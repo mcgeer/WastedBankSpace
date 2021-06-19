@@ -4,6 +4,7 @@ import com.google.inject.Provides;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 
+import com.wastedbankspace.model.StorableItem;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
@@ -134,9 +135,14 @@ public class WastedBankSpacePlugin extends Plugin
 			//SwingUtilities.invokeLater(() -> panel.setInventoryMap(inventoryId, m));
 		}
 
-		if(m.containsKey(314))
-		{
-			log.debug("FEATHER FOUND");
+		for (StorableItem item:
+				StorableItem.values()) {
+			int id = item.itemID;
+			if(m.containsKey(id))
+			{
+				log.debug("WASTED SPACE ALERT " +  itemManager.getItemComposition(id).getName());
+			}
+
 		}
 	}
 }
