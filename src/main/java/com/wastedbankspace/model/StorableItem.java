@@ -3,8 +3,11 @@ package com.wastedbankspace.model;
 import lombok.Getter;
 import net.runelite.api.ItemID;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 public enum StorableItem {
@@ -80,6 +83,10 @@ public enum StorableItem {
         this.itemID = itemID;
         this.location = location;
     }
+
+    public static final List<StorableItem> tackleBoxItems = Arrays.stream(StorableItem.values())
+            .filter(x ->x.location == StorageLocation.TACKLE_BOX)
+            .collect(Collectors.toList());
 
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
     static
