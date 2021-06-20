@@ -13,12 +13,17 @@ public interface WastedBankSpaceConfig extends Config
 	String STEEL_KEY_RING_CHECK_KEY = "keyRingCheck";
 	String TOOL_LEP_CHECK_KEY = "toolLepCheck";
 	String MASTER_SCROLL_BOOK_CHECK_KEY = "masterScrollBookCheck";
+	String FOSSIL_STORAGE_CHECK_KEY = "fossilStorageCheck";
 
 	/*Order
 		Tackle Box
-		Master Scroll Book
 		Key Ring
+		Tool Lep
+		Master Scroll Book
+		Fossil Island Chest
+
 		-- Below here is for the future and Ideas--
+		Flamtaer bag
 		Bolt Pouch
 		PoH Storage
 		Check Stash Units
@@ -26,11 +31,9 @@ public interface WastedBankSpaceConfig extends Config
 		Herb Sack
 		Gem Bag
 		Rune Pouch
-		Fossil Island Chest
-		Tool Lep
 
 		Other storage spaces?
-		Flag useless quest items
+		Flag useless quest items - Add a tip to ask the WOM to remove Junk
 
 		See https://oldschool.runescape.wiki/w/Storage
 	 */
@@ -100,6 +103,16 @@ public interface WastedBankSpaceConfig extends Config
 			position = 7
 	)
 	default boolean masterScrollBookCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = FOSSIL_STORAGE_CHECK_KEY,
+			name = "Fossil Storage",
+			description = "Storage for fossils on Fossil Island and in Varrok Museum",
+			position = 8
+	)
+	default boolean fossilStorageCheck()
 	{
 		return true;
 	}
