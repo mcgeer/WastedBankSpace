@@ -74,7 +74,24 @@ public enum StorableItem {
     FISHING_POTION2(ItemID.FISHING_POTION2, StorageLocation.TACKLE_BOX),
     FISHING_POTION3(ItemID.FISHING_POTION3, StorageLocation.TACKLE_BOX),
     FISHING_POTION4(ItemID.FISHING_POTION4, StorageLocation.TACKLE_BOX),
-    MOLCH_PEARLS(ItemID.MOLCH_PEARL, StorageLocation.TACKLE_BOX);
+    MOLCH_PEARLS(ItemID.MOLCH_PEARL, StorageLocation.TACKLE_BOX),
+
+    /**
+     * Steel Key Ring
+     */
+    ANCESTREAL_KEY(ItemID.ANCESTRAL_KEY, StorageLocation.STEEL_KEY_RING),
+    BATTERED_KEY(ItemID.BATTERED_KEY, StorageLocation.STEEL_KEY_RING),
+    BONE_KEY(ItemID.BONE_KEY, StorageLocation.STEEL_KEY_RING),
+    BRASS_KEY(ItemID.BRASS_KEY, StorageLocation.STEEL_KEY_RING),
+    CRYSTALMINE_KEY(ItemID.CRYSTALMINE_KEY, StorageLocation.STEEL_KEY_RING),
+    DUSTY_KEY(ItemID.DUSTY_KEY, StorageLocation.STEEL_KEY_RING),
+    ENCHANTED_KEY(ItemID.ENCHANTED_KEY, StorageLocation.STEEL_KEY_RING),
+    WEAPON_STORE_KEY(ItemID.WEAPON_STORE_KEY, StorageLocation.STEEL_KEY_RING),
+    MAZE_KEY(ItemID.MAZE_KEY, StorageLocation.STEEL_KEY_RING),
+    METAL_KEY(ItemID.METAL_KEY, StorageLocation.STEEL_KEY_RING),
+    NEW_KEY(ItemID.NEW_KEY, StorageLocation.STEEL_KEY_RING),
+    SHINY_KEY(ItemID.SHINY_KEY, StorageLocation.STEEL_KEY_RING),
+    WROUGHT_IRON_KEY(ItemID.WROUGHT_IRON_KEY, StorageLocation.STEEL_KEY_RING);
 
     public final int itemID;
     public final StorageLocation location;
@@ -87,6 +104,10 @@ public enum StorableItem {
 
     public static final List<StorableItem> tackleBoxItems = Arrays.stream(StorableItem.values())
             .filter(x ->x.location == StorageLocation.TACKLE_BOX)
+            .collect(Collectors.toList());
+
+    public static final List<StorableItem> steelKeyRingItems = Arrays.stream(StorableItem.values())
+            .filter(x ->x.location == StorageLocation.STEEL_KEY_RING)
             .collect(Collectors.toList());
 
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();

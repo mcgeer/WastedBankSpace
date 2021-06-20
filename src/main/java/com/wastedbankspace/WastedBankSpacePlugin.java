@@ -68,7 +68,8 @@ public class WastedBankSpacePlugin extends Plugin
 	private final Map<Integer, Integer> inventoryHashMap = new HashMap<>();
 
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
-			new StorageLocationEnabler(StorageLocation.TACKLE_BOX, () -> config.tackleBoxCheck(), StorableItem.tackleBoxItems)
+			new StorageLocationEnabler(StorageLocation.TACKLE_BOX, () -> config.tackleBoxCheck(), StorableItem.tackleBoxItems),
+			new StorageLocationEnabler(StorageLocation.STEEL_KEY_RING, () -> config.KeyRingCheck(), StorableItem.steelKeyRingItems)
 	);
 
 	//Local Disposable Properties
@@ -105,7 +106,7 @@ public class WastedBankSpacePlugin extends Plugin
 		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
 		{
 			//client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.greeting(), null);
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.boltPouchCheck(), null);
+//			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.boltPouchCheck(), null);
 		}
 	}
 

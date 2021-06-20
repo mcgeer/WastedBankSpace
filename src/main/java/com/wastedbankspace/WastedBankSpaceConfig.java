@@ -10,6 +10,7 @@ public interface WastedBankSpaceConfig extends Config
 {
 
 	String TACKLE_BOX_CHECK_KEY = "tackleBoxCheck";
+	String STEEL_KEY_RING_CHECK_KEY = "keyRingCheck";
 	/*Order
 		PoH Storage
 		Check Stash Units
@@ -23,6 +24,7 @@ public interface WastedBankSpaceConfig extends Config
 		Gem Bag
 		Rune Pouch
 		Fossil Island Chest
+		Tool Lep
 
 		Other storage spaces
 		Looting bag
@@ -65,6 +67,16 @@ public interface WastedBankSpaceConfig extends Config
 			position = 4
 	)
 	default boolean boltPouchCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = STEEL_KEY_RING_CHECK_KEY,
+			name = "Steel Key Ring",
+			description = "Stores some keys - One small favor reward",
+			position = 5
+	)
+	default boolean KeyRingCheck()
 	{
 		return true;
 	}
