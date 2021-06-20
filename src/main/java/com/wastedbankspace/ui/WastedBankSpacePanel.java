@@ -31,12 +31,22 @@ public class WastedBankSpacePanel extends PluginPanel
         setLayout(new GridBagLayout());
 
         numberOfItemsText = new JTextArea("Please Visit Your Bank");
+        numberOfItemsText.setEditable(false);
 
         data = new JList();
         data.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         data.setSelectedIndex(0);
         data.setVisibleRowCount(10);
-        data.setListData(new String[] {"a", "b"});
+
+        final String tipTab = "         ";
+        final String[] tips = new String[]{
+                "Tips",
+                "Tip1: Talk to the Wise Old Man",
+                tipTab + "to remove Junk Quest Items",
+                "Tip2: Murky Matt combines jewelery charges",
+                "Tip3: Make item sets at the ge",
+                tipTab + "PHat and Mask sets save many spaces"
+        };
 
         final GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -44,10 +54,14 @@ public class WastedBankSpacePanel extends PluginPanel
         c.gridx = 0;
         c.gridy = 0;
 
-
         add(numberOfItemsText,c);
         c.gridy++;
         add(data, c);
+        c.gridy++;
+        for (String tipString : tips) {
+            add(new JLabel(tipString),c);
+            c.gridy++;
+        }
     }
 
     public void setWastedBankSpaceItems(List<String> items)

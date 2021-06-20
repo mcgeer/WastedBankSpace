@@ -33,6 +33,7 @@ public interface WastedBankSpaceConfig extends Config
 		Rune Pouch
 
 		Other storage spaces?
+		Elknok for jars, update wiki storage
 		Flag useless quest items - Add a tip to ask the WOM to remove Junk
 
 		See https://oldschool.runescape.wiki/w/Storage
