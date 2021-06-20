@@ -11,7 +11,8 @@ public enum StorageLocation {
     TOOL_LEP("Tool Lep"),
     MASTER_SCROLL_BOOK("Master Scroll Book"),
     FOSSIL_STORAGE("Fossil Storage"),
-    BOLT_POUCH("Bolt Pouch");
+    BOLT_POUCH("Bolt Pouch"),
+    PURO_PURO("Puro Puro");
 
     private String uiRepresentation;
 

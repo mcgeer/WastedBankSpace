@@ -14,6 +14,7 @@ public interface WastedBankSpaceConfig extends Config
 	String TOOL_LEP_CHECK_KEY = "toolLepCheck";
 	String MASTER_SCROLL_BOOK_CHECK_KEY = "masterScrollBookCheck";
 	String FOSSIL_STORAGE_CHECK_KEY = "fossilStorageCheck";
+	String ELNOCK_INQUISITOR_CHECK_KEY = "elnockInquisitorCheck";
 
 	/*Order
 		Tackle Box
@@ -114,6 +115,16 @@ public interface WastedBankSpaceConfig extends Config
 			position = 8
 	)
 	default boolean fossilStorageCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = ELNOCK_INQUISITOR_CHECK_KEY,
+			name = "Puro Pruo Storage",
+			description = "Elnock Inquisitor will hold some items in Puro Puro",
+			position = 9
+	)
+	default boolean elnockInquisitorCheck()
 	{
 		return true;
 	}

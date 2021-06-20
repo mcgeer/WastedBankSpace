@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -41,6 +42,9 @@ public class WastedBankSpacePlugin extends Plugin
 	private Client client;
 
 	@Inject
+	private ClientThread clientThread;
+
+	@Inject
 	private ClientToolbar clientToolbar;
 
 	@Inject
@@ -58,7 +62,7 @@ public class WastedBankSpacePlugin extends Plugin
 
 	//=====Local Properties
 	public static final String CONFIG_GROUP = "Wasted Bank Space";
-
+	private static boolean prepared = false;
 
 	private final Map<Integer, Integer> inventoryHashMap = new HashMap<>();
 
@@ -67,10 +71,10 @@ public class WastedBankSpacePlugin extends Plugin
 			new StorageLocationEnabler(StorageLocation.STEEL_KEY_RING, () -> config.keyRingCheck(), StorableItem.steelKeyRingItems),
 			new StorageLocationEnabler(StorageLocation.TOOL_LEP, () -> config.toolLepCheck(), StorableItem.toolLepItems),
 			new StorageLocationEnabler(StorageLocation.MASTER_SCROLL_BOOK, () -> config.masterScrollBookCheck(), StorableItem.masterScrollBookItems),
-			new StorageLocationEnabler(StorageLocation.FOSSIL_STORAGE, () -> config.fossilStorageCheck(), StorableItem.fossilStorageItems)
+			new StorageLocationEnabler(StorageLocation.FOSSIL_STORAGE, () -> config.fossilStorageCheck(), StorableItem.fossilStorageItems),
+			new StorageLocationEnabler(StorageLocation.PURO_PURO, () -> config.elnockInquisitorCheck(), StorableItem.puroPuroItems)
 	);
 
-	//Local Disposable Properties
 	private NavigationButton navButton;
 	private WastedBankSpacePanel panel;
 	private Map<Integer, Integer> inventoryMap = new HashMap<>();
@@ -88,6 +92,28 @@ public class WastedBankSpacePlugin extends Plugin
 				.build();
 
 		clientToolbar.addNavigation(navButton);
+
+		if (!prepared)
+		{
+			clientThread.invoke(() ->
+			{
+				switch (client.getGameState())
+				{
+					case LOGIN_SCREEN:
+					case LOGIN_SCREEN_AUTHENTICATOR:
+					case LOGGING_IN:
+					case LOADING:
+					case LOGGED_IN:
+					case CONNECTION_LOST:
+					case HOPPING:
+						StorableItem.prepareStorableItemNames(itemManager);
+						prepared = true;
+						return true;
+					default:
+						return false;
+				}
+			});
+		}
 	}
 
 	@Override
@@ -184,7 +210,7 @@ public class WastedBankSpacePlugin extends Plugin
 		}
 
 		SwingUtilities.invokeLater(
-				() -> panel.setWastedBankSpaceItems(StorableItem.StorableListToString(storableItemsInBank, itemManager))
+				() -> panel.setWastedBankSpaceItems(StorableItem.storableListToString(storableItemsInBank))
 		);
 	}
 

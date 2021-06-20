@@ -165,10 +165,37 @@ public enum StorableItem {
     FOSSILISED_STUMP(ItemID.FOSSILISED_STUMP, StorageLocation.FOSSIL_STORAGE),
     FOSSILISED_BRANCH(ItemID.FOSSILISED_BRANCH, StorageLocation.FOSSIL_STORAGE),
     FOSSILISED_LEAF(ItemID.FOSSILISED_LEAF, StorageLocation.FOSSIL_STORAGE),
-    FOSSILISED_MUSHROOM(ItemID.FOSSILISED_MUSHROOM, StorageLocation.FOSSIL_STORAGE)
+    FOSSILISED_MUSHROOM(ItemID.FOSSILISED_MUSHROOM, StorageLocation.FOSSIL_STORAGE),
+
+    /**
+     * Puro Puro @ Elnock Inquisitor
+     */
+
+    BUTTERFLY_NET(ItemID.BUTTERFLY_NET, StorageLocation.PURO_PURO),
+    MAGIC_BUTTERFLY_NET(ItemID.MAGIC_BUTTERFLY_NET, StorageLocation.PURO_PURO),
+    IMPLING_JAR(ItemID.IMPLING_JAR, StorageLocation.PURO_PURO),
+    IMP_REPELLENT(ItemID.IMP_REPELLENT, StorageLocation.PURO_PURO)
     ;
+
     public final int itemID;
     public final StorageLocation location;
+
+    public static final List<StorableItem> tackleBoxItems = storableItemsAtLocation(StorageLocation.TACKLE_BOX);
+    public static final List<StorableItem> steelKeyRingItems = storableItemsAtLocation(StorageLocation.STEEL_KEY_RING);
+    public static final List<StorableItem> toolLepItems = storableItemsAtLocation(StorageLocation.TOOL_LEP);
+    public static final List<StorableItem> masterScrollBookItems = storableItemsAtLocation(StorageLocation.MASTER_SCROLL_BOOK);
+    public static final List<StorableItem> fossilStorageItems = storableItemsAtLocation(StorageLocation.FOSSIL_STORAGE);
+    public static final List<StorableItem> puroPuroItems = storableItemsAtLocation(StorageLocation.PURO_PURO);
+
+    private static Map<StorableItem, String> storableItemNameMap = new HashMap<>();
+    private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
+    static
+    {
+        for (StorableItem i : values())
+        {
+            ITEM_ID_MAP.put(i.getItemID(), i);
+        }
+    }
 
     StorableItem(int itemID, StorageLocation location)
     {
@@ -183,25 +210,19 @@ public enum StorableItem {
                 .collect(Collectors.toList());
     }
 
-    public static final List<StorableItem> tackleBoxItems = storableItemsAtLocation(StorageLocation.TACKLE_BOX);
-    public static final List<StorableItem> steelKeyRingItems = storableItemsAtLocation(StorageLocation.STEEL_KEY_RING);
-    public static final List<StorableItem> toolLepItems = storableItemsAtLocation(StorageLocation.TOOL_LEP);
-    public static final List<StorableItem> masterScrollBookItems = storableItemsAtLocation(StorageLocation.MASTER_SCROLL_BOOK);
-    public static final List<StorableItem> fossilStorageItems = storableItemsAtLocation(StorageLocation.FOSSIL_STORAGE);
-
-    private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
-    static
+    public static void prepareStorableItemNames(ItemManager itemManager)
     {
-        for (StorableItem i : values())
+        for(StorableItem i : StorableItem.values())
         {
-            ITEM_ID_MAP.put(i.getItemID(), i);
+            storableItemNameMap.put(i, itemManager.getItemComposition(i.itemID).getName());
         }
     }
 
-    public static List<String> StorableListToString(List<StorableItem> items, ItemManager itemManager)
+    public static List<String> storableListToString(List<StorableItem> items)
     {
         return items.stream()
-                .map(i -> String.format("%d --> %s", i.itemID /*itemManager.getItemComposition(i.itemID).getName()*/, i.location.toString()))
+                .filter(i -> storableItemNameMap.containsKey(i))
+                .map(i -> String.format("%s --> %s", storableItemNameMap.get(i), i.location.toString()))
                 .collect(Collectors.toList());
     }
 
