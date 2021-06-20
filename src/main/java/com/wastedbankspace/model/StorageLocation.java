@@ -10,6 +10,7 @@ public enum StorageLocation {
     STEEL_KEY_RING("Key Ring"),
     TOOL_LEP("Tool Lep"),
     MASTER_SCROLL_BOOK("Master Scroll Book"),
+    FOSSIL_STORAGE("Fossil Storage"),
     BOLT_POUCH("Bolt Pouch");
 
     private String uiRepresentation;
