@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.ItemContainerChanged;
-import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -25,10 +24,6 @@ import net.runelite.client.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Slf4j
@@ -69,7 +64,8 @@ public class WastedBankSpacePlugin extends Plugin
 
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
 			new StorageLocationEnabler(StorageLocation.TACKLE_BOX, () -> config.tackleBoxCheck(), StorableItem.tackleBoxItems),
-			new StorageLocationEnabler(StorageLocation.STEEL_KEY_RING, () -> config.KeyRingCheck(), StorableItem.steelKeyRingItems)
+			new StorageLocationEnabler(StorageLocation.STEEL_KEY_RING, () -> config.keyRingCheck(), StorableItem.steelKeyRingItems),
+			new StorageLocationEnabler(StorageLocation.TOOL_LEP, () -> config.toolLepCheck(), StorableItem.toolLepItems)
 	);
 
 	//Local Disposable Properties
