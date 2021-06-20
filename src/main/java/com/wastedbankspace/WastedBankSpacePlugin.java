@@ -5,6 +5,9 @@ import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 
 import com.wastedbankspace.model.StorableItem;
+import com.wastedbankspace.model.StorageLocation;
+import com.wastedbankspace.model.StorageLocationEnabler;
+import com.wastedbankspace.ui.WastedBankSpacePanel;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
@@ -12,25 +15,38 @@ import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.util.ImageUtil;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 @Slf4j
 @PluginDescriptor(
 	name = "Wasted Bank Space"
 )
-
 public class WastedBankSpacePlugin extends Plugin
 {
-	//=====Consts
+	//=====Constants
+	//Images stored in main/resources
+	private static final BufferedImage ICON = ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/icon.png");
 
 	//=====Inject
 	@Inject
 	private Client client;
+
+	@Inject
+	private ClientToolbar clientToolbar;
 
 	@Inject
 	private ItemManager itemManager;
@@ -46,19 +62,40 @@ public class WastedBankSpacePlugin extends Plugin
 	}
 
 	//=====Local Properties
+	public static final String CONFIG_GROUP = "Wasted Bank Space";
+
+
 	private final Map<Integer, Integer> inventoryHashMap = new HashMap<>();
+
+	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
+			new StorageLocationEnabler(StorageLocation.TACKLE_BOX, () -> config.tackleBoxCheck(), StorableItem.tackleBoxItems)
+	);
+
+	//Local Disposable Properties
+	private NavigationButton navButton;
+	private WastedBankSpacePanel panel;
+	private Map<Integer, Integer> inventoryMap = new HashMap<>();
 
 	//=====Override Runelite Functions
 	@Override
 	protected void startUp() throws Exception
 	{
-		log.info("Example started!");
+		panel = new WastedBankSpacePanel(client, config, itemManager);
+		navButton = NavigationButton.builder()
+				.tooltip("Wasted Bank Space")
+				.priority(8)
+				.icon(ICON)
+				.panel(panel)
+				.build();
+
+		clientToolbar.addNavigation(navButton);
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		log.info("Example stopped!");
+		navButton = null;
+		panel = null;
 	}
 
 	//=====Event Subscriptions
@@ -79,13 +116,21 @@ public class WastedBankSpacePlugin extends Plugin
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged ev)
 	{
-		if (ev.getContainerId() == InventoryID.BANK.getId()
-				/*|| (ev.getContainerId() == InventoryID.SEED_VAULT.getId() && config.grabFromSeedVault())
-				|| (ev.getContainerId() == InventoryID.INVENTORY.getId() && config.grabFromInventory())
-				|| (ev.getContainerId() == LOOTING_BAG_ID && config.grabFromLootingBag())*/)
+		if (ev.getContainerId() == InventoryID.BANK.getId())
 		{
 			updateItemsFromItemContainer(ev.getContainerId(), ev.getItemContainer());
 		}
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged event)
+	{
+		if (!event.getGroup().equals(CONFIG_GROUP))
+		{
+			return;
+		}
+
+		updateWastedBankSpace();
 	}
 
 	//=====Private Functions
@@ -122,27 +167,35 @@ public class WastedBankSpacePlugin extends Plugin
 			m.put(itemID, qty);
 		}
 
-		updateInventoryMap(inventoryId, m);
+		inventoryMap = m;
+		updateWastedBankSpace();
 	}
 
-	private void updateInventoryMap(final int inventoryId, final Map<Integer, Integer> m)
+
+	private void updateWastedBankSpace()
 	{
-		final int curHash = m.hashCode();
-		if (curHash != inventoryHashMap.getOrDefault(inventoryId, -1))
-		{
-			inventoryHashMap.put(inventoryId, curHash);
-			log.debug("Inventory Id Added to Inventory Map: " + String.valueOf(inventoryId));
-			//SwingUtilities.invokeLater(() -> panel.setInventoryMap(inventoryId, m));
-		}
-
+		List<StorableItem> storableItemsInBank = new ArrayList<>();
 		for (StorableItem item:
-				StorableItem.values()) {
+				getEnabledItemLists()) {
 			int id = item.itemID;
-			if(m.containsKey(id))
+			if(inventoryMap.containsKey(id))
 			{
-				log.debug("WASTED SPACE ALERT " +  itemManager.getItemComposition(id).getName());
+				storableItemsInBank.add(item);
 			}
-
 		}
+
+		SwingUtilities.invokeLater(
+				() -> panel.setWastedBankSpaceItems(StorableItem.StorableListToString(storableItemsInBank, itemManager))
+		);
+	}
+
+	private List<StorableItem>  getEnabledItemLists()
+	{
+		List<StorableItem> ret = new ArrayList<>();
+		for (StorageLocationEnabler sle:
+				storageLocationEnablers) {
+			ret.addAll(sle.GetStorableItems());
+		}
+		return ret;
 	}
 }

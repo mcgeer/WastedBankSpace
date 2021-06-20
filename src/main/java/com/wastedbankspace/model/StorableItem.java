@@ -2,6 +2,7 @@ package com.wastedbankspace.model;
 
 import lombok.Getter;
 import net.runelite.api.ItemID;
+import net.runelite.client.game.ItemManager;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -95,6 +96,13 @@ public enum StorableItem {
         {
             ITEM_ID_MAP.put(i.getItemID(), i);
         }
+    }
+
+    public static List<String> StorableListToString(List<StorableItem> items, ItemManager itemManager)
+    {
+        return items.stream()
+                .map(i -> String.format("%d --> %s", i.itemID /*itemManager.getItemComposition(i.itemID).getName()*/, i.location.toString()))
+                .collect(Collectors.toList());
     }
 
 }

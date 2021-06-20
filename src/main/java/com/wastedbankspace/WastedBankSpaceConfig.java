@@ -1,5 +1,6 @@
 package com.wastedbankspace;
 
+import lombok.Getter;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -7,6 +8,8 @@ import net.runelite.client.config.ConfigItem;
 @ConfigGroup("Wasted Bank Space")
 public interface WastedBankSpaceConfig extends Config
 {
+
+	String TACKLE_BOX_CHECK_KEY = "tackleBoxCheck";
 	/*Order
 		PoH Storage
 		Check Stash Units
@@ -46,7 +49,7 @@ public interface WastedBankSpaceConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(keyName = "tackleBoxCheck",
+	@ConfigItem(keyName = TACKLE_BOX_CHECK_KEY,
 			name = "Tackle Box Items",
 			description = "Check for items that could be in your tackle box",
 			position = 3
