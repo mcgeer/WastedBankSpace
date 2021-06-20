@@ -12,14 +12,16 @@ public interface WastedBankSpaceConfig extends Config
 	String TACKLE_BOX_CHECK_KEY = "tackleBoxCheck";
 	String STEEL_KEY_RING_CHECK_KEY = "keyRingCheck";
 	String TOOL_LEP_CHECK_KEY = "toolLepCheck";
+	String MASTER_SCROLL_BOOK_CHECK_KEY = "masterScrollBookCheck";
+
 	/*Order
-		PoH Storage
-		Check Stash Units
 		Tackle Box
-		Bolt Pouch
-		-- Below here is for the future and Ideas--
 		Master Scroll Book
 		Key Ring
+		-- Below here is for the future and Ideas--
+		Bolt Pouch
+		PoH Storage
+		Check Stash Units
 		Seeds - Box or Vault
 		Herb Sack
 		Gem Bag
@@ -27,10 +29,10 @@ public interface WastedBankSpaceConfig extends Config
 		Fossil Island Chest
 		Tool Lep
 
-		Other storage spaces
-		Looting bag
-		Hespori
+		Other storage spaces?
 		Flag useless quest items
+
+		See https://oldschool.runescape.wiki/w/Storage
 	 */
 	@ConfigItem(keyName = "pohStorageCheck",
 			name = "PoH Storage",
@@ -84,10 +86,20 @@ public interface WastedBankSpaceConfig extends Config
 
 	@ConfigItem(keyName = TOOL_LEP_CHECK_KEY,
 			name = "Tool Leprechaun",
-			description = "Stores Farming items, note low limits on many items",
+			description = "Stores farming items, note low limits on many items",
 			position = 6
 	)
 	default boolean toolLepCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = MASTER_SCROLL_BOOK_CHECK_KEY,
+			name = "Master Scroll Book",
+			description = "Stores teleport scrolls",
+			position = 7
+	)
+	default boolean masterScrollBookCheck()
 	{
 		return true;
 	}

@@ -9,6 +9,7 @@ public enum StorageLocation {
     TACKLE_BOX("Tackle Box"),
     STEEL_KEY_RING("Key Ring"),
     TOOL_LEP("Tool Lep"),
+    MASTER_SCROLL_BOOK("Master Scroll Book"),
     BOLT_POUCH("Bolt Pouch");
 
     private String uiRepresentation;
