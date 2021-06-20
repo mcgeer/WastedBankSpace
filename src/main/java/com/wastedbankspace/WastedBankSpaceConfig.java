@@ -11,6 +11,7 @@ public interface WastedBankSpaceConfig extends Config
 
 	String TACKLE_BOX_CHECK_KEY = "tackleBoxCheck";
 	String STEEL_KEY_RING_CHECK_KEY = "keyRingCheck";
+	String TOOL_LEP_CHECK_KEY = "toolLepCheck";
 	/*Order
 		PoH Storage
 		Check Stash Units
@@ -76,7 +77,17 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Stores some keys - One small favor reward",
 			position = 5
 	)
-	default boolean KeyRingCheck()
+	default boolean keyRingCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = TOOL_LEP_CHECK_KEY,
+			name = "Tool Leprechaun",
+			description = "Stores Farming items, note low limits on many items",
+			position = 6
+	)
+	default boolean toolLepCheck()
 	{
 		return true;
 	}

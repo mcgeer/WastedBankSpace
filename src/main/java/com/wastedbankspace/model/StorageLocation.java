@@ -8,6 +8,7 @@ public enum StorageLocation {
     STASH("S.T.A.S.H. Unit"),
     TACKLE_BOX("Tackle Box"),
     STEEL_KEY_RING("Key Ring"),
+    TOOL_LEP("Tool Lep"),
     BOLT_POUCH("Bolt Pouch");
 
     private String uiRepresentation;

@@ -91,8 +91,36 @@ public enum StorableItem {
     METAL_KEY(ItemID.METAL_KEY, StorageLocation.STEEL_KEY_RING),
     NEW_KEY(ItemID.NEW_KEY, StorageLocation.STEEL_KEY_RING),
     SHINY_KEY(ItemID.SHINY_KEY, StorageLocation.STEEL_KEY_RING),
-    WROUGHT_IRON_KEY(ItemID.WROUGHT_IRON_KEY, StorageLocation.STEEL_KEY_RING);
+    WROUGHT_IRON_KEY(ItemID.WROUGHT_IRON_KEY, StorageLocation.STEEL_KEY_RING),
 
+    /**
+     * Tool Lep
+     */
+    RAKE(ItemID.RAKE, StorageLocation.TOOL_LEP),
+    SPADE(ItemID.SPADE, StorageLocation.TOOL_LEP),
+    SEED_DIBBER(ItemID.SEED_DIBBER, StorageLocation.TOOL_LEP),
+    SECATEURS(ItemID.SECATEURS, StorageLocation.TOOL_LEP),
+    MAGIC_SECATEURS(ItemID.MAGIC_SECATEURS, StorageLocation.TOOL_LEP),
+    GARDENING_TROWEL(ItemID.GARDENING_TROWEL, StorageLocation.TOOL_LEP),
+    BOTOMLESS_COMPOST(ItemID.BOTTOMLESS_COMPOST_BUCKET, StorageLocation.TOOL_LEP),
+    BOTTOMLESS_COMPOST_BUCKET_22997(ItemID.BOTTOMLESS_COMPOST_BUCKET_22997, StorageLocation.TOOL_LEP),
+    PLANT_CURE(ItemID.PLANT_CURE, StorageLocation.TOOL_LEP),
+    PLANT_CURE_6468(ItemID.PLANT_CURE_6468, StorageLocation.TOOL_LEP),
+    COMPOST(ItemID.COMPOST, StorageLocation.TOOL_LEP),
+    SUPERCOMPOST(ItemID.SUPERCOMPOST, StorageLocation.TOOL_LEP),
+    ULTRACOMPOST(ItemID.ULTRACOMPOST, StorageLocation.TOOL_LEP),
+    WATERING_CAN(ItemID.WATERING_CAN, StorageLocation.TOOL_LEP),
+    WATERING_CAN1(ItemID.WATERING_CAN1, StorageLocation.TOOL_LEP),
+    WATERING_CAN2(ItemID.WATERING_CAN2, StorageLocation.TOOL_LEP),
+    WATERING_CAN3(ItemID.WATERING_CAN3, StorageLocation.TOOL_LEP),
+    WATERING_CAN4(ItemID.WATERING_CAN4, StorageLocation.TOOL_LEP),
+    WATERING_CAN5(ItemID.WATERING_CAN5, StorageLocation.TOOL_LEP),
+    WATERING_CAN6(ItemID.WATERING_CAN6, StorageLocation.TOOL_LEP),
+    WATERING_CAN7(ItemID.WATERING_CAN7, StorageLocation.TOOL_LEP),
+    WATERING_CAN8(ItemID.WATERING_CAN8, StorageLocation.TOOL_LEP),
+    GRICOLLERS_CAN(ItemID.GRICOLLERS_CAN, StorageLocation.TOOL_LEP),
+
+    ;
     public final int itemID;
     public final StorageLocation location;
 
@@ -102,13 +130,16 @@ public enum StorableItem {
         this.location = location;
     }
 
-    public static final List<StorableItem> tackleBoxItems = Arrays.stream(StorableItem.values())
-            .filter(x ->x.location == StorageLocation.TACKLE_BOX)
-            .collect(Collectors.toList());
+    private static List<StorableItem> storableItemsAtLocation(StorageLocation storageLocation)
+    {
+        return Arrays.stream(StorableItem.values())
+                .filter(x ->x.location == storageLocation)
+                .collect(Collectors.toList());
+    }
 
-    public static final List<StorableItem> steelKeyRingItems = Arrays.stream(StorableItem.values())
-            .filter(x ->x.location == StorageLocation.STEEL_KEY_RING)
-            .collect(Collectors.toList());
+    public static final List<StorableItem> tackleBoxItems = storableItemsAtLocation(StorageLocation.TACKLE_BOX);
+    public static final List<StorableItem> steelKeyRingItems = storableItemsAtLocation(StorageLocation.STEEL_KEY_RING);
+    public static final List<StorableItem> toolLepItems = storableItemsAtLocation(StorageLocation.TOOL_LEP);
 
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
     static
