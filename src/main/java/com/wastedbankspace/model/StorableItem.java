@@ -120,6 +120,25 @@ public enum StorableItem {
     WATERING_CAN8(ItemID.WATERING_CAN8, StorageLocation.TOOL_LEP),
     GRICOLLERS_CAN(ItemID.GRICOLLERS_CAN, StorageLocation.TOOL_LEP),
 
+    /**
+     * Master Scroll Book
+     * https://oldschool.runescape.wiki/w/Teleport_scrolls
+     */
+    NARDAH_TELEPORT(ItemID.NARDAH_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    DIGSITE_TELEPORT(ItemID.DIGSITE_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    FELDIP_HILLS_TELEPORT(ItemID.FELDIP_HILLS_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    LUNAR_ISLE_TELEPORT(ItemID.LUNAR_ISLE_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    MORTTON_TELEPORT(ItemID.MORTTON_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    PEST_CONTROL_TELEPORT(ItemID.PEST_CONTROL_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    PISCATORIS_TELEPORT(ItemID.PISCATORIS_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    TAI_BWO_WANNAI_TELEPORT(ItemID.TAI_BWO_WANNAI_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    IORWERTH_CAMP_TELEPORT(ItemID.IORWERTH_CAMP_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    MOS_LEHARMLESS_TELEPORT(ItemID.MOS_LEHARMLESS_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    LUMBERYARD_TELEPORT(ItemID.LUMBERYARD_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    ZULANDRA_TELEPORT(ItemID.ZULANDRA_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    KEY_MASTER_TELEPORT(ItemID.KEY_MASTER_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    REVENANT_CAVE_TELEPORT(ItemID.REVENANT_CAVE_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK),
+    WATSON_TELEPORT(ItemID.WATSON_TELEPORT, StorageLocation.MASTER_SCROLL_BOOK)
     ;
     public final int itemID;
     public final StorageLocation location;
@@ -140,6 +159,7 @@ public enum StorableItem {
     public static final List<StorableItem> tackleBoxItems = storableItemsAtLocation(StorageLocation.TACKLE_BOX);
     public static final List<StorableItem> steelKeyRingItems = storableItemsAtLocation(StorageLocation.STEEL_KEY_RING);
     public static final List<StorableItem> toolLepItems = storableItemsAtLocation(StorageLocation.TOOL_LEP);
+    public static final List<StorableItem> masterScrollBookItems = storableItemsAtLocation(StorageLocation.MASTER_SCROLL_BOOK);
 
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
     static

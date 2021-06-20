@@ -65,7 +65,8 @@ public class WastedBankSpacePlugin extends Plugin
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
 			new StorageLocationEnabler(StorageLocation.TACKLE_BOX, () -> config.tackleBoxCheck(), StorableItem.tackleBoxItems),
 			new StorageLocationEnabler(StorageLocation.STEEL_KEY_RING, () -> config.keyRingCheck(), StorableItem.steelKeyRingItems),
-			new StorageLocationEnabler(StorageLocation.TOOL_LEP, () -> config.toolLepCheck(), StorableItem.toolLepItems)
+			new StorageLocationEnabler(StorageLocation.TOOL_LEP, () -> config.toolLepCheck(), StorableItem.toolLepItems),
+			new StorageLocationEnabler(StorageLocation.MASTER_SCROLL_BOOK, () -> config.masterScrollBookCheck(), StorableItem.masterScrollBookItems)
 	);
 
 	//Local Disposable Properties
