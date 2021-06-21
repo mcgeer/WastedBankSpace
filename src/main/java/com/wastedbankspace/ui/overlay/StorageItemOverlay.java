@@ -28,9 +28,8 @@ package com.wastedbankspace.ui.overlay;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
@@ -46,13 +45,13 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.overlay.WidgetItemOverlay;
+import net.runelite.client.ui.overlay.components.ImageComponent;
 import net.runelite.client.util.ImageUtil;
 
 public class StorageItemOverlay extends WidgetItemOverlay
 {
-    private static final BufferedImage ICON = ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/overlaySmoll.png");
-    private static final int ALPHA = 135;
-    private static final int COLOR_BOUNDARY = 240;
+    private static final ImageComponent ICON = new ImageComponent(ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/overlaySmoller.png"));
+    private final Point point;
 
     private final WastedBankSpacePlugin plugin;
     private final ItemManager itemManager;
@@ -68,8 +67,8 @@ public class StorageItemOverlay extends WidgetItemOverlay
     {
         this.plugin = plugin;
         this.itemManager = itemManager;
+        this.point = new Point();
         showOnBank();
-        super.onMouseOver();
     }
 
     @Override
@@ -93,23 +92,24 @@ public class StorageItemOverlay extends WidgetItemOverlay
             wastedSpaceImages.put(itemId, image);
         }
 
-        graphics.drawImage(image, bounds.x, bounds.y, null);
-    }
-
-    private static Color getColor(float value)
-    {
-        float h = (1 - value) * COLOR_BOUNDARY / 360;
-        Color c = Color.getHSBColor(h, 1, 1f);
-
-        return new Color(c.getRed(), c.getGreen(), c.getBlue(), ALPHA);
+        renderRibbon(graphics, ICON,bounds.x + bounds.width - 12,bounds.y + bounds.height - 12);
+        //graphics.drawImage(image, bounds.x, bounds.y, null);
     }
 
     private BufferedImage getImage(int id)
     {
         ItemComposition itemComposition = itemManager.getItemComposition(id);
+
         //boolean stackable = item.getQuantity() > 1 || itemComposition.isStackable();
         BufferedImage image = itemManager.getImage(id);
-        Color color = new Color(255, 183, 0, ALPHA);
+        Color color = new Color(255, 251, 0, 62);
         return ImageUtil.fillImage(image, color);
+    }
+
+    private void renderRibbon(Graphics2D graphics, ImageComponent ribbon, int x, int y)
+    {
+        this.point.setLocation(x, y);
+        ribbon.setPreferredLocation(this.point);
+        ribbon.render(graphics);
     }
 }
