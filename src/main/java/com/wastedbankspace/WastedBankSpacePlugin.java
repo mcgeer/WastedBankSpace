@@ -8,6 +8,7 @@ import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocation;
 import com.wastedbankspace.model.StorageLocationEnabler;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
+import com.wastedbankspace.ui.overlay.StorageItemOverlay;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
@@ -21,6 +22,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -49,6 +51,12 @@ public class WastedBankSpacePlugin extends Plugin
 
 	@Inject
 	private ItemManager itemManager;
+
+	@Inject
+	private OverlayManager overlayManager;
+
+	@Inject
+	private StorageItemOverlay storageItemOverlay;
 
 	@Inject
 	private WastedBankSpaceConfig config;
@@ -93,6 +101,8 @@ public class WastedBankSpacePlugin extends Plugin
 
 		clientToolbar.addNavigation(navButton);
 
+		overlayManager.add(storageItemOverlay);
+
 		if (!prepared)
 		{
 			clientThread.invoke(() ->
@@ -121,6 +131,7 @@ public class WastedBankSpacePlugin extends Plugin
 	{
 		navButton = null;
 		panel = null;
+		overlayManager.remove(storageItemOverlay);
 	}
 
 	//=====Event Subscriptions
@@ -214,7 +225,7 @@ public class WastedBankSpacePlugin extends Plugin
 		);
 	}
 
-	private List<StorableItem>  getEnabledItemLists()
+	public List<StorableItem>  getEnabledItemLists()
 	{
 		List<StorableItem> ret = new ArrayList<>();
 		for (StorageLocationEnabler sle:
