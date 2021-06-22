@@ -1,9 +1,34 @@
+/*
+ * BSD 2-Clause License
+ *
+ * Copyright (c) 2021, Riley McGee
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package com.wastedbankspace;
 
 import com.google.inject.Provides;
-import javax.inject.Inject;
-import javax.swing.SwingUtilities;
-
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocation;
 import com.wastedbankspace.model.StorageLocationEnabler;
@@ -11,7 +36,6 @@ import com.wastedbankspace.ui.WastedBankSpacePanel;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
-import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
@@ -23,8 +47,11 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 import net.runelite.client.util.ImageUtil;
 
+import javax.inject.Inject;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
@@ -35,11 +62,6 @@ import java.util.*;
 )
 public class WastedBankSpacePlugin extends Plugin
 {
-	//=====Constants
-	//Images stored in main/resources
-	private static final BufferedImage ICON = ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/icon.png");
-
-	//=====Inject
 	@Inject
 	private Client client;
 
@@ -59,20 +81,20 @@ public class WastedBankSpacePlugin extends Plugin
 	private StorageItemOverlay storageItemOverlay;
 
 	@Inject
+	private TooltipManager tooltipManager;
+
+	@Inject
 	private WastedBankSpaceConfig config;
 
-	//=====Provides
 	@Provides
 	WastedBankSpaceConfig provideConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(WastedBankSpaceConfig.class);
 	}
 
-	//=====Local Properties
+	private static final BufferedImage ICON = ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/overlaySmoll.png");
 	public static final String CONFIG_GROUP = "Wasted Bank Space";
 	private static boolean prepared = false;
-
-	private final Map<Integer, Integer> inventoryHashMap = new HashMap<>();
 
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
 			new StorageLocationEnabler(StorageLocation.TACKLE_BOX, () -> config.tackleBoxCheck(), StorableItem.tackleBoxItems),
@@ -87,7 +109,6 @@ public class WastedBankSpacePlugin extends Plugin
 	private WastedBankSpacePanel panel;
 	private Map<Integer, Integer> inventoryMap = new HashMap<>();
 
-	//=====Override Runelite Functions
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -134,21 +155,6 @@ public class WastedBankSpacePlugin extends Plugin
 		overlayManager.remove(storageItemOverlay);
 	}
 
-	//=====Event Subscriptions
-	@Subscribe
-	public void onGameStateChanged(GameStateChanged gameStateChanged)
-	{
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
-		{
-			//client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.greeting(), null);
-//			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.boltPouchCheck(), null);
-		}
-	}
-
-
-	/*
-	 * Adapted from thestonedturtle.bankedexperience;
-	 */
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged ev)
 	{
@@ -169,7 +175,6 @@ public class WastedBankSpacePlugin extends Plugin
 		updateWastedBankSpace();
 	}
 
-	//=====Private Functions
 	private void updateItemsFromItemContainer(final int inventoryId, final ItemContainer c)
 	{
 		// Check if the contents have changed.
