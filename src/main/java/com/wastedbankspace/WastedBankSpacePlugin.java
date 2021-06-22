@@ -114,7 +114,7 @@ public class WastedBankSpacePlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		panel = new WastedBankSpacePanel(client, config, itemManager);
+		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager);
 		navButton = NavigationButton.builder()
 				.tooltip("Wasted Bank Space")
 				.priority(8)
@@ -162,7 +162,7 @@ public class WastedBankSpacePlugin extends Plugin
 	{
 		if (ev.getContainerId() == InventoryID.BANK.getId())
 		{
-			updateItemsFromItemContainer(ev.getContainerId(), ev.getItemContainer());
+			updateItemsFromBankContainer(ev.getItemContainer());
 		}
 	}
 
@@ -177,7 +177,7 @@ public class WastedBankSpacePlugin extends Plugin
 		updateWastedBankSpace();
 	}
 
-	private void updateItemsFromItemContainer(final int inventoryId, final ItemContainer c)
+	private void updateItemsFromBankContainer(final ItemContainer c)
 	{
 		// Check if the contents have changed.
 		if (c == null)
@@ -228,7 +228,7 @@ public class WastedBankSpacePlugin extends Plugin
 		}
 
 		SwingUtilities.invokeLater(
-				() -> panel.setWastedBankSpaceItems(StorableItem.storableListToString(storableItemsInBank))
+				() -> panel.setWastedBankSpaceItems(storableItemsInBank)
 		);
 	}
 

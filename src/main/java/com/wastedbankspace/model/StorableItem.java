@@ -244,7 +244,7 @@ public enum StorableItem {
     public static final List<StorableItem> flamtaerBagItems = storableItemsAtLocation(StorageLocation.FLAMTAER_BAG);
     public static final List<StorableItem> nightmareZoneItems = storableItemsAtLocation(StorageLocation.NIGHTMARE_ZONE);
 
-    private static Map<StorableItem, String> storableItemNameMap = new HashMap<>();
+    private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
     static
     {
@@ -278,8 +278,8 @@ public enum StorableItem {
     public static List<String> storableListToString(List<StorableItem> items)
     {
         return items.stream()
-                .filter(i -> storableItemNameMap.containsKey(i))
-                .map(i -> String.format("%s --> %s", storableItemNameMap.get(i), i.location.toString()))
+                .filter(storableItemNameMap::containsKey)
+                .map(i -> String.format("%s", storableItemNameMap.get(i)))
                 .collect(Collectors.toList());
     }
 

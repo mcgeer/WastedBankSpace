@@ -29,26 +29,29 @@
 package com.wastedbankspace.ui;
 
 import com.wastedbankspace.WastedBankSpaceConfig;
+import com.wastedbankspace.model.StorableItem;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.PluginPanel;
+import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Vector;
 
 @Slf4j
 public class WastedBankSpacePanel extends PluginPanel
 {
 
-    private JLabel numberOfItemsText;
-    private JList data;
+    private final JLabel numberOfItemsText;
+    private final JList<String> data;
+    private List<StorableItem> items;
 
-    private int numberOfItems = 0;
-
-    public WastedBankSpacePanel(Client client, WastedBankSpaceConfig config, ItemManager itemManager)
+    public WastedBankSpacePanel(Client client, TooltipManager tooltipManager, WastedBankSpaceConfig config, ItemManager itemManager)
     {
         super();
 
@@ -57,7 +60,16 @@ public class WastedBankSpacePanel extends PluginPanel
 
         numberOfItemsText = new JLabel("Please Visit Your Bank");
 
-        data = new JList();
+        data = new JList<String>()
+        {
+            public String getToolTipText(MouseEvent me) {
+                int index = locationToIndex(me.getPoint());
+                if (index > -1 && items != null) {
+                    return items.get(index).location.getUiRepresentation();
+                }
+                return null;
+            }
+        };
         data.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         data.setSelectedIndex(0);
         data.setVisibleRowCount(10);
@@ -92,12 +104,12 @@ public class WastedBankSpacePanel extends PluginPanel
         }
     }
 
-    public void setWastedBankSpaceItems(List<String> items)
+    public void setWastedBankSpaceItems(List<StorableItem> items)
     {
+        this.items = items;
         //Update number of items that can be moved
-        numberOfItemsText.setText("Number of Items: " + items.size());
-        data.setListData(items.toArray());
-
+        numberOfItemsText.setText("Number of Items Wasting Space: " + items.size());
+        data.setListData(new Vector<>(StorableItem.storableListToString(items)));
         this.updateUI();
     }
 

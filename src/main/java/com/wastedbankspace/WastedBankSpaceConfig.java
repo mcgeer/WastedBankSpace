@@ -67,15 +67,15 @@ public interface WastedBankSpaceConfig extends Config
 
 		See https://oldschool.runescape.wiki/w/Storage
 	 */
-	@ConfigItem(keyName = "pohStorageCheck",
-			name = "PoH Storage",
-			description = "Not Supported",
-			position = 1
-	)
-	default boolean pohStorageCheck()
-	{
-		return false;
-	}
+//	@ConfigItem(keyName = "pohStorageCheck",
+//			name = "PoH Storage",
+//			description = "Not Supported",
+//			position = 1
+//	)
+//	default boolean pohStorageCheck()
+//	{
+//		return false;
+//	}
 
 	@ConfigItem(keyName = TACKLE_BOX_CHECK_KEY,
 			name = "Tackle Box Items",
@@ -87,15 +87,15 @@ public interface WastedBankSpaceConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(keyName = "boltPouchCheck",
-			name = "Bolt Pouch",
-			description = "Check for items that could be in your bolt pouch - Hirko in eastern Keldagrim",
-			position = 3
-	)
-	default boolean boltPouchCheck()
-	{
-		return true;
-	}
+//	@ConfigItem(keyName = "boltPouchCheck",
+//			name = "Bolt Pouch",
+//			description = "Check for items that could be in your bolt pouch - Hirko in eastern Keldagrim",
+//			position = 3
+//	)
+//	default boolean boltPouchCheck()
+//	{
+//		return true;
+//	}
 
 	@ConfigItem(keyName = STEEL_KEY_RING_CHECK_KEY,
 			name = "Steel Key Ring",

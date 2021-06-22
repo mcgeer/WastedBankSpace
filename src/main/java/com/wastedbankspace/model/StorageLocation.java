@@ -44,7 +44,7 @@ public enum StorageLocation {
     FLAMTAER_BAG("Flamtaer Bag"),
     NIGHTMARE_ZONE("Nightmare Zone");
 
-    private String uiRepresentation;
+    private final String uiRepresentation;
 
     StorageLocation(String uiRepresentation)
     {

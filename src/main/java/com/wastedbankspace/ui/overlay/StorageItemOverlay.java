@@ -35,7 +35,6 @@ import com.wastedbankspace.WastedBankSpacePlugin;
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
 import net.runelite.api.Client;
-import net.runelite.api.ItemComposition;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.game.ItemManager;
