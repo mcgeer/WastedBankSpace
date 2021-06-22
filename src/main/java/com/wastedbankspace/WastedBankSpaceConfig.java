@@ -42,6 +42,8 @@ public interface WastedBankSpaceConfig extends Config
 	String MASTER_SCROLL_BOOK_CHECK_KEY = "masterScrollBookCheck";
 	String FOSSIL_STORAGE_CHECK_KEY = "fossilStorageCheck";
 	String ELNOCK_INQUISITOR_CHECK_KEY = "elnockInquisitorCheck";
+	String FLAMTAER_BAG_CHECK_KEY = "flamtaerBagCheck";
+	String NIGHTMARE_ZONE_CHECK_KEY = "nightmareZoneCheck";
 
 	/*Order
 		Tackle Box
@@ -49,47 +51,36 @@ public interface WastedBankSpaceConfig extends Config
 		Tool Lep
 		Master Scroll Book
 		Fossil Island Chest
+		Elknok for jars, update wiki storage
+		Flamtaer bag
+		Nightmare Zone
+
+		Tips
 
 		-- Below here is for the future and Ideas--
-		Flamtaer bag
 		Bolt Pouch
 		PoH Storage
-		Check Stash Units
 		Seeds - Box or Vault
 		Herb Sack
 		Gem Bag
 		Rune Pouch
 
-		Other storage spaces?
-		Elknok for jars, update wiki storage
-		Flag useless quest items - Add a tip to ask the WOM to remove Junk
-
 		See https://oldschool.runescape.wiki/w/Storage
 	 */
 	@ConfigItem(keyName = "pohStorageCheck",
 			name = "PoH Storage",
-			description = "Check for items that could be in your PoH storage",
+			description = "Not Supported",
 			position = 1
 	)
 	default boolean pohStorageCheck()
 	{
-		return true;
-	}
-
-	@ConfigItem(keyName = "stashUnitCheck",
-			name = "Stash Units",
-			description = "Check for items that could be in unused Stash Units",
-			position = 2
-	)
-	default boolean stashUnitCheck()
-	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(keyName = TACKLE_BOX_CHECK_KEY,
 			name = "Tackle Box Items",
 			description = "Check for items that could be in your tackle box",
-			position = 3
+			position = 2
 	)
 	default boolean tackleBoxCheck()
 	{
@@ -99,7 +90,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = "boltPouchCheck",
 			name = "Bolt Pouch",
 			description = "Check for items that could be in your bolt pouch - Hirko in eastern Keldagrim",
-			position = 4
+			position = 3
 	)
 	default boolean boltPouchCheck()
 	{
@@ -109,7 +100,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = STEEL_KEY_RING_CHECK_KEY,
 			name = "Steel Key Ring",
 			description = "Stores some keys - One small favor reward",
-			position = 5
+			position = 4
 	)
 	default boolean keyRingCheck()
 	{
@@ -119,7 +110,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = TOOL_LEP_CHECK_KEY,
 			name = "Tool Leprechaun",
 			description = "Stores farming items, note low limits on many items",
-			position = 6
+			position = 5
 	)
 	default boolean toolLepCheck()
 	{
@@ -129,7 +120,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = MASTER_SCROLL_BOOK_CHECK_KEY,
 			name = "Master Scroll Book",
 			description = "Stores teleport scrolls",
-			position = 7
+			position = 6
 	)
 	default boolean masterScrollBookCheck()
 	{
@@ -139,7 +130,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = FOSSIL_STORAGE_CHECK_KEY,
 			name = "Fossil Storage",
 			description = "Storage for fossils on Fossil Island and in Varrok Museum",
-			position = 8
+			position = 7
 	)
 	default boolean fossilStorageCheck()
 	{
@@ -149,9 +140,29 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = ELNOCK_INQUISITOR_CHECK_KEY,
 			name = "Puro Pruo Storage",
 			description = "Elnock Inquisitor will hold some items in Puro Puro",
-			position = 9
+			position = 8
 	)
 	default boolean elnockInquisitorCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = FLAMTAER_BAG_CHECK_KEY,
+			name = "Flamtaer Bag Storage",
+			description = "Storage for Shades of Morton (minigame) items",
+			position = 9
+	)
+	default boolean flamtaerBagCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = NIGHTMARE_ZONE_CHECK_KEY,
+			name = "Nightmare Zone Potion Storage",
+			description = "Potion's which store in the barrels at the nmz (minigame)",
+			position = 10
+	)
+	default boolean nightmareZoneCheck()
 	{
 		return true;
 	}

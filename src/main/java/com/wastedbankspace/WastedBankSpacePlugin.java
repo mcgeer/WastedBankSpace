@@ -102,7 +102,9 @@ public class WastedBankSpacePlugin extends Plugin
 			new StorageLocationEnabler(StorageLocation.TOOL_LEP, () -> config.toolLepCheck(), StorableItem.toolLepItems),
 			new StorageLocationEnabler(StorageLocation.MASTER_SCROLL_BOOK, () -> config.masterScrollBookCheck(), StorableItem.masterScrollBookItems),
 			new StorageLocationEnabler(StorageLocation.FOSSIL_STORAGE, () -> config.fossilStorageCheck(), StorableItem.fossilStorageItems),
-			new StorageLocationEnabler(StorageLocation.PURO_PURO, () -> config.elnockInquisitorCheck(), StorableItem.puroPuroItems)
+			new StorageLocationEnabler(StorageLocation.PURO_PURO, () -> config.elnockInquisitorCheck(), StorableItem.puroPuroItems),
+			new StorageLocationEnabler(StorageLocation.FLAMTAER_BAG, () -> config.flamtaerBagCheck(), StorableItem.flamtaerBagItems),
+			new StorageLocationEnabler(StorageLocation.NIGHTMARE_ZONE, () -> config.nightmareZoneCheck(), StorableItem.nightmareZoneItems)
 	);
 
 	private NavigationButton navButton;

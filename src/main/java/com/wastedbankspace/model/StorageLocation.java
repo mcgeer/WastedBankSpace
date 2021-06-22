@@ -40,7 +40,9 @@ public enum StorageLocation {
     MASTER_SCROLL_BOOK("Master Scroll Book"),
     FOSSIL_STORAGE("Fossil Storage"),
     BOLT_POUCH("Bolt Pouch"),
-    PURO_PURO("Puro Puro");
+    PURO_PURO("Puro Puro"),
+    FLAMTAER_BAG("Flamtaer Bag"),
+    NIGHTMARE_ZONE("Nightmare Zone");
 
     private String uiRepresentation;
 

@@ -202,7 +202,34 @@ public enum StorableItem {
     BUTTERFLY_NET(ItemID.BUTTERFLY_NET, StorageLocation.PURO_PURO),
     MAGIC_BUTTERFLY_NET(ItemID.MAGIC_BUTTERFLY_NET, StorageLocation.PURO_PURO),
     IMPLING_JAR(ItemID.IMPLING_JAR, StorageLocation.PURO_PURO),
-    IMP_REPELLENT(ItemID.IMP_REPELLENT, StorageLocation.PURO_PURO)
+    IMP_REPELLENT(ItemID.IMP_REPELLENT, StorageLocation.PURO_PURO),
+
+    /**
+     * Flamtaer Bag
+     */
+    TIMBER_BEAMS(ItemID.TIMBER_BEAM, StorageLocation.FLAMTAER_BAG),
+    LIMESTONE_BRICK(ItemID.LIMESTONE_BRICK, StorageLocation.FLAMTAER_BAG),
+    SWAMP_PASTE(ItemID.SWAMP_PASTE, StorageLocation.FLAMTAER_BAG),
+
+    /**
+     * Nightmare Zone
+     */
+    ABSORPTION_1(ItemID.ABSORPTION_1, StorageLocation.NIGHTMARE_ZONE),
+    ABSORPTION_2(ItemID.ABSORPTION_2, StorageLocation.NIGHTMARE_ZONE),
+    ABSORPTION_3(ItemID.ABSORPTION_3, StorageLocation.NIGHTMARE_ZONE),
+    ABSORPTION_4(ItemID.ABSORPTION_4, StorageLocation.NIGHTMARE_ZONE),
+    OVERLOAD_1(ItemID.OVERLOAD_1, StorageLocation.NIGHTMARE_ZONE),
+    OVERLOAD_2(ItemID.OVERLOAD_2, StorageLocation.NIGHTMARE_ZONE),
+    OVERLOAD_3(ItemID.OVERLOAD_4, StorageLocation.NIGHTMARE_ZONE),
+    OVERLOAD_4(ItemID.OVERLOAD_3, StorageLocation.NIGHTMARE_ZONE),
+    SUPER_MAGIC_POTION_1(ItemID.SUPER_MAGIC_POTION_1, StorageLocation.NIGHTMARE_ZONE),
+    SUPER_MAGIC_POTION_2(ItemID.SUPER_MAGIC_POTION_2, StorageLocation.NIGHTMARE_ZONE),
+    SUPER_MAGIC_POTION_3(ItemID.SUPER_MAGIC_POTION_3, StorageLocation.NIGHTMARE_ZONE),
+    SUPER_MAGIC_POTION_4(ItemID.SUPER_MAGIC_POTION_4, StorageLocation.NIGHTMARE_ZONE),
+    SUPER_RANGING_1(ItemID.SUPER_RANGING_1, StorageLocation.NIGHTMARE_ZONE),
+    SUPER_RANGING_2(ItemID.SUPER_RANGING_2, StorageLocation.NIGHTMARE_ZONE),
+    SUPER_RANGING_3(ItemID.SUPER_RANGING_3, StorageLocation.NIGHTMARE_ZONE),
+    SUPER_RANGING_4(ItemID.SUPER_RANGING_4, StorageLocation.NIGHTMARE_ZONE)
     ;
 
     public final int itemID;
@@ -214,6 +241,8 @@ public enum StorableItem {
     public static final List<StorableItem> masterScrollBookItems = storableItemsAtLocation(StorageLocation.MASTER_SCROLL_BOOK);
     public static final List<StorableItem> fossilStorageItems = storableItemsAtLocation(StorageLocation.FOSSIL_STORAGE);
     public static final List<StorableItem> puroPuroItems = storableItemsAtLocation(StorageLocation.PURO_PURO);
+    public static final List<StorableItem> flamtaerBagItems = storableItemsAtLocation(StorageLocation.FLAMTAER_BAG);
+    public static final List<StorableItem> nightmareZoneItems = storableItemsAtLocation(StorageLocation.NIGHTMARE_ZONE);
 
     private static Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
