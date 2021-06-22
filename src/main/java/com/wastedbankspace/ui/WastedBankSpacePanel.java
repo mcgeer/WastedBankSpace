@@ -43,7 +43,7 @@ import java.util.List;
 public class WastedBankSpacePanel extends PluginPanel
 {
 
-    private JTextArea numberOfItemsText;
+    private JLabel numberOfItemsText;
     private JList data;
 
     private int numberOfItems = 0;
@@ -55,22 +55,25 @@ public class WastedBankSpacePanel extends PluginPanel
         setBorder(new EmptyBorder(10, 10, 10, 10));
         setLayout(new GridBagLayout());
 
-        numberOfItemsText = new JTextArea("Please Visit Your Bank");
-        numberOfItemsText.setEditable(false);
+        numberOfItemsText = new JLabel("Please Visit Your Bank");
 
         data = new JList();
         data.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         data.setSelectedIndex(0);
         data.setVisibleRowCount(10);
 
-        final String tipTab = "         ";
+        final String tipTab = "    ";
         final String[] tips = new String[]{
                 "Tips",
-                "Tip1: Talk to the Wise Old Man",
+                "1: Talk to the Wise Old Man",
                 tipTab + "to remove Junk Quest Items",
-                "Tip2: Murky Matt combines jewelery charges",
-                "Tip3: Make item sets at the ge",
-                tipTab + "PHat and Mask sets save many spaces"
+                "2: Murky Matt combines ",
+                tipTab + "jewelery charges",
+                "3: Make item sets at the ge",
+                "3.1: PHat and Mask can be combined",
+                "4: Clue items in PoH (future update)",
+                "5: Costumes, sets, capes in PoH",
+                "6: Alch, trade, sell"
         };
 
         final GridBagConstraints c = new GridBagConstraints();
