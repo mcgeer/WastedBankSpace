@@ -155,9 +155,11 @@ public class WastedBankSpacePlugin extends Plugin
 	@Override
 	protected void shutDown() throws Exception
 	{
+		clientToolbar.removeNavigation(navButton);
+		overlayManager.remove(storageItemOverlay);
+
 		navButton = null;
 		panel = null;
-		overlayManager.remove(storageItemOverlay);
 	}
 
 	@Subscribe
