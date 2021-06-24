@@ -79,7 +79,7 @@ public interface WastedBankSpaceConfig extends Config
 	}
 
 	@ConfigItem(keyName = SEED_CHECK_KEY,
-			name = "Seed Box/Vault Chek",
+			name = "Seed Box/Vault",
 			description = "Seeds can be storred in a seed box, sapplings and seeds in the vault",
 			position = 2
 	)
