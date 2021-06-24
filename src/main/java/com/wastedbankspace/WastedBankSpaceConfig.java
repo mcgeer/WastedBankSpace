@@ -44,6 +44,7 @@ public interface WastedBankSpaceConfig extends Config
 	String ELNOCK_INQUISITOR_CHECK_KEY = "elnockInquisitorCheck";
 	String FLAMTAER_BAG_CHECK_KEY = "flamtaerBagCheck";
 	String NIGHTMARE_ZONE_CHECK_KEY = "nightmareZoneCheck";
+	String SEED_CHECK_KEY = "seedCheck";
 
 	/*Order
 		Tackle Box
@@ -77,25 +78,25 @@ public interface WastedBankSpaceConfig extends Config
 //		return false;
 //	}
 
+	@ConfigItem(keyName = SEED_CHECK_KEY,
+			name = "Seed Box/Vault Chek",
+			description = "Seeds can be storred in a seed box, sapplings and seeds in the vault",
+			position = 2
+	)
+	default boolean seedCheck()
+	{
+		return true;
+	}
+
 	@ConfigItem(keyName = TACKLE_BOX_CHECK_KEY,
 			name = "Tackle Box Items",
 			description = "Check for items that could be in your tackle box",
-			position = 2
+			position = 3
 	)
 	default boolean tackleBoxCheck()
 	{
 		return true;
 	}
-
-//	@ConfigItem(keyName = "boltPouchCheck",
-//			name = "Bolt Pouch",
-//			description = "Check for items that could be in your bolt pouch - Hirko in eastern Keldagrim",
-//			position = 3
-//	)
-//	default boolean boltPouchCheck()
-//	{
-//		return true;
-//	}
 
 	@ConfigItem(keyName = STEEL_KEY_RING_CHECK_KEY,
 			name = "Steel Key Ring",
