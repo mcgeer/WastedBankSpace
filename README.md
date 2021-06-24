@@ -10,7 +10,7 @@ You must view your bank while the plugin is enabled for it to register what item
 
 # Configuration
 All of the following configurations are enabled by deafult.
-### PoHClue Item Storage
+### PoH Clue Item Storage
 Check all items which can be storred in the PoH Teasure Chests
 
 ### Seed Box/Vault
