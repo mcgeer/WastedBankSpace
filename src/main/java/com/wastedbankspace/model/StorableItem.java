@@ -229,7 +229,111 @@ public enum StorableItem {
     SUPER_RANGING_1(ItemID.SUPER_RANGING_1, StorageLocation.NIGHTMARE_ZONE),
     SUPER_RANGING_2(ItemID.SUPER_RANGING_2, StorageLocation.NIGHTMARE_ZONE),
     SUPER_RANGING_3(ItemID.SUPER_RANGING_3, StorageLocation.NIGHTMARE_ZONE),
-    SUPER_RANGING_4(ItemID.SUPER_RANGING_4, StorageLocation.NIGHTMARE_ZONE)
+    SUPER_RANGING_4(ItemID.SUPER_RANGING_4, StorageLocation.NIGHTMARE_ZONE),
+
+    /**
+     * Seeds
+     */
+    //ALLOTMENT SEEDS
+    POTATO_SEED(ItemID.POTATO_SEED, StorageLocation.SEEDS),
+    ONION_SEED(ItemID.ONION_SEED, StorageLocation.SEEDS),
+    CABBAGE_SEED(ItemID.CABBAGE_SEED, StorageLocation.SEEDS),
+    TOMATO_SEED(ItemID.TOMATO_SEED, StorageLocation.SEEDS),
+    SWEETCORN_SEED(ItemID.SWEETCORN_SEED, StorageLocation.SEEDS),
+    STRAWBERRY_SEED(ItemID.STRAWBERRY_SEED, StorageLocation.SEEDS),
+    WATERMELON_SEED(ItemID.WATERMELON_SEED, StorageLocation.SEEDS),
+    SNAPE_GRASS_SEED(ItemID.SNAPE_GRASS_SEED, StorageLocation.SEEDS),
+    //FLOWER SEEDS
+    MARIGOLD_SEED(ItemID.MARIGOLD_SEED, StorageLocation.SEEDS),
+    ROSEMARY_SEED(ItemID.ROSEMARY_SEED, StorageLocation.SEEDS),
+    NASTURTIUM_SEED(ItemID.NASTURTIUM_SEED, StorageLocation.SEEDS),
+    WOAD_SEED(ItemID.WOAD_SEED, StorageLocation.SEEDS),
+    LIMPWURT_SEED(ItemID.LIMPWURT_SEED, StorageLocation.SEEDS),
+    WHITE_LILY_SEED(ItemID.WHITE_LILY_SEED, StorageLocation.SEEDS),
+    //HERB SEEDS
+    GUAM_SEED(ItemID.GUAM_SEED, StorageLocation.SEEDS),
+    MARRENTILL_SEED(ItemID.MARRENTILL_SEED, StorageLocation.SEEDS),
+    TARROMIN_SEED(ItemID.TARROMIN_SEED, StorageLocation.SEEDS),
+    HARRALANDER_SEED(ItemID.HARRALANDER_SEED, StorageLocation.SEEDS),
+    RANARR_SEED(ItemID.RANARR_SEED, StorageLocation.SEEDS),
+    TOADFLAX_SEED(ItemID.TOADFLAX_SEED, StorageLocation.SEEDS),
+    IRIT_SEED(ItemID.IRIT_SEED, StorageLocation.SEEDS),
+    AVANTOE_SEED(ItemID.AVANTOE_SEED, StorageLocation.SEEDS),
+    KWUARM_SEED(ItemID.KWUARM_SEED, StorageLocation.SEEDS),
+    SNAPDRAGON_SEED(ItemID.SNAPDRAGON_SEED, StorageLocation.SEEDS),
+    CADANTINE_SEED(ItemID.CADANTINE_SEED, StorageLocation.SEEDS),
+    LANTADYME_SEED(ItemID.LANTADYME_SEED, StorageLocation.SEEDS),
+    DWARF_WEED_SEED(ItemID.DWARF_WEED_SEED, StorageLocation.SEEDS),
+    TORSTOL_SEED(ItemID.TORSTOL_SEED, StorageLocation.SEEDS),
+    //HOP SEEDS
+    BARLEY_SEED(ItemID.BARLEY_SEED, StorageLocation.SEEDS),
+    HAMMERSTONE_SEED(ItemID.HAMMERSTONE_SEED, StorageLocation.SEEDS),
+    ASGARNIAN_SEED(ItemID.ASGARNIAN_SEED, StorageLocation.SEEDS),
+    JUTE_SEED(ItemID.JUTE_SEED, StorageLocation.SEEDS),
+    YANILLIAN_SEED(ItemID.YANILLIAN_SEED, StorageLocation.SEEDS),
+    KRANDORIAN_SEED(ItemID.KRANDORIAN_SEED, StorageLocation.SEEDS),
+    WILDBLOOD_SEED(ItemID.WILDBLOOD_SEED, StorageLocation.SEEDS),
+    //BUSH SEEDS
+    REDBERRY_SEED(ItemID.REDBERRY_SEED, StorageLocation.SEEDS),
+    CADAVABERRY_SEED(ItemID.CADAVABERRY_SEED, StorageLocation.SEEDS),
+    DWELLBERRY_SEED(ItemID.DWELLBERRY_SEED, StorageLocation.SEEDS),
+    JANGERBERRY_SEED(ItemID.JANGERBERRY_SEED, StorageLocation.SEEDS),
+    WHITEBERRY_SEED(ItemID.WHITEBERRY_SEED, StorageLocation.SEEDS),
+    POISON_IVY_SEED(ItemID.POISON_IVY_SEED, StorageLocation.SEEDS),
+    //TREE SEEDS
+    ACORN(ItemID.ACORN, StorageLocation.SEEDS),
+    WILLOW_SEED(ItemID.WILLOW_SEED, StorageLocation.SEEDS),
+    MAPLE_SEED(ItemID.MAPLE_SEED, StorageLocation.SEEDS),
+    YEW_SEED(ItemID.YEW_SEED, StorageLocation.SEEDS),
+    MAGIC_SEED(ItemID.MAGIC_SEED, StorageLocation.SEEDS),
+    //FRUIT TREE SEEDS
+    APPLE_TREE_SEED(ItemID.APPLE_TREE_SEED, StorageLocation.SEEDS),
+    BANANA_TREE_SEED(ItemID.BANANA_TREE_SEED, StorageLocation.SEEDS),
+    ORANGE_TREE_SEED(ItemID.ORANGE_TREE_SEED, StorageLocation.SEEDS),
+    PINEAPPLE_SEED(ItemID.PINEAPPLE_SEED, StorageLocation.SEEDS),
+    PALM_TREE_SEED(ItemID.PALM_TREE_SEED, StorageLocation.SEEDS),
+    DRAGONFRUIT_TREE_SEED(ItemID.DRAGONFRUIT_TREE_SEED, StorageLocation.SEEDS),
+    //SPECIAL SEEDS
+    SEAWEED_SPORE(ItemID.SEAWEED_SPORE, StorageLocation.SEEDS),
+    GRAPE_SEED(ItemID.GRAPE_SEED, StorageLocation.SEEDS),
+    MUSHROOM_SPORE(ItemID.MUSHROOM_SPORE, StorageLocation.SEEDS),
+    BELLADONNA_SEED(ItemID.BELLADONNA_SEED, StorageLocation.SEEDS),
+    HESPORI_SEED(ItemID.HESPORI_SEED, StorageLocation.SEEDS),
+    //ANIMA SEEDS
+    KRONOS_SEED(ItemID.KRONOS_SEED, StorageLocation.SEEDS),
+    IASOR_SEED(ItemID.IASOR_SEED, StorageLocation.SEEDS),
+    ATTAS_SEED(ItemID.ATTAS_SEED, StorageLocation.SEEDS),
+    //SPECIAL TREES
+    TEAK_SEED(ItemID.TEAK_SEED, StorageLocation.SEEDS),
+    MAHOGANY_SEED(ItemID.MAHOGANY_SEED, StorageLocation.SEEDS),
+    CALQUAT_TREE_SEED(ItemID.CALQUAT_TREE_SEED, StorageLocation.SEEDS),
+    CRYSTAL_ACORN(ItemID.CRYSTAL_ACORN, StorageLocation.SEEDS),
+    SPIRIT_SEED(ItemID.SPIRIT_SEED, StorageLocation.SEEDS),
+    CELASTRUS_SEED(ItemID.CELASTRUS_SEED, StorageLocation.SEEDS),
+    REDWOOD_TREE_SEED(ItemID.REDWOOD_TREE_SEED, StorageLocation.SEEDS),
+    //CACTI SEEDS
+    CACTUS_SEED(ItemID.CACTUS_SEED, StorageLocation.SEEDS),
+    POTATO_CACTUS_SEED(ItemID.POTATO_CACTUS_SEED, StorageLocation.SEEDS),
+    //TREE SAPLINGS
+    OAK_SAPLING(ItemID.OAK_SAPLING, StorageLocation.SEEDS),
+    WILLOW_SAPLING(ItemID.WILLOW_SAPLING, StorageLocation.SEEDS),
+    MAPLE_SAPLING(ItemID.MAPLE_SAPLING, StorageLocation.SEEDS),
+    YEW_SAPLING(ItemID.YEW_SAPLING, StorageLocation.SEEDS),
+    MAGIC_SAPLING(ItemID.MAGIC_SAPLING, StorageLocation.SEEDS),
+    //FRUIT TREES
+    APPLE_SAPLING(ItemID.APPLE_SAPLING, StorageLocation.SEEDS),
+    BANANA_SAPLING(ItemID.BANANA_SAPLING, StorageLocation.SEEDS),
+    ORANGE_SAPLING(ItemID.ORANGE_SAPLING, StorageLocation.SEEDS),
+    CURRY_SAPLING(ItemID.CURRY_SAPLING, StorageLocation.SEEDS),
+    PINEAPPLE_SAPLING(ItemID.PINEAPPLE_SAPLING, StorageLocation.SEEDS),
+    PALM_SAPLING(ItemID.PALM_SAPLING, StorageLocation.SEEDS),
+    DRAGONFRUIT_SAPLING(ItemID.DRAGONFRUIT_SAPLING, StorageLocation.SEEDS),
+    TEAK_SAPLING(ItemID.TEAK_SAPLING, StorageLocation.SEEDS),
+    MAHOGANY_SAPLING(ItemID.MAHOGANY_SAPLING, StorageLocation.SEEDS),
+    CALQUAT_SAPLING(ItemID.CALQUAT_SAPLING, StorageLocation.SEEDS),
+    SPIRIT_SAPLING(ItemID.SPIRIT_SAPLING, StorageLocation.SEEDS),
+    CELASTRUS_SAPLING(ItemID.CELASTRUS_SAPLING, StorageLocation.SEEDS),
+    REDWOOD_SAPLING(ItemID.REDWOOD_SAPLING, StorageLocation.SEEDS)
     ;
 
     public final int itemID;
@@ -243,6 +347,7 @@ public enum StorableItem {
     public static final List<StorableItem> puroPuroItems = storableItemsAtLocation(StorageLocation.PURO_PURO);
     public static final List<StorableItem> flamtaerBagItems = storableItemsAtLocation(StorageLocation.FLAMTAER_BAG);
     public static final List<StorableItem> nightmareZoneItems = storableItemsAtLocation(StorageLocation.NIGHTMARE_ZONE);
+    public static final List<StorableItem> seedItems = storableItemsAtLocation(StorageLocation.SEEDS);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();

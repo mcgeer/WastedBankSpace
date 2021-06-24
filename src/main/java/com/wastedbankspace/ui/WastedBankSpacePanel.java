@@ -84,8 +84,8 @@ public class WastedBankSpacePanel extends PluginPanel
                 "3: Make item sets at the ge",
                 "3.1: PHat and Mask can be combined",
                 "4: Clue items in PoH (future update)",
-                "5: Costumes, sets, capes in PoH",
-                "6: Alch, trade, sell"
+                "5: Costumes, sets, and capes in PoH",
+                "6: Store bolts in a bolt pouch"
         };
 
         final GridBagConstraints c = new GridBagConstraints();

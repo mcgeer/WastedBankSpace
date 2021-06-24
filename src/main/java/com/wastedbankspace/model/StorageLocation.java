@@ -32,8 +32,6 @@ import lombok.Getter;
 
 @Getter
 public enum StorageLocation {
-    POH("PoH"),
-    STASH("S.T.A.S.H. Unit"),
     TACKLE_BOX("Tackle Box"),
     STEEL_KEY_RING("Key Ring"),
     TOOL_LEP("Tool Lep"),
@@ -42,7 +40,8 @@ public enum StorageLocation {
     BOLT_POUCH("Bolt Pouch"),
     PURO_PURO("Puro Puro"),
     FLAMTAER_BAG("Flamtaer Bag"),
-    NIGHTMARE_ZONE("Nightmare Zone");
+    NIGHTMARE_ZONE("Nightmare Zone"),
+    SEEDS("Seed Box/Vault");
 
     private final String uiRepresentation;
 
