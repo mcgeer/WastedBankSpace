@@ -890,6 +890,7 @@ public enum StorableItem {
     SAMURAI_SHIRT(ItemID.SAMURAI_SHIRT, StorageLocation.MAHOGANY_TREASURE_CHEST),
     SAMURAI_KASA(ItemID.SAMURAI_KASA, StorageLocation.MAHOGANY_TREASURE_CHEST),
     SCROLL_SACK(ItemID.SCROLL_SACK, StorageLocation.MAHOGANY_TREASURE_CHEST)
+
     ;
 
     public final int itemID;
@@ -905,6 +906,8 @@ public enum StorableItem {
     public static final List<StorableItem> nightmareZoneItems = storableItemsAtLocation(StorageLocation.NIGHTMARE_ZONE);
     public static final List<StorableItem> seedItems = storableItemsAtLocation(StorageLocation.SEEDS);
     public static final List<StorableItem> oakTreasureChestItems = storableItemsAtLocation(StorageLocation.OAK_TREASURE_CHEST);
+    public static final List<StorableItem> teakTreasureChestItems = storableItemsAtLocation(StorageLocation.TEAK_TREASURE_CHEST);
+    public static final List<StorableItem> mahoganyTreasureChestItems = storableItemsAtLocation(StorageLocation.MAHOGANY_TREASURE_CHEST);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();

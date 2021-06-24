@@ -35,7 +35,8 @@ import net.runelite.client.config.ConfigItem;
 @ConfigGroup("Wasted Bank Space")
 public interface WastedBankSpaceConfig extends Config
 {
-
+	String CLUE_ITEM_CHECK_KEY = "clueItemCheck";
+	String SEED_CHECK_KEY = "seedCheck";
 	String TACKLE_BOX_CHECK_KEY = "tackleBoxCheck";
 	String STEEL_KEY_RING_CHECK_KEY = "keyRingCheck";
 	String TOOL_LEP_CHECK_KEY = "toolLepCheck";
@@ -44,7 +45,6 @@ public interface WastedBankSpaceConfig extends Config
 	String ELNOCK_INQUISITOR_CHECK_KEY = "elnockInquisitorCheck";
 	String FLAMTAER_BAG_CHECK_KEY = "flamtaerBagCheck";
 	String NIGHTMARE_ZONE_CHECK_KEY = "nightmareZoneCheck";
-	String SEED_CHECK_KEY = "seedCheck";
 
 	/*Order
 		Tackle Box
@@ -68,15 +68,15 @@ public interface WastedBankSpaceConfig extends Config
 
 		See https://oldschool.runescape.wiki/w/Storage
 	 */
-//	@ConfigItem(keyName = "pohStorageCheck",
-//			name = "PoH Storage",
-//			description = "Not Supported",
-//			position = 1
-//	)
-//	default boolean pohStorageCheck()
-//	{
-//		return false;
-//	}
+	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
+			name = "PoH Clue Item Storage",
+			description = "Treasure Chest Storage",
+			position = 1
+	)
+	default boolean treasureChestStorageCheck()
+	{
+		return true;
+	}
 
 	@ConfigItem(keyName = SEED_CHECK_KEY,
 			name = "Seed Box/Vault Chek",
