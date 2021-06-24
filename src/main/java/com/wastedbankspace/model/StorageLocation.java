@@ -41,7 +41,11 @@ public enum StorageLocation {
     PURO_PURO("Puro Puro"),
     FLAMTAER_BAG("Flamtaer Bag"),
     NIGHTMARE_ZONE("Nightmare Zone"),
-    SEEDS("Seed Box/Vault");
+    SEEDS("Seed Box/Vault"),
+    OAK_TREASURE_CHEST("PoH Treasure Chest"),
+    TEAK_TREASURE_CHEST("PoH Treasure Chest"),
+    MAHOGANY_TREASURE_CHEST("PoH Treasure Chest")
+    ;
 
     private final String uiRepresentation;
 
