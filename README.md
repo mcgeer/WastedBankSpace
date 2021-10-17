@@ -29,7 +29,7 @@ Check all items which can be storred at a tool leprechaun
 Check for all Master Scroll Book storrable teleport scrolls
 
 ### Fossil Storage
-Check for any unidentified or identified fossils which can be storred on Fossil Island OR in the Varrok Museum
+Check for any unidentified or identified fossils which can be storred on Fossil Island OR in the Varrock Museum
 
 ### Puro-Puro Storage
 Check for items which can be given to Enlock Inquisitor
