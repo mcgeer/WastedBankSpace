@@ -44,7 +44,9 @@ public enum StorageLocation {
     SEEDS("Seed Box/Vault"),
     OAK_TREASURE_CHEST("PoH Treasure Chest"),
     TEAK_TREASURE_CHEST("PoH Treasure Chest"),
-    MAHOGANY_TREASURE_CHEST("PoH Treasure Chest")
+    MAHOGANY_TREASURE_CHEST("PoH Treasure Chest"),
+    FANCY_DRESS_BOX("PoH Fancy Dress Box"),
+    MAGIC_WARDROBE("PoH Magic Wardrobe"),
     ;
 
     private final String uiRepresentation;
