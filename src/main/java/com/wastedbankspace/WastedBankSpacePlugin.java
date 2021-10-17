@@ -108,7 +108,9 @@ public class WastedBankSpacePlugin extends Plugin
 			new StorageLocationEnabler(StorageLocation.SEEDS, () -> config.seedCheck(), StorableItem.seedItems),
 			new StorageLocationEnabler(StorageLocation.OAK_TREASURE_CHEST, () -> config.treasureChestStorageCheck(), StorableItem.oakTreasureChestItems),
 			new StorageLocationEnabler(StorageLocation.TEAK_TREASURE_CHEST, () -> config.treasureChestStorageCheck(), StorableItem.teakTreasureChestItems),
-			new StorageLocationEnabler(StorageLocation.MAHOGANY_TREASURE_CHEST, () -> config.treasureChestStorageCheck(), StorableItem.mahoganyTreasureChestItems)
+			new StorageLocationEnabler(StorageLocation.MAHOGANY_TREASURE_CHEST, () -> config.treasureChestStorageCheck(), StorableItem.mahoganyTreasureChestItems),
+			new StorageLocationEnabler(StorageLocation.FANCY_DRESS_BOX, () -> config.fancyDressBoxStorageCheck(), StorableItem.fancyDressBoxItems),
+			new StorageLocationEnabler(StorageLocation.MAGIC_WARDROBE, () -> config.magicWardrobeStorageCheck(), StorableItem.magicWardrobeItems)
 	);
 
 	private NavigationButton navButton;

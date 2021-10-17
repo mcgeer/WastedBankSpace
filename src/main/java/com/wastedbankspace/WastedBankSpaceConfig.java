@@ -36,6 +36,8 @@ import net.runelite.client.config.ConfigItem;
 public interface WastedBankSpaceConfig extends Config
 {
 	String CLUE_ITEM_CHECK_KEY = "clueItemCheck";
+	String FANCY_DRESS_BOX_KEY = "poHFancyDressBox";
+	String MAGIC_WARDROBE_KEY = "poHMagicWardrobe";
 	String SEED_CHECK_KEY = "seedCheck";
 	String TACKLE_BOX_CHECK_KEY = "tackleBoxCheck";
 	String STEEL_KEY_RING_CHECK_KEY = "keyRingCheck";
@@ -78,10 +80,30 @@ public interface WastedBankSpaceConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(keyName = FANCY_DRESS_BOX_KEY,
+			name = "PoH Fancy Dress Box",
+			description = "Random Event Items",
+			position = 2
+	)
+	default boolean fancyDressBoxStorageCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = MAGIC_WARDROBE_KEY,
+			name = "PoH Magic Wardrobe Storage",
+			description = "PoH Magic Wardrobe Storage",
+			position = 3
+	)
+	default boolean magicWardrobeStorageCheck()
+	{
+		return true;
+	}
+
 	@ConfigItem(keyName = SEED_CHECK_KEY,
 			name = "Seed Box/Vault",
 			description = "Seeds can be storred in a seed box, sapplings and seeds in the vault",
-			position = 2
+			position = 4
 	)
 	default boolean seedCheck()
 	{
@@ -91,7 +113,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = TACKLE_BOX_CHECK_KEY,
 			name = "Tackle Box Items",
 			description = "Check for items that could be in your tackle box",
-			position = 3
+			position = 5
 	)
 	default boolean tackleBoxCheck()
 	{
@@ -101,7 +123,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = STEEL_KEY_RING_CHECK_KEY,
 			name = "Steel Key Ring",
 			description = "Stores some keys - One small favor reward",
-			position = 4
+			position = 6
 	)
 	default boolean keyRingCheck()
 	{
@@ -111,7 +133,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = TOOL_LEP_CHECK_KEY,
 			name = "Tool Leprechaun",
 			description = "Stores farming items, note low limits on many items",
-			position = 5
+			position = 7
 	)
 	default boolean toolLepCheck()
 	{
@@ -121,7 +143,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = MASTER_SCROLL_BOOK_CHECK_KEY,
 			name = "Master Scroll Book",
 			description = "Stores teleport scrolls",
-			position = 6
+			position = 8
 	)
 	default boolean masterScrollBookCheck()
 	{
@@ -131,7 +153,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = FOSSIL_STORAGE_CHECK_KEY,
 			name = "Fossil Storage",
 			description = "Storage for fossils on Fossil Island and in Varrok Museum",
-			position = 7
+			position = 9
 	)
 	default boolean fossilStorageCheck()
 	{
@@ -141,7 +163,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = ELNOCK_INQUISITOR_CHECK_KEY,
 			name = "Puro Pruo Storage",
 			description = "Elnock Inquisitor will hold some items in Puro Puro",
-			position = 8
+			position = 10
 	)
 	default boolean elnockInquisitorCheck()
 	{
@@ -151,7 +173,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = FLAMTAER_BAG_CHECK_KEY,
 			name = "Flamtaer Bag Storage",
 			description = "Storage for Shades of Morton (minigame) items",
-			position = 9
+			position = 11
 	)
 	default boolean flamtaerBagCheck()
 	{
@@ -161,7 +183,7 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = NIGHTMARE_ZONE_CHECK_KEY,
 			name = "Nightmare Zone Potion Storage",
 			description = "Potion's which store in the barrels at the nmz (minigame)",
-			position = 10
+			position = 12
 	)
 	default boolean nightmareZoneCheck()
 	{
