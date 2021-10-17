@@ -92,7 +92,7 @@ public interface WastedBankSpaceConfig extends Config
 
 	@ConfigItem(keyName = MAGIC_WARDROBE_KEY,
 			name = "PoH Magic Wardrobe Storage",
-			description = "PoH Magic Wardrobe Storage",
+			description = "Magic armour and robe sets",
 			position = 3
 	)
 	default boolean magicWardrobeStorageCheck()
