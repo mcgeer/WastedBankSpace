@@ -161,7 +161,7 @@ public interface WastedBankSpaceConfig extends Config
 	}
 
 	@ConfigItem(keyName = ELNOCK_INQUISITOR_CHECK_KEY,
-			name = "Puro Pruo Storage",
+			name = "Puro Puro Storage",
 			description = "Elnock Inquisitor will hold some items in Puro Puro",
 			position = 10
 	)
