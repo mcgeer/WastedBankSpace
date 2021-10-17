@@ -48,28 +48,6 @@ public interface WastedBankSpaceConfig extends Config
 	String FLAMTAER_BAG_CHECK_KEY = "flamtaerBagCheck";
 	String NIGHTMARE_ZONE_CHECK_KEY = "nightmareZoneCheck";
 
-	/*Order
-		Tackle Box
-		Key Ring
-		Tool Lep
-		Master Scroll Book
-		Fossil Island Chest
-		Elknok for jars, update wiki storage
-		Flamtaer bag
-		Nightmare Zone
-
-		Tips
-
-		-- Below here is for the future and Ideas--
-		Bolt Pouch
-		PoH Storage
-		Seeds - Box or Vault
-		Herb Sack
-		Gem Bag
-		Rune Pouch
-
-		See https://oldschool.runescape.wiki/w/Storage
-	 */
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
 			description = "Treasure Chest Storage",
