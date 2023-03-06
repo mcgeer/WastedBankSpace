@@ -1285,7 +1285,7 @@ public enum StorableItem {
     FLOWER_CROWN_27153(ItemID.FLOWER_CROWN_27153, StorageLocation.TOY_BOX),
     FLOWER_CROWN_27155(ItemID.FLOWER_CROWN_27155, StorageLocation.TOY_BOX),
     SKIS(ItemID.SKIS, StorageLocation.TOY_BOX),
-    SANTAS_LIST(ItemID.SANTAS_LIST, , StorageLocation.TOY_BOX),
+    SANTAS_LIST(ItemID.SANTAS_LIST, StorageLocation.TOY_BOX),
     SNOW_GOGGLES__HAT(ItemID.SNOW_GOGGLES__HAT, StorageLocation.TOY_BOX),
     TREAT_CAULDRON(ItemID.TREAT_CAULDRON, StorageLocation.TOY_BOX),
     TREAT_CAULDRON_27465(ItemID.TREAT_CAULDRON_27465, StorageLocation.TOY_BOX),
