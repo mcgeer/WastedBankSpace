@@ -1335,6 +1335,7 @@ public enum StorableItem {
     public static final List<StorableItem> mahoganyTreasureChestItems = storableItemsAtLocation(StorageLocation.MAHOGANY_TREASURE_CHEST);
     public static final List<StorableItem> fancyDressBoxItems = storableItemsAtLocation(StorageLocation.FANCY_DRESS_BOX);
     public static final List<StorableItem> magicWardrobeItems = storableItemsAtLocation(StorageLocation.MAGIC_WARDROBE);
+    public static final List<StorableItem> toyBoxItems = storableItemsAtLocation(StorageLocation.TOY_BOX);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
