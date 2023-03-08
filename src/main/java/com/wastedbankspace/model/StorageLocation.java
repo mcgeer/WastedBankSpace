@@ -48,6 +48,7 @@ public enum StorageLocation {
     FANCY_DRESS_BOX("PoH Fancy Dress Box"),
     MAGIC_WARDROBE("PoH Magic Wardrobe"),
     TOY_BOX("PoH Toy Box"),
+    SPICE_RACK("PoH Spice rack")
     ;
 
     private final String uiRepresentation;

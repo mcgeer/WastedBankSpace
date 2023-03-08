@@ -49,6 +49,8 @@ public interface WastedBankSpaceConfig extends Config
 	String NIGHTMARE_ZONE_CHECK_KEY = "nightmareZoneCheck";
 	String TOY_BOX_CHECK_KEY = "toyBoxCheck";
 
+	String SPICE_RACK_CHECK_KEY = "spiceRackCheck";
+
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
 			description = "Treasure Chest Storage",
@@ -174,7 +176,17 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Toy and holiday item  storage",
 			position = 13
 	)
-	default	boolean toyBoxCheck(){
+	default	boolean toyBoxCheck()
+  {
 		return true;
 	}
+  
+  @ConfigItem(keyName = SPICE_RACK_CHECK_KEY,
+		name = "Spice rack storage",
+		description = "Storage for spicy stew spices in the PoH kitchen",
+		position = 13)
+	default boolean spiceRackStorageCheck() 
+  { 
+    return true; 
+  }
 }

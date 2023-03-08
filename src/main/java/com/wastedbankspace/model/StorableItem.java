@@ -1316,6 +1316,25 @@ public enum StorableItem {
     MYSTIC_CARDS(ItemID.MYSTIC_CARDS, StorageLocation.TOY_BOX),
     SILVER_PARTYHAT(ItemID.SILVER_PARTYHAT, StorageLocation.TOY_BOX),
     WAR_SHIP(ItemID.WAR_SHIP, StorageLocation.TOY_BOX),
+    /**
+     * Spice Rack
+     */
+    ORANGE_SPICE_1(ItemID.ORANGE_SPICE_1, StorageLocation.SPICE_RACK),
+    ORANGE_SPICE_2(ItemID.ORANGE_SPICE_2, StorageLocation.SPICE_RACK),
+    ORANGE_SPICE_3(ItemID.ORANGE_SPICE_3, StorageLocation.SPICE_RACK),
+    ORANGE_SPICE_4(ItemID.ORANGE_SPICE_4, StorageLocation.SPICE_RACK),
+    RED_SPICE_1(ItemID.RED_SPICE_1, StorageLocation.SPICE_RACK),
+    RED_SPICE_2(ItemID.RED_SPICE_2, StorageLocation.SPICE_RACK),
+    RED_SPICE_3(ItemID.RED_SPICE_3, StorageLocation.SPICE_RACK),
+    RED_SPICE_4(ItemID.RED_SPICE_4, StorageLocation.SPICE_RACK),
+    YELLOW_SPICE_1(ItemID.YELLOW_SPICE_1, StorageLocation.SPICE_RACK),
+    YELLOW_SPICE_2(ItemID.YELLOW_SPICE_2, StorageLocation.SPICE_RACK),
+    YELLOW_SPICE_3(ItemID.YELLOW_SPICE_3, StorageLocation.SPICE_RACK),
+    YELLOW_SPICE_4(ItemID.YELLOW_SPICE_4, StorageLocation.SPICE_RACK),
+    BROWN_SPICE_1(ItemID.BROWN_SPICE_1, StorageLocation.SPICE_RACK),
+    BROWN_SPICE_2(ItemID.BROWN_SPICE_2, StorageLocation.SPICE_RACK),
+    BROWN_SPICE_3(ItemID.BROWN_SPICE_3, StorageLocation.SPICE_RACK),
+    BROWN_SPICE_4(ItemID.BROWN_SPICE_4, StorageLocation.SPICE_RACK),
     ;
 
     public final int itemID;
@@ -1336,6 +1355,8 @@ public enum StorableItem {
     public static final List<StorableItem> fancyDressBoxItems = storableItemsAtLocation(StorageLocation.FANCY_DRESS_BOX);
     public static final List<StorableItem> magicWardrobeItems = storableItemsAtLocation(StorageLocation.MAGIC_WARDROBE);
     public static final List<StorableItem> toyBoxItems = storableItemsAtLocation(StorageLocation.TOY_BOX);
+
+    public static final List<StorableItem> spiceRackItems = storableItemsAtLocation(StorageLocation.SPICE_RACK);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
