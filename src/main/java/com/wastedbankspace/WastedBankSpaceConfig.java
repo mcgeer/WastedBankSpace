@@ -47,6 +47,7 @@ public interface WastedBankSpaceConfig extends Config
 	String ELNOCK_INQUISITOR_CHECK_KEY = "elnockInquisitorCheck";
 	String FLAMTAER_BAG_CHECK_KEY = "flamtaerBagCheck";
 	String NIGHTMARE_ZONE_CHECK_KEY = "nightmareZoneCheck";
+	String TOY_BOX_CHECK_KEY = "toyBoxCheck";
 
 	String SPICE_RACK_CHECK_KEY = "spiceRackCheck";
 
@@ -82,7 +83,7 @@ public interface WastedBankSpaceConfig extends Config
 
 	@ConfigItem(keyName = SEED_CHECK_KEY,
 			name = "Seed Box/Vault",
-			description = "Seeds can be storred in a seed box, sapplings and seeds in the vault",
+			description = "Seeds can be stored in a seed box, saplings and seeds in the vault",
 			position = 4
 	)
 	default boolean seedCheck()
@@ -170,9 +171,22 @@ public interface WastedBankSpaceConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(keyName = SPICE_RACK_CHECK_KEY,
+	@ConfigItem(keyName = TOY_BOX_CHECK_KEY,
+			name = "PoH Toy Box Storage",
+			description = "Toy and holiday item  storage",
+			position = 13
+	)
+	default	boolean toyBoxCheck()
+  {
+		return true;
+	}
+  
+  @ConfigItem(keyName = SPICE_RACK_CHECK_KEY,
 		name = "Spice rack storage",
 		description = "Storage for spicy stew spices in the PoH kitchen",
 		position = 13)
-	default boolean spiceRackStorageCheck() { return true; }
+	default boolean spiceRackStorageCheck() 
+  { 
+    return true; 
+  }
 }

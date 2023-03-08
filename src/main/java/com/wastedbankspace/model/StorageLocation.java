@@ -47,6 +47,7 @@ public enum StorageLocation {
     MAHOGANY_TREASURE_CHEST("PoH Treasure Chest"),
     FANCY_DRESS_BOX("PoH Fancy Dress Box"),
     MAGIC_WARDROBE("PoH Magic Wardrobe"),
+    TOY_BOX("PoH Toy Box"),
     SPICE_RACK("PoH Spice rack")
     ;
 
