@@ -50,6 +50,7 @@ public interface WastedBankSpaceConfig extends Config
 	String TOY_BOX_CHECK_KEY = "toyBoxCheck";
 
 	String SPICE_RACK_CHECK_KEY = "spiceRackCheck";
+	String ARMOUR_CASE_CHECK_KEY = "armourCaseCheck";
 
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
@@ -177,16 +178,27 @@ public interface WastedBankSpaceConfig extends Config
 			position = 13
 	)
 	default	boolean toyBoxCheck()
-  {
+	{
 		return true;
 	}
-  
-  @ConfigItem(keyName = SPICE_RACK_CHECK_KEY,
-		name = "Spice rack storage",
-		description = "Storage for spicy stew spices in the PoH kitchen",
-		position = 13)
+
+	@ConfigItem(keyName = SPICE_RACK_CHECK_KEY,
+			name = "Spice rack storage",
+			description = "Storage for spicy stew spices in the PoH kitchen",
+			position = 14
+	)
 	default boolean spiceRackStorageCheck() 
-  { 
+	{
     return true; 
-  }
+	}
+
+	@ConfigItem(keyName = ARMOUR_CASE_CHECK_KEY,
+			name = "PoH Armour Case storage",
+			description = "Armour and outfit storage",
+			position = 15
+	)
+	default boolean armourCaseStorageCheck()
+	{
+		return true;
+	}
 }
