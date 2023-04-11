@@ -1316,6 +1316,11 @@ public enum StorableItem {
     MYSTIC_CARDS(ItemID.MYSTIC_CARDS, StorageLocation.TOY_BOX),
     SILVER_PARTYHAT(ItemID.SILVER_PARTYHAT, StorageLocation.TOY_BOX),
     WAR_SHIP(ItemID.WAR_SHIP, StorageLocation.TOY_BOX),
+    GIANT_BRONZE_DAGGER(ItemID.GIANT_BRONZE_DAGGER, StorageLocation.TOY_BOX),
+    EASTFLOOR_SPADE(ItemID.EASTFLOOR_SPADE, StorageLocation.TOY_BOX),
+    NEST_HAT(ItemID.NEST_HAT, StorageLocation.TOY_BOX),
+    NEST_HAT_27877(ItemID.NEST_HAT_27877, StorageLocation.TOY_BOX),
+
     /**
      * Spice Rack
      */
