@@ -1316,6 +1316,11 @@ public enum StorableItem {
     MYSTIC_CARDS(ItemID.MYSTIC_CARDS, StorageLocation.TOY_BOX),
     SILVER_PARTYHAT(ItemID.SILVER_PARTYHAT, StorageLocation.TOY_BOX),
     WAR_SHIP(ItemID.WAR_SHIP, StorageLocation.TOY_BOX),
+    GIANT_BRONZE_DAGGER(ItemID.GIANT_BRONZE_DAGGER, StorageLocation.TOY_BOX),
+    EASTFLOOR_SPADE(ItemID.EASTFLOOR_SPADE, StorageLocation.TOY_BOX),
+    NEST_HAT(ItemID.NEST_HAT, StorageLocation.TOY_BOX),
+    NEST_HAT_27877(ItemID.NEST_HAT_27877, StorageLocation.TOY_BOX),
+
     /**
      * Spice Rack
      */
@@ -1335,6 +1340,35 @@ public enum StorableItem {
     BROWN_SPICE_2(ItemID.BROWN_SPICE_2, StorageLocation.SPICE_RACK),
     BROWN_SPICE_3(ItemID.BROWN_SPICE_3, StorageLocation.SPICE_RACK),
     BROWN_SPICE_4(ItemID.BROWN_SPICE_4, StorageLocation.SPICE_RACK),
+  
+    /**
+     * Forestry Kit
+     */
+    ANIMAINFUSED_BARK(ItemID.ANIMAINFUSED_BARK, StorageLocation.FORESTRY_KIT),
+    FORESTERS_RATION(ItemID.FORESTERS_RATION, StorageLocation.FORESTRY_KIT),
+    SECATEURS_ATTACHMENT(ItemID.SECATEURS_ATTACHMENT, StorageLocation.FORESTRY_KIT),
+    NATURE_OFFERINGS(ItemID.NATURE_OFFERINGS, StorageLocation.FORESTRY_KIT),
+    WOODCUTTING_CAPE(ItemID.WOODCUTTING_CAPE, StorageLocation.FORESTRY_KIT),
+    LUMBERJACK_TOP(ItemID.LUMBERJACK_TOP, StorageLocation.FORESTRY_KIT),
+    LUMBERJACK_HAT(ItemID.LUMBERJACK_HAT, StorageLocation.FORESTRY_KIT),
+    LUMBERJACK_BOOTS(ItemID.LUMBERJACK_BOOTS, StorageLocation.FORESTRY_KIT),
+    LUMBERJACK_LEGS(ItemID.LUMBERJACK_LEGS, StorageLocation.FORESTRY_KIT),
+    FORESTRY_TOP(ItemID.FORESTRY_TOP, StorageLocation.FORESTRY_KIT),
+    FORESTRY_HAT(ItemID.FORESTRY_HAT, StorageLocation.FORESTRY_KIT),
+    FORESTRY_BOOTS(ItemID.FORESTRY_BOOTS, StorageLocation.FORESTRY_KIT),
+    FORESTRY_LEGS(ItemID.FORESTRY_LEGS, StorageLocation.FORESTRY_KIT),
+    BEE_ON_A_STICK(ItemID.BEE_ON_A_STICK, StorageLocation.FORESTRY_KIT),
+    LEPRECHAUN_CHARM(ItemID.LEPRECHAUN_CHARM, StorageLocation.FORESTRY_KIT),
+    PADDED_SPOON(ItemID.PADDED_SPOON, StorageLocation.FORESTRY_KIT),
+    PETAL_CIRCLET(ItemID.PETAL_CIRCLET, StorageLocation.FORESTRY_KIT),
+    SMOKER_CANISTER(ItemID.SMOKER_CANISTER, StorageLocation.FORESTRY_KIT),
+    TRAP_DISARMER(ItemID.TRAP_DISARMER, StorageLocation.FORESTRY_KIT),
+    MAGIC_LEAVES(ItemID.MAGIC_LEAVES, StorageLocation.FORESTRY_KIT),
+    YEW_LEAVES(ItemID.YEW_LEAVES, StorageLocation.FORESTRY_KIT),
+    MAPLE_LEAVES(ItemID.MAPLE_LEAVES, StorageLocation.FORESTRY_KIT),
+    WILLOW_LEAVES(ItemID.WILLOW_LEAVES, StorageLocation.FORESTRY_KIT),
+    OAK_LEAVES(ItemID.OAK_LEAVES, StorageLocation.FORESTRY_KIT),
+    LEAVES(ItemID.LEAVES, StorageLocation.FORESTRY_KIT),
 
     /**
      * Armour Case
@@ -1631,7 +1665,7 @@ public enum StorableItem {
     WHITE_KITESHIELD(ItemID.WHITE_KITESHIELD, StorageLocation.ARMOUR_CASE),
     XERICIAN_HAT(ItemID.XERICIAN_HAT, StorageLocation.ARMOUR_CASE),
     XERICIAN_TOP(ItemID.XERICIAN_TOP, StorageLocation.ARMOUR_CASE),
-    XERICIAN_ROBE(ItemID.XERICIAN_ROBE, StorageLocation.ARMOUR_CASE),
+    XERICIAN_ROBE(ItemID.XERICIAN_ROBE, StorageLocation.ARMOUR_CASE)
     ;
 
     public final int itemID;
@@ -1652,8 +1686,8 @@ public enum StorableItem {
     public static final List<StorableItem> fancyDressBoxItems = storableItemsAtLocation(StorageLocation.FANCY_DRESS_BOX);
     public static final List<StorableItem> magicWardrobeItems = storableItemsAtLocation(StorageLocation.MAGIC_WARDROBE);
     public static final List<StorableItem> toyBoxItems = storableItemsAtLocation(StorageLocation.TOY_BOX);
-
     public static final List<StorableItem> spiceRackItems = storableItemsAtLocation(StorageLocation.SPICE_RACK);
+    public static final List<StorableItem> forestryKitItems = storableItemsAtLocation(StorageLocation.FORESTRY_KIT);
     public static final List<StorableItem> armourCaseItems = storableItemsAtLocation(StorageLocation.ARMOUR_CASE);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();

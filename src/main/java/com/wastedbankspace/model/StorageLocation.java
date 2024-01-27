@@ -49,6 +49,7 @@ public enum StorageLocation {
     MAGIC_WARDROBE("PoH Magic Wardrobe"),
     TOY_BOX("PoH Toy Box"),
     SPICE_RACK("PoH Spice rack"),
+    FORESTRY_KIT("Forestry kit"),
     ARMOUR_CASE("PoH Armour Case")
     ;
 

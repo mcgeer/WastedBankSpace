@@ -52,6 +52,8 @@ public interface WastedBankSpaceConfig extends Config
 	String SPICE_RACK_CHECK_KEY = "spiceRackCheck";
 	String ARMOUR_CASE_CHECK_KEY = "armourCaseCheck";
 
+	String FORESTRY_KIT_CHECK_KEY = "forestryKitCheck";
+
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
 			description = "Treasure Chest Storage",
@@ -192,13 +194,22 @@ public interface WastedBankSpaceConfig extends Config
     return true; 
 	}
 
+	@ConfigItem(keyName = FORESTRY_KIT_CHECK_KEY,
+			name = "Forestry kit storage",
+			description = "Storage for Forestry-related items",
+			position = 15)
+	default boolean forestryKitCheck()
+	{
+		return true;
+	}
+  
 	@ConfigItem(keyName = ARMOUR_CASE_CHECK_KEY,
 			name = "PoH Armour Case storage",
 			description = "Armour and outfit storage",
-			position = 15
+			position = 16
 	)
 	default boolean armourCaseStorageCheck()
 	{
-		return true;
+		return false; //Only for people to turn on if they want it on, nobody wants BIS gear with little triangles
 	}
 }
