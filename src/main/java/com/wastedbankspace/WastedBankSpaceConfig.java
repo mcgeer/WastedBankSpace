@@ -51,6 +51,8 @@ public interface WastedBankSpaceConfig extends Config
 
 	String SPICE_RACK_CHECK_KEY = "spiceRackCheck";
 
+	String FORESTRY_KIT_CHECK_KEY = "forestryKitCheck";
+
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
 			description = "Treasure Chest Storage",
@@ -177,16 +179,25 @@ public interface WastedBankSpaceConfig extends Config
 			position = 13
 	)
 	default	boolean toyBoxCheck()
-  {
+	{
 		return true;
 	}
-  
-  @ConfigItem(keyName = SPICE_RACK_CHECK_KEY,
-		name = "Spice rack storage",
-		description = "Storage for spicy stew spices in the PoH kitchen",
-		position = 13)
-	default boolean spiceRackStorageCheck() 
-  { 
-    return true; 
-  }
+
+	@ConfigItem(keyName = SPICE_RACK_CHECK_KEY,
+			name = "Spice rack storage",
+			description = "Storage for spicy stew spices in the PoH kitchen",
+			position = 13)
+	default boolean spiceRackStorageCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = FORESTRY_KIT_CHECK_KEY,
+			name = "Forestry kit storage",
+			description = "Storage for Forestry-related items",
+			position = 14)
+	default boolean forestryKitCheck()
+	{
+		return true;
+	}
 }
