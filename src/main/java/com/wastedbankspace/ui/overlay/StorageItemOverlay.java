@@ -35,7 +35,7 @@ import com.wastedbankspace.WastedBankSpacePlugin;
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
 import net.runelite.api.Client;
-import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.overlay.WidgetItemOverlay;
@@ -83,7 +83,7 @@ public class StorageItemOverlay extends WidgetItemOverlay
         List<StorableItem> items =  plugin.getEnabledItemLists();
 
         if (items.isEmpty()
-                || itemWidget.getWidget().getParentId() != WidgetInfo.BANK_ITEM_CONTAINER.getId()
+                || itemWidget.getWidget().getParentId() != ComponentID.BANK_ITEM_CONTAINER
                 || items.stream().noneMatch(i -> i.itemID == itemId)
         )
         {
