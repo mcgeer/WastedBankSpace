@@ -226,6 +226,6 @@ public interface WastedBankSpaceConfig extends Config
 			position = 18
 	)
 	default boolean petHouseSpaceCheck() {
-		return true;
+		return false; //Disabled by Default. Most people dont lose pets in their bank alike BIS gear. 
 	}
 }
