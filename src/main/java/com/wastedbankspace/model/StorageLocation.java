@@ -50,7 +50,8 @@ public enum StorageLocation {
     TOY_BOX("PoH Toy Box"),
     SPICE_RACK("PoH Spice rack"),
     FORESTRY_KIT("Forestry kit"),
-    ARMOUR_CASE("PoH Armour Case")
+    ARMOUR_CASE("PoH Armour Case"),
+    PET_HOUSE_SPACE("Pet House Space")
     ;
 
     private final String uiRepresentation;

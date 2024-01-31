@@ -1665,7 +1665,69 @@ public enum StorableItem {
     WHITE_KITESHIELD(ItemID.WHITE_KITESHIELD, StorageLocation.ARMOUR_CASE),
     XERICIAN_HAT(ItemID.XERICIAN_HAT, StorageLocation.ARMOUR_CASE),
     XERICIAN_TOP(ItemID.XERICIAN_TOP, StorageLocation.ARMOUR_CASE),
-    XERICIAN_ROBE(ItemID.XERICIAN_ROBE, StorageLocation.ARMOUR_CASE)
+    XERICIAN_ROBE(ItemID.XERICIAN_ROBE, StorageLocation.ARMOUR_CASE),
+
+    /**
+     * Pet House Space
+     */
+    PET_CHAOS_ELEMENTAL(ItemID.PET_CHAOS_ELEMENTAL, StorageLocation.PET_HOUSE_SPACE),
+    PET_DAGANNOTH_SUPREME(ItemID.PET_DAGANNOTH_SUPREME, StorageLocation.PET_HOUSE_SPACE),
+    PET_DAGANNOTH_PRIME(ItemID.PET_DAGANNOTH_PRIME, StorageLocation.PET_HOUSE_SPACE),
+    PET_DAGANNOTH_REX(ItemID.PET_DAGANNOTH_REX, StorageLocation.PET_HOUSE_SPACE),
+    PET_PENANCE_QUEEN(ItemID.PET_PENANCE_QUEEN, StorageLocation.PET_HOUSE_SPACE),
+    PET_KREEARRA(ItemID.PET_KREEARRA, StorageLocation.PET_HOUSE_SPACE),
+    PET_GENERAL_GRAARDOR(ItemID.PET_GENERAL_GRAARDOR, StorageLocation.PET_HOUSE_SPACE),
+    PET_ZILYANA(ItemID.PET_ZILYANA, StorageLocation.PET_HOUSE_SPACE),
+    PET_KRIL_TSUTAROTH(ItemID.PET_KRIL_TSUTSAROTH, StorageLocation.PET_HOUSE_SPACE),
+    PET_BABY_MOLE(ItemID.BABY_MOLE, StorageLocation.PET_HOUSE_SPACE),
+    PET_PRINCE_BLACK_DRAGON(ItemID.PRINCE_BLACK_DRAGON, StorageLocation.PET_HOUSE_SPACE),
+    PET_KALPHITE_PRINCESS(ItemID.KALPHITE_PRINCESS, StorageLocation.PET_HOUSE_SPACE),
+    PET_SMOKE_DEVIL(ItemID.PET_SMOKE_DEVIL, StorageLocation.PET_HOUSE_SPACE),
+    PET_KRAKEN(ItemID.PET_KRAKEN, StorageLocation.PET_HOUSE_SPACE),
+    PET_DARK_CORE(ItemID.PET_DARK_CORE, StorageLocation.PET_HOUSE_SPACE),
+    PET_SNAKELING(ItemID.PET_SNAKELING, StorageLocation.PET_HOUSE_SPACE),
+    CHOMPY_CHICK(ItemID.CHOMPY_CHICK, StorageLocation.PET_HOUSE_SPACE),
+    VENENATIS_SPIDERLING(ItemID.VENENATIS_SPIDERLING, StorageLocation.PET_HOUSE_SPACE),
+    CALLISTO_CUB(ItemID.CALLISTO_CUB, StorageLocation.PET_HOUSE_SPACE),
+    CALLISTO_CUB_(ItemID.CALLISTO_CUB_27649, StorageLocation.PET_HOUSE_SPACE),
+    VETION_JR(ItemID.VETION_JR, StorageLocation.PET_HOUSE_SPACE),
+    SCORPIAS_OFFSPRING(ItemID.SCORPIAS_OFFSPRING, StorageLocation.PET_HOUSE_SPACE),
+    TZREKJAD(ItemID.TZREKJAD, StorageLocation.PET_HOUSE_SPACE),
+    HELLPUPPY(ItemID.HELLPUPPY, StorageLocation.PET_HOUSE_SPACE),
+    ABYSSAL_ORPHAN(ItemID.ABYSSAL_ORPHAN, StorageLocation.PET_HOUSE_SPACE),
+    HERON(ItemID.HERON, StorageLocation.PET_HOUSE_SPACE),
+    ROCK_GOLEM(ItemID.ROCK_GOLEM, StorageLocation.PET_HOUSE_SPACE),
+    BEAVER(ItemID.BEAVER, StorageLocation.PET_HOUSE_SPACE),
+    BABY_CHINCHOMPA(ItemID.BABY_CHINCHOMPA, StorageLocation.PET_HOUSE_SPACE),
+    BLOODHOUND(ItemID.BLOODHOUND, StorageLocation.PET_HOUSE_SPACE),
+    GIANT_SQUIRREL(ItemID.GIANT_SQUIRREL, StorageLocation.PET_HOUSE_SPACE),
+    TANGLEROOT(ItemID.TANGLEROOT, StorageLocation.PET_HOUSE_SPACE),
+    RIFT_GUARDIAN(ItemID.RIFT_GUARDIAN, StorageLocation.PET_HOUSE_SPACE),
+    ROCKY(ItemID.ROCKY, StorageLocation.PET_HOUSE_SPACE),
+    PHOENIX(ItemID.PHOENIX, StorageLocation.PET_HOUSE_SPACE),
+    OLMLET(ItemID.OLMLET, StorageLocation.PET_HOUSE_SPACE),
+    SKOTOS(ItemID.SKOTOS, StorageLocation.PET_HOUSE_SPACE),
+    JALNIBREK(ItemID.JALNIBREK, StorageLocation.PET_HOUSE_SPACE),
+    HERBI(ItemID.HERBI, StorageLocation.PET_HOUSE_SPACE),
+    NOON(ItemID.NOON, StorageLocation.PET_HOUSE_SPACE),
+    VORKI(ItemID.VORKI, StorageLocation.PET_HOUSE_SPACE),
+    LIL_ZIK(ItemID.LIL_ZIK, StorageLocation.PET_HOUSE_SPACE),
+    IKKLE_HYDRA(ItemID.IKKLE_HYDRA, StorageLocation.PET_HOUSE_SPACE),
+    SRARACHA(ItemID.SRARACHA, StorageLocation.PET_HOUSE_SPACE),
+    YOUNGLLEF(ItemID.YOUNGLLEF, StorageLocation.PET_HOUSE_SPACE),
+    SMOLCANO(ItemID.SMOLCANO, StorageLocation.PET_HOUSE_SPACE),
+    LITTLE_NIGHTMARE(ItemID.LITTLE_NIGHTMARE, StorageLocation.PET_HOUSE_SPACE),
+    LIL_CREATOR(ItemID.LIL_CREATOR, StorageLocation.PET_HOUSE_SPACE),
+    TINY_TEMPOR(ItemID.TINY_TEMPOR, StorageLocation.PET_HOUSE_SPACE),
+    NEXLING(ItemID.NEXLING, StorageLocation.PET_HOUSE_SPACE),
+    ABYSSAL_PROTECTOR(ItemID.ABYSSAL_PROTECTOR, StorageLocation.PET_HOUSE_SPACE),
+    TUMEKENS_GUARDIAN(ItemID.TUMEKENS_GUARDIAN, StorageLocation.PET_HOUSE_SPACE),
+    MUPHIN(ItemID.MUPHIN, StorageLocation.PET_HOUSE_SPACE),
+    WISP(ItemID.WISP, StorageLocation.PET_HOUSE_SPACE),
+    BUTCH(ItemID.BUTCH, StorageLocation.PET_HOUSE_SPACE),
+    LILVIATHAN(ItemID.LILVIATHAN, StorageLocation.PET_HOUSE_SPACE),
+    BARON(ItemID.BARON, StorageLocation.PET_HOUSE_SPACE),
+    SCURRY(ItemID.SCURRY, StorageLocation.PET_HOUSE_SPACE)
     ;
 
     public final int itemID;
@@ -1689,6 +1751,7 @@ public enum StorableItem {
     public static final List<StorableItem> spiceRackItems = storableItemsAtLocation(StorageLocation.SPICE_RACK);
     public static final List<StorableItem> forestryKitItems = storableItemsAtLocation(StorageLocation.FORESTRY_KIT);
     public static final List<StorableItem> armourCaseItems = storableItemsAtLocation(StorageLocation.ARMOUR_CASE);
+    public static final List<StorableItem> petHouseSpaceItems = storableItemsAtLocation(StorageLocation.PET_HOUSE_SPACE);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();

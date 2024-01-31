@@ -54,6 +54,8 @@ public interface WastedBankSpaceConfig extends Config
 
 	String FORESTRY_KIT_CHECK_KEY = "forestryKitCheck";
 
+	String PET_HOUSE_SPACE_CHECK_KEY = "petHouseSpaceCheck";
+
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
 			description = "Treasure Chest Storage",
@@ -211,5 +213,14 @@ public interface WastedBankSpaceConfig extends Config
 	default boolean armourCaseStorageCheck()
 	{
 		return false; //Only for people to turn on if they want it on, nobody wants BIS gear with little triangles
+	}
+
+	@ConfigItem(keyName = PET_HOUSE_SPACE_CHECK_KEY,
+			name = "Pet House Space",
+			description = "Pet House Space inside the POH",
+			position = 18
+	)
+	default boolean petHouseSpaceCheck() {
+		return true;
 	}
 }
