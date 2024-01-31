@@ -1665,7 +1665,17 @@ public enum StorableItem {
     WHITE_KITESHIELD(ItemID.WHITE_KITESHIELD, StorageLocation.ARMOUR_CASE),
     XERICIAN_HAT(ItemID.XERICIAN_HAT, StorageLocation.ARMOUR_CASE),
     XERICIAN_TOP(ItemID.XERICIAN_TOP, StorageLocation.ARMOUR_CASE),
-    XERICIAN_ROBE(ItemID.XERICIAN_ROBE, StorageLocation.ARMOUR_CASE)
+    XERICIAN_ROBE(ItemID.XERICIAN_ROBE, StorageLocation.ARMOUR_CASE),
+
+    /**
+     * Mysterious Stranger - Hallowed Sepulchre
+     */
+    HALLOWED_GRAPPLE(ItemID.HALLOWED_GRAPPLE, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_HAMMER(ItemID.HALLOWED_HAMMER, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_FOCUS(ItemID.HALLOWED_FOCUS, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_SYMBOL(ItemID.HALLOWED_SYMBOL, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_RING(ItemID.HALLOWED_RING, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_TOKEN(ItemID.HALLOWED_TOKEN, StorageLocation.MYSTERIOUS_STRANGER)
     ;
 
     public final int itemID;
@@ -1689,6 +1699,7 @@ public enum StorableItem {
     public static final List<StorableItem> spiceRackItems = storableItemsAtLocation(StorageLocation.SPICE_RACK);
     public static final List<StorableItem> forestryKitItems = storableItemsAtLocation(StorageLocation.FORESTRY_KIT);
     public static final List<StorableItem> armourCaseItems = storableItemsAtLocation(StorageLocation.ARMOUR_CASE);
+    public static final List<StorableItem> mysteriousStrangerItems = storableItemsAtLocation(StorageLocation.MYSTERIOUS_STRANGER);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();

@@ -114,7 +114,8 @@ public class WastedBankSpacePlugin extends Plugin
 			new StorageLocationEnabler(StorageLocation.TOY_BOX, () -> config.toyBoxCheck(), StorableItem.toyBoxItems),
 			new StorageLocationEnabler(StorageLocation.SPICE_RACK, () -> config.spiceRackStorageCheck(), StorableItem.spiceRackItems),
 			new StorageLocationEnabler(StorageLocation.FORESTRY_KIT, () -> config.forestryKitCheck(), StorableItem.forestryKitItems),
-			new StorageLocationEnabler(StorageLocation.ARMOUR_CASE, () -> config.armourCaseStorageCheck(), StorableItem.armourCaseItems)
+			new StorageLocationEnabler(StorageLocation.ARMOUR_CASE, () -> config.armourCaseStorageCheck(), StorableItem.armourCaseItems),
+			new StorageLocationEnabler(StorageLocation.MYSTERIOUS_STRANGER, () -> config.mysteriousStrangerCheck(), StorableItem.mysteriousStrangerItems)
 	);
 
 	private NavigationButton navButton;

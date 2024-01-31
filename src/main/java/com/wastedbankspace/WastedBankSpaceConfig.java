@@ -54,6 +54,8 @@ public interface WastedBankSpaceConfig extends Config
 
 	String FORESTRY_KIT_CHECK_KEY = "forestryKitCheck";
 
+	String MYSTERIOUS_STRANGER_CHECK_KEY = "mysteriousStrangerCheck";
+
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
 			description = "Treasure Chest Storage",
@@ -212,4 +214,11 @@ public interface WastedBankSpaceConfig extends Config
 	{
 		return false; //Only for people to turn on if they want it on, nobody wants BIS gear with little triangles
 	}
+
+	@ConfigItem(keyName = MYSTERIOUS_STRANGER_CHECK_KEY,
+			name = "Mysterious Stranger",
+			description = "Storage for Hallowed Sepulchre items",
+			position = 17
+	)
+	default boolean mysteriousStrangerCheck() { return true; }
 }
