@@ -48,12 +48,10 @@ public interface WastedBankSpaceConfig extends Config
 	String FLAMTAER_BAG_CHECK_KEY = "flamtaerBagCheck";
 	String NIGHTMARE_ZONE_CHECK_KEY = "nightmareZoneCheck";
 	String TOY_BOX_CHECK_KEY = "toyBoxCheck";
-
 	String SPICE_RACK_CHECK_KEY = "spiceRackCheck";
 	String ARMOUR_CASE_CHECK_KEY = "armourCaseCheck";
-
 	String FORESTRY_KIT_CHECK_KEY = "forestryKitCheck";
-
+	String MYSTERIOUS_STRANGER_CHECK_KEY = "mysteriousStrangerCheck";
 	String PET_HOUSE_SPACE_CHECK_KEY = "petHouseSpaceCheck";
 
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
@@ -215,6 +213,13 @@ public interface WastedBankSpaceConfig extends Config
 		return false; //Only for people to turn on if they want it on, nobody wants BIS gear with little triangles
 	}
 
+	@ConfigItem(keyName = MYSTERIOUS_STRANGER_CHECK_KEY,
+			name = "Mysterious Stranger",
+			description = "Storage for Hallowed Sepulchre items",
+			position = 17
+	)
+	default boolean mysteriousStrangerCheck() { return true; }
+  
 	@ConfigItem(keyName = PET_HOUSE_SPACE_CHECK_KEY,
 			name = "Pet House Space",
 			description = "Pet House Space inside the POH",

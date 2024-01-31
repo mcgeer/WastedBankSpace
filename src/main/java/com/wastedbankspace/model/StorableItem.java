@@ -1061,6 +1061,10 @@ public enum StorableItem {
     SKELETAL_BOOTS(ItemID.SKELETAL_BOOTS, StorageLocation.MAGIC_WARDROBE),
     SKELETAL_GLOVES(ItemID.SKELETAL_GLOVES, StorageLocation.MAGIC_WARDROBE),
     SKELETAL_TOP(ItemID.SKELETAL_TOP, StorageLocation.MAGIC_WARDROBE),
+    SMITHS_TUNIC(ItemID.SMITHS_TUNIC, StorageLocation.MAGIC_WARDROBE),
+    SMITHS_TROUSERS(ItemID.SMITHS_TROUSERS, StorageLocation.MAGIC_WARDROBE),
+    SMITHS_GLOVES(ItemID.SMITHS_GLOVES, StorageLocation.MAGIC_WARDROBE),
+    SMITHS_BOOTS(ItemID.SMITHS_BOOTS, StorageLocation.MAGIC_WARDROBE),
     SPLITBARK_BODY(ItemID.SPLITBARK_BODY, StorageLocation.MAGIC_WARDROBE),
     SPLITBARK_BOOTS(ItemID.SPLITBARK_BOOTS, StorageLocation.MAGIC_WARDROBE),
     SPLITBARK_HELM(ItemID.SPLITBARK_HELM, StorageLocation.MAGIC_WARDROBE),
@@ -1096,6 +1100,10 @@ public enum StorableItem {
     ZEALOTS_HELM(ItemID.ZEALOTS_HELM, StorageLocation.MAGIC_WARDROBE),
     ZEALOTS_ROBE_BOTTOM(ItemID.ZEALOTS_ROBE_BOTTOM, StorageLocation.MAGIC_WARDROBE),
     ZEALOTS_ROBE_TOP(ItemID.ZEALOTS_ROBE_TOP, StorageLocation.MAGIC_WARDROBE),
+    HAT_OF_THE_EYE(ItemID.HAT_OF_THE_EYE, StorageLocation.MAGIC_WARDROBE),
+    ROBE_TOP_OF_THE_EYE(ItemID.ROBE_TOP_OF_THE_EYE, StorageLocation.MAGIC_WARDROBE),
+    ROBE_BOTTOMS_OF_THE_EYE(ItemID.ROBE_BOTTOMS_OF_THE_EYE, StorageLocation.MAGIC_WARDROBE),
+    BOOTS_OF_THE_EYE(ItemID.BOOTS_OF_THE_EYE, StorageLocation.MAGIC_WARDROBE),
 
     /**
      * Toy Box
@@ -1666,8 +1674,18 @@ public enum StorableItem {
     XERICIAN_HAT(ItemID.XERICIAN_HAT, StorageLocation.ARMOUR_CASE),
     XERICIAN_TOP(ItemID.XERICIAN_TOP, StorageLocation.ARMOUR_CASE),
     XERICIAN_ROBE(ItemID.XERICIAN_ROBE, StorageLocation.ARMOUR_CASE),
-
-    /**
+  
+   /**  
+     * Mysterious Stranger - Hallowed Sepulchre
+     */
+    HALLOWED_GRAPPLE(ItemID.HALLOWED_GRAPPLE, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_HAMMER(ItemID.HALLOWED_HAMMER, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_FOCUS(ItemID.HALLOWED_FOCUS, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_SYMBOL(ItemID.HALLOWED_SYMBOL, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_RING(ItemID.HALLOWED_RING, StorageLocation.MYSTERIOUS_STRANGER),
+    HALLOWED_TOKEN(ItemID.HALLOWED_TOKEN, StorageLocation.MYSTERIOUS_STRANGER),
+      
+   /**
      * Pet House Space
      */
     PET_CHAOS_ELEMENTAL(ItemID.PET_CHAOS_ELEMENTAL, StorageLocation.PET_HOUSE_SPACE),
@@ -1751,6 +1769,7 @@ public enum StorableItem {
     public static final List<StorableItem> spiceRackItems = storableItemsAtLocation(StorageLocation.SPICE_RACK);
     public static final List<StorableItem> forestryKitItems = storableItemsAtLocation(StorageLocation.FORESTRY_KIT);
     public static final List<StorableItem> armourCaseItems = storableItemsAtLocation(StorageLocation.ARMOUR_CASE);
+    public static final List<StorableItem> mysteriousStrangerItems = storableItemsAtLocation(StorageLocation.MYSTERIOUS_STRANGER);
     public static final List<StorableItem> petHouseSpaceItems = storableItemsAtLocation(StorageLocation.PET_HOUSE_SPACE);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
