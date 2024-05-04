@@ -1745,7 +1745,52 @@ public enum StorableItem {
     BUTCH(ItemID.BUTCH, StorageLocation.PET_HOUSE_SPACE),
     LILVIATHAN(ItemID.LILVIATHAN, StorageLocation.PET_HOUSE_SPACE),
     BARON(ItemID.BARON, StorageLocation.PET_HOUSE_SPACE),
-    SCURRY(ItemID.SCURRY, StorageLocation.PET_HOUSE_SPACE)
+    SCURRY(ItemID.SCURRY, StorageLocation.PET_HOUSE_SPACE),
+
+    /**
+     * Huntsman's Kit
+     */
+    BIRD_SNARE(ItemID.BIRD_SNARE, StorageLocation.HUNTSMANS_KIT),
+    NOOSE_WAND(ItemID.NOOSE_WAND, StorageLocation.HUNTSMANS_KIT),
+    BUTTERFLY_NET_(ItemID.BUTTERFLY_NET, StorageLocation.HUNTSMANS_KIT),
+    MAGIC_BUTTERFLY_NET_(ItemID.MAGIC_BUTTERFLY_NET, StorageLocation.HUNTSMANS_KIT),
+    BUTTERFLY_JAR_(ItemID.BUTTERFLY_JAR, StorageLocation.HUNTSMANS_KIT),
+    BOX_TRAP(ItemID.BOX_TRAP, StorageLocation.HUNTSMANS_KIT),
+    RABBIT_SNARE(ItemID.RABBIT_SNARE, StorageLocation.HUNTSMANS_KIT),
+    UNLIT_TORCH(ItemID.UNLIT_TORCH, StorageLocation.HUNTSMANS_KIT),
+    SMALL_FISHING_NET_(ItemID.SMALL_FISHING_NET, StorageLocation.HUNTSMANS_KIT),
+    ROPE(ItemID.ROPE, StorageLocation.HUNTSMANS_KIT),
+    MAGIC_BOX(ItemID.MAGIC_BOX, StorageLocation.HUNTSMANS_KIT),
+    IMPINABOX1(ItemID.IMPINABOX1, StorageLocation.HUNTSMANS_KIT),
+    IMPINABOX2(ItemID.IMPINABOX2, StorageLocation.HUNTSMANS_KIT),
+    TEASING_STICK(ItemID.TEASING_STICK, StorageLocation.HUNTSMANS_KIT),
+    HUNTERS_SPEAR(ItemID.HUNTERS_SPEAR, StorageLocation.HUNTSMANS_KIT),
+    WOOD_CAMO_TOP_(ItemID.WOOD_CAMO_TOP, StorageLocation.HUNTSMANS_KIT),
+    WOOD_CAMO_LEGS_(ItemID.WOOD_CAMO_LEGS, StorageLocation.HUNTSMANS_KIT),
+    POLAR_CAMO_TOP_(ItemID.POLAR_CAMO_TOP, StorageLocation.HUNTSMANS_KIT),
+    POLAR_CAMO_LEGS_(ItemID.POLAR_CAMO_LEGS, StorageLocation.HUNTSMANS_KIT),
+    JUNGLE_CAMO_TOP_(ItemID.JUNGLE_CAMO_TOP, StorageLocation.HUNTSMANS_KIT),
+    JUNGLE_CAMO_LEGS_(ItemID.JUNGLE_CAMO_LEGS, StorageLocation.HUNTSMANS_KIT),
+    DESERT_CAMO_TOP_(ItemID.DESERT_CAMO_TOP, StorageLocation.HUNTSMANS_KIT),
+    DESERT_CAMO_LEGS_(ItemID.DESERT_CAMO_LEGS, StorageLocation.HUNTSMANS_KIT),
+    LARUPIA_HAT_(ItemID.LARUPIA_HAT, StorageLocation.HUNTSMANS_KIT),
+    LARUPIA_TOP_(ItemID.LARUPIA_TOP, StorageLocation.HUNTSMANS_KIT),
+    LARUPIA_LEGS_(ItemID.LARUPIA_LEGS, StorageLocation.HUNTSMANS_KIT),
+    GRAAKH_HEADDRESS(ItemID.GRAAHK_HEADDRESS, StorageLocation.HUNTSMANS_KIT),
+    GRAAKH_TOP(ItemID.GRAAHK_TOP, StorageLocation.HUNTSMANS_KIT),
+    GRAAKH_LEGS(ItemID.GRAAHK_LEGS, StorageLocation.HUNTSMANS_KIT),
+    KYATT_HAT_(ItemID.KYATT_HAT, StorageLocation.HUNTSMANS_KIT),
+    KYATT_TOP_(ItemID.KYATT_TOP, StorageLocation.HUNTSMANS_KIT),
+    KYATT_LEGS_(ItemID.KYATT_LEGS, StorageLocation.HUNTSMANS_KIT),
+    HUNTER_HOOD(ItemID.HUNTER_HOOD, StorageLocation.HUNTSMANS_KIT),
+    HUNTER_CAPE(ItemID.HUNTER_CAPE, StorageLocation.HUNTSMANS_KIT),
+    HUNTER_CAPET(ItemID.HUNTER_CAPET, StorageLocation.HUNTSMANS_KIT),
+    GUILD_HUNTER_HEADWEAR(ItemID.GUILD_HUNTER_HEADWEAR, StorageLocation.HUNTSMANS_KIT),
+    GUILD_HUNTER_TOP(ItemID.GUILD_HUNTER_TOP, StorageLocation.HUNTSMANS_KIT),
+    GUILD_HUNTER_LEGS(ItemID.GUILD_HUNTER_LEGS, StorageLocation.HUNTSMANS_KIT),
+    GUILD_HUNTER_BOOTS(ItemID.GUILD_HUNTER_BOOTS, StorageLocation.HUNTSMANS_KIT),
+    RING_OF_PURSUIT(ItemID.RING_OF_PURSUIT, StorageLocation.HUNTSMANS_KIT),
+    IMPLING_JAR_(ItemID.IMPLING_JAR, StorageLocation.HUNTSMANS_KIT)
     ;
 
     public final int itemID;
@@ -1771,6 +1816,7 @@ public enum StorableItem {
     public static final List<StorableItem> armourCaseItems = storableItemsAtLocation(StorageLocation.ARMOUR_CASE);
     public static final List<StorableItem> mysteriousStrangerItems = storableItemsAtLocation(StorageLocation.MYSTERIOUS_STRANGER);
     public static final List<StorableItem> petHouseSpaceItems = storableItemsAtLocation(StorageLocation.PET_HOUSE_SPACE);
+    public static final List<StorableItem> huntsmansKitItems = storableItemsAtLocation(StorageLocation.HUNTSMANS_KIT);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
