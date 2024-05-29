@@ -53,6 +53,7 @@ public interface WastedBankSpaceConfig extends Config
 	String FORESTRY_KIT_CHECK_KEY = "forestryKitCheck";
 	String MYSTERIOUS_STRANGER_CHECK_KEY = "mysteriousStrangerCheck";
 	String PET_HOUSE_SPACE_CHECK_KEY = "petHouseSpaceCheck";
+	String HOUSE_BOOKCASE_CHECK_KEY = "bookcaseHouseSpaceCheck";
 
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
@@ -176,7 +177,7 @@ public interface WastedBankSpaceConfig extends Config
 
 	@ConfigItem(keyName = TOY_BOX_CHECK_KEY,
 			name = "PoH Toy Box Storage",
-			description = "Toy and holiday item  storage",
+			description = "Toy and holiday item storage",
 			position = 13
 	)
 	default	boolean toyBoxCheck()
@@ -228,4 +229,10 @@ public interface WastedBankSpaceConfig extends Config
 	default boolean petHouseSpaceCheck() {
 		return false; //Disabled by Default. Most people dont lose pets in their bank alike BIS gear. 
 	}
+
+	@ConfigItem(keyName = HOUSE_BOOKCASE_CHECK_KEY,
+	name = "PoH Bookcase",
+	description = "Bookcase inside the PoH",
+	position = 19)
+	default boolean houseBookcaseCheck() { return true; }
 }

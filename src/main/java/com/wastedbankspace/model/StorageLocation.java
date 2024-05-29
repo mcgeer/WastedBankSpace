@@ -52,7 +52,8 @@ public enum StorageLocation {
     FORESTRY_KIT("Forestry kit"),
     ARMOUR_CASE("PoH Armour Case"),
     MYSTERIOUS_STRANGER("Mysterious Stranger"),
-    PET_HOUSE_SPACE("Pet House Space")
+    PET_HOUSE_SPACE("Pet House Space"),
+    BOOKCASE_HOUSE_SPACE("POH Bookcase")
     ;
 
     private final String uiRepresentation;
