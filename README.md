@@ -27,13 +27,16 @@ All the following configurations are enabled by default.
 - Spice Rack
 - Forestry Kit
 - Mysterious Stranger ( Hallowed Sepulchre )
+- PoH Bookcase
+- Huntsman's Kit
 
 All the following configurations are disabled by default.
-- Armour Case
+- PoH Armour Case
+- PoH Cape Rack
 - Pet House ( Skilling & Bossing Pets )
 
 # Issue or Feature Requests
-Please create an issue under the Issues tab, or @EvilRail#1899 on Discord.
+Please create an issue under the Issues tab, or @evilrail on Discord.
 
 # Developers
 Developers welcome, develop what you see fit, just keep all changes related to determining wasted bank space. 
