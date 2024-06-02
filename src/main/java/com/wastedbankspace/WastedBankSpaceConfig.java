@@ -54,6 +54,8 @@ public interface WastedBankSpaceConfig extends Config
 	String MYSTERIOUS_STRANGER_CHECK_KEY = "mysteriousStrangerCheck";
 	String PET_HOUSE_SPACE_CHECK_KEY = "petHouseSpaceCheck";
 	String HOUSE_BOOKCASE_CHECK_KEY = "bookcaseHouseSpaceCheck";
+	String CAPE_RACK_CHECK_KEY = "capeRackCheck";
+	String HUNTSMANS_KIT_SPACE_CHECK_KEY = "huntsmansKitSpaceCheck";
 
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
@@ -235,4 +237,22 @@ public interface WastedBankSpaceConfig extends Config
 	description = "Bookcase inside the PoH",
 	position = 19)
 	default boolean houseBookcaseCheck() { return true; }
+  
+	@ConfigItem(keyName = CAPE_RACK_CHECK_KEY,
+			name = "Cape rack storage",
+			description = "Storage for capes in the costume room",
+			position = 20
+	)
+    default boolean capeRackStorageCheck() {
+		return false;
+  }
+  
+	@ConfigItem(keyName = HUNTSMANS_KIT_SPACE_CHECK_KEY,
+			name = "Huntsman's Kit",
+			description = "Check for items that could go in your Huntsman's kit",
+			position = 21
+	)
+    default boolean huntsmansKitCheck() {
+		return true;
+	}
 }
