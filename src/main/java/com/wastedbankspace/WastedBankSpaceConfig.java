@@ -236,6 +236,6 @@ public interface WastedBankSpaceConfig extends Config
 			position = 19
 	)
     default boolean capeRackStorageCheck() {
-		return true;
+		return false;
 	}
 }
