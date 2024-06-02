@@ -117,6 +117,7 @@ public class WastedBankSpacePlugin extends Plugin
 			new StorageLocationEnabler(StorageLocation.ARMOUR_CASE, () -> config.armourCaseStorageCheck(), StorableItem.armourCaseItems),
 			new StorageLocationEnabler(StorageLocation.MYSTERIOUS_STRANGER, () -> config.mysteriousStrangerCheck(), StorableItem.mysteriousStrangerItems),
 			new StorageLocationEnabler(StorageLocation.PET_HOUSE_SPACE, () -> config.petHouseSpaceCheck(), StorableItem.petHouseSpaceItems),
+			new StorageLocationEnabler(StorageLocation.CAPE_RACK, () -> config.capeRackStorageCheck(), StorableItem.capeRackItems),
 			new StorageLocationEnabler(StorageLocation.HUNTSMANS_KIT, () -> config.huntsmansKitCheck(), StorableItem.huntsmansKitItems)
 	);
 

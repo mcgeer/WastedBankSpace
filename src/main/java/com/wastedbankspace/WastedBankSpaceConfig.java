@@ -53,6 +53,7 @@ public interface WastedBankSpaceConfig extends Config
 	String FORESTRY_KIT_CHECK_KEY = "forestryKitCheck";
 	String MYSTERIOUS_STRANGER_CHECK_KEY = "mysteriousStrangerCheck";
 	String PET_HOUSE_SPACE_CHECK_KEY = "petHouseSpaceCheck";
+	String CAPE_RACK_CHECK_KEY = "capeRackCheck";
 	String HUNTSMANS_KIT_SPACE_CHECK_KEY = "huntsmansKitSpaceCheck";
 
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
@@ -230,10 +231,19 @@ public interface WastedBankSpaceConfig extends Config
 		return false; //Disabled by Default. Most people dont lose pets in their bank alike BIS gear. 
 	}
 
+	@ConfigItem(keyName = CAPE_RACK_CHECK_KEY,
+			name = "Cape rack storage",
+			description = "Storage for capes in the costume room",
+			position = 19
+	)
+    default boolean capeRackStorageCheck() {
+		return false;
+  }
+  
 	@ConfigItem(keyName = HUNTSMANS_KIT_SPACE_CHECK_KEY,
 			name = "Huntsman's Kit",
 			description = "Check for items that could go in your Huntsman's kit",
-			position = 19
+			position = 20
 	)
     default boolean huntsmansKitCheck() {
 		return true;
