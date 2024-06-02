@@ -53,7 +53,8 @@ public enum StorageLocation {
     ARMOUR_CASE("PoH Armour Case"),
     MYSTERIOUS_STRANGER("Mysterious Stranger"),
     PET_HOUSE_SPACE("Pet House Space"),
-    CAPE_RACK("PoH Cape rack")
+    CAPE_RACK("PoH Cape rack"),
+    HUNTSMANS_KIT("Huntsman's Kit")
     ;
 
     private final String uiRepresentation;

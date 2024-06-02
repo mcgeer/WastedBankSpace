@@ -1523,6 +1523,10 @@ public enum StorableItem {
     MINING_GLOVES(ItemID.MINING_GLOVES, StorageLocation.ARMOUR_CASE),
     SUPERIOR_MINING_GLOVES(ItemID.SUPERIOR_MINING_GLOVES, StorageLocation.ARMOUR_CASE),
     EXPERT_MINING_GLOVES(ItemID.EXPERT_MINING_GLOVES, StorageLocation.ARMOUR_CASE),
+    MIXED_HIDE_TOP(ItemID.MIXED_HIDE_TOP, StorageLocation.ARMOUR_CASE),
+    MIXED_HIDE_LEGS(ItemID.MIXED_HIDE_LEGS, StorageLocation.ARMOUR_CASE),
+    MIXED_HIDE_BOOTS(ItemID.MIXED_HIDE_BOOTS, StorageLocation.ARMOUR_CASE),
+    MIXED_HIDE_CAPE(ItemID.MIXED_HIDE_CAPE, StorageLocation.ARMOUR_CASE),
     GAS_MASK(ItemID.GAS_MASK, StorageLocation.ARMOUR_CASE),
     MOURNER_TOP(ItemID.MOURNER_TOP, StorageLocation.ARMOUR_CASE),
     MOURNER_TROUSERS(ItemID.MOURNER_TROUSERS, StorageLocation.ARMOUR_CASE),
@@ -1611,6 +1615,12 @@ public enum StorableItem {
     SPINED_CHAPS(ItemID.SPINED_CHAPS, StorageLocation.ARMOUR_CASE),
     SPINED_GLOVES(ItemID.SPINED_GLOVES, StorageLocation.ARMOUR_CASE),
     SPINED_BOOTS(ItemID.SPINED_BOOTS, StorageLocation.ARMOUR_CASE),
+    FANCY_BOOTS(ItemID.FANCY_BOOTS, StorageLocation.ARMOUR_CASE),
+    FIGHTING_BOOTS(ItemID.FIGHTING_BOOTS, StorageLocation.ARMOUR_CASE),
+    FANCIER_BOOTS(ItemID.FANCIER_BOOTS, StorageLocation.ARMOUR_CASE),
+    SUNFIRE_FANATIC_HELM(ItemID.SUNFIRE_FANATIC_HELM, StorageLocation.ARMOUR_CASE),
+    SUNFIRE_FANATIC_CUIRASS(ItemID.SUNFIRE_FANATIC_CUIRASS, StorageLocation.ARMOUR_CASE),
+    SUNFIRE_FANATIC_CHAUSSES(ItemID.SUNFIRE_FANATIC_CHAUSSES, StorageLocation.ARMOUR_CASE),
     SWIFT_BLADE(ItemID.SWIFT_BLADE, StorageLocation.ARMOUR_CASE),
     INITIATE_SALLET(ItemID.INITIATE_SALLET, StorageLocation.ARMOUR_CASE),
     INITIATE_HAUBERK(ItemID.INITIATE_HAUBERK, StorageLocation.ARMOUR_CASE),
@@ -1676,7 +1686,7 @@ public enum StorableItem {
     XERICIAN_ROBE(ItemID.XERICIAN_ROBE, StorageLocation.ARMOUR_CASE),
   
    /**  
-     * Mysterious Stranger - Hallowed Sepulchre
+     * Mysterious Stranger - Hallowed Sepuchre
      */
     HALLOWED_GRAPPLE(ItemID.HALLOWED_GRAPPLE, StorageLocation.MYSTERIOUS_STRANGER),
     HALLOWED_HAMMER(ItemID.HALLOWED_HAMMER, StorageLocation.MYSTERIOUS_STRANGER),
@@ -1952,7 +1962,52 @@ public enum StorableItem {
     XERICS_GENERAL(ItemID.XERICS_GENERAL, StorageLocation.CAPE_RACK),
     XERICS_GUARD(ItemID.XERICS_GUARD, StorageLocation.CAPE_RACK),
     XERICS_SENTINEL(ItemID.XERICS_SENTINEL, StorageLocation.CAPE_RACK),
-    XERICS_WARRIOR(ItemID.XERICS_WARRIOR, StorageLocation.CAPE_RACK)
+    XERICS_WARRIOR(ItemID.XERICS_WARRIOR, StorageLocation.CAPE_RACK),
+
+    /**
+     * Huntsman's Kit
+     */
+    BIRD_SNARE(ItemID.BIRD_SNARE, StorageLocation.HUNTSMANS_KIT),
+    NOOSE_WAND(ItemID.NOOSE_WAND, StorageLocation.HUNTSMANS_KIT),
+    BUTTERFLY_NET_(ItemID.BUTTERFLY_NET, StorageLocation.HUNTSMANS_KIT),
+    MAGIC_BUTTERFLY_NET_(ItemID.MAGIC_BUTTERFLY_NET, StorageLocation.HUNTSMANS_KIT),
+    BUTTERFLY_JAR_(ItemID.BUTTERFLY_JAR, StorageLocation.HUNTSMANS_KIT),
+    BOX_TRAP(ItemID.BOX_TRAP, StorageLocation.HUNTSMANS_KIT),
+    RABBIT_SNARE(ItemID.RABBIT_SNARE, StorageLocation.HUNTSMANS_KIT),
+    UNLIT_TORCH(ItemID.UNLIT_TORCH, StorageLocation.HUNTSMANS_KIT),
+    SMALL_FISHING_NET_(ItemID.SMALL_FISHING_NET, StorageLocation.HUNTSMANS_KIT),
+    ROPE(ItemID.ROPE, StorageLocation.HUNTSMANS_KIT),
+    MAGIC_BOX(ItemID.MAGIC_BOX, StorageLocation.HUNTSMANS_KIT),
+    IMPINABOX1(ItemID.IMPINABOX1, StorageLocation.HUNTSMANS_KIT),
+    IMPINABOX2(ItemID.IMPINABOX2, StorageLocation.HUNTSMANS_KIT),
+    TEASING_STICK(ItemID.TEASING_STICK, StorageLocation.HUNTSMANS_KIT),
+    HUNTERS_SPEAR(ItemID.HUNTERS_SPEAR, StorageLocation.HUNTSMANS_KIT),
+    WOOD_CAMO_TOP_(ItemID.WOOD_CAMO_TOP, StorageLocation.HUNTSMANS_KIT),
+    WOOD_CAMO_LEGS_(ItemID.WOOD_CAMO_LEGS, StorageLocation.HUNTSMANS_KIT),
+    POLAR_CAMO_TOP_(ItemID.POLAR_CAMO_TOP, StorageLocation.HUNTSMANS_KIT),
+    POLAR_CAMO_LEGS_(ItemID.POLAR_CAMO_LEGS, StorageLocation.HUNTSMANS_KIT),
+    JUNGLE_CAMO_TOP_(ItemID.JUNGLE_CAMO_TOP, StorageLocation.HUNTSMANS_KIT),
+    JUNGLE_CAMO_LEGS_(ItemID.JUNGLE_CAMO_LEGS, StorageLocation.HUNTSMANS_KIT),
+    DESERT_CAMO_TOP_(ItemID.DESERT_CAMO_TOP, StorageLocation.HUNTSMANS_KIT),
+    DESERT_CAMO_LEGS_(ItemID.DESERT_CAMO_LEGS, StorageLocation.HUNTSMANS_KIT),
+    LARUPIA_HAT_(ItemID.LARUPIA_HAT, StorageLocation.HUNTSMANS_KIT),
+    LARUPIA_TOP_(ItemID.LARUPIA_TOP, StorageLocation.HUNTSMANS_KIT),
+    LARUPIA_LEGS_(ItemID.LARUPIA_LEGS, StorageLocation.HUNTSMANS_KIT),
+    GRAAKH_HEADDRESS(ItemID.GRAAHK_HEADDRESS, StorageLocation.HUNTSMANS_KIT),
+    GRAAKH_TOP(ItemID.GRAAHK_TOP, StorageLocation.HUNTSMANS_KIT),
+    GRAAKH_LEGS(ItemID.GRAAHK_LEGS, StorageLocation.HUNTSMANS_KIT),
+    KYATT_HAT_(ItemID.KYATT_HAT, StorageLocation.HUNTSMANS_KIT),
+    KYATT_TOP_(ItemID.KYATT_TOP, StorageLocation.HUNTSMANS_KIT),
+    KYATT_LEGS_(ItemID.KYATT_LEGS, StorageLocation.HUNTSMANS_KIT),
+    HUNTER_HOOD(ItemID.HUNTER_HOOD, StorageLocation.HUNTSMANS_KIT),
+    HUNTER_CAPE(ItemID.HUNTER_CAPE, StorageLocation.HUNTSMANS_KIT),
+    HUNTER_CAPET(ItemID.HUNTER_CAPET, StorageLocation.HUNTSMANS_KIT),
+    GUILD_HUNTER_HEADWEAR(ItemID.GUILD_HUNTER_HEADWEAR, StorageLocation.HUNTSMANS_KIT),
+    GUILD_HUNTER_TOP(ItemID.GUILD_HUNTER_TOP, StorageLocation.HUNTSMANS_KIT),
+    GUILD_HUNTER_LEGS(ItemID.GUILD_HUNTER_LEGS, StorageLocation.HUNTSMANS_KIT),
+    GUILD_HUNTER_BOOTS(ItemID.GUILD_HUNTER_BOOTS, StorageLocation.HUNTSMANS_KIT),
+    RING_OF_PURSUIT(ItemID.RING_OF_PURSUIT, StorageLocation.HUNTSMANS_KIT),
+    IMPLING_JAR_(ItemID.IMPLING_JAR, StorageLocation.HUNTSMANS_KIT)
     ;
 
     public final int itemID;
@@ -1979,6 +2034,7 @@ public enum StorableItem {
     public static final List<StorableItem> mysteriousStrangerItems = storableItemsAtLocation(StorageLocation.MYSTERIOUS_STRANGER);
     public static final List<StorableItem> petHouseSpaceItems = storableItemsAtLocation(StorageLocation.PET_HOUSE_SPACE);
     public static final List<StorableItem> capeRackItems = storableItemsAtLocation(StorageLocation.CAPE_RACK);
+    public static final List<StorableItem> huntsmansKitItems = storableItemsAtLocation(StorageLocation.HUNTSMANS_KIT);
 
     private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
