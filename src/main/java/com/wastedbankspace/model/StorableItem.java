@@ -2165,6 +2165,7 @@ public enum StorableItem {
 
     public final int itemID;
     public final StorageLocation location;
+    public String name;
 
     public static final List<StorableItem> tackleBoxItems = storableItemsAtLocation(StorageLocation.TACKLE_BOX);
     public static final List<StorableItem> steelKeyRingItems = storableItemsAtLocation(StorageLocation.STEEL_KEY_RING);
@@ -2217,7 +2218,8 @@ public enum StorableItem {
     {
         for(StorableItem i : StorableItem.values())
         {
-            storableItemNameMap.put(i, itemManager.getItemComposition(i.itemID).getName());
+            i.name = itemManager.getItemComposition(i.itemID).getName();
+            storableItemNameMap.put(i, i.name);
         }
     }
 
