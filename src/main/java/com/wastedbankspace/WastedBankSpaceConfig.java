@@ -112,7 +112,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Stores some keys - One small favor reward",
 			position = 6
 	)
-	default boolean keyRingCheck()
+	default boolean steelKeyRingCheck()
 	{
 		return true;
 	}
@@ -122,7 +122,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Stores farming items, note low limits on many items",
 			position = 7
 	)
-	default boolean toolLepCheck()
+	default boolean toolLeprechaunCheck()
 	{
 		return true;
 	}
