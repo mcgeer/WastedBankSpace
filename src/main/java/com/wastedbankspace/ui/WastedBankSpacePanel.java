@@ -30,6 +30,7 @@ package com.wastedbankspace.ui;
 
 import com.wastedbankspace.WastedBankSpaceConfig;
 import com.wastedbankspace.model.StorableItem;
+import com.wastedbankspace.model.StorageLocations;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.game.ItemManager;
@@ -65,7 +66,7 @@ public class WastedBankSpacePanel extends PluginPanel
             public String getToolTipText(MouseEvent me) {
                 int index = locationToIndex(me.getPoint());
                 if (index > -1 && items != null) {
-                    return items.get(index).location.getUiRepresentation();
+                    return items.get(index).getLocation();
                 }
                 return null;
             }
@@ -109,7 +110,7 @@ public class WastedBankSpacePanel extends PluginPanel
         this.items = items;
         //Update number of items that can be moved
         numberOfItemsText.setText("Number of Items Wasting Space: " + items.size());
-        data.setListData(new Vector<>(StorableItem.storableListToString(items)));
+        data.setListData(new Vector<>(StorageLocations.storableListToString(items)));
         this.updateUI();
     }
 

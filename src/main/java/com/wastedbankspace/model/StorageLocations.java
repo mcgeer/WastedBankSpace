@@ -28,45 +28,42 @@
 
 package com.wastedbankspace.model;
 
+import com.wastedbankspace.locations.TackleBox;
 import lombok.Getter;
+import net.runelite.client.game.ItemManager;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
-public enum StorageLocation {
-    TACKLE_BOX("Tackle Box"),
-    STEEL_KEY_RING("Key Ring"),
-    TOOL_LEP("Tool Lep"),
-    MASTER_SCROLL_BOOK("Master Scroll Book"),
-    FOSSIL_STORAGE("Fossil Storage"),
-    BOLT_POUCH("Bolt Pouch"),
-    PURO_PURO("Puro Puro"),
-    FLAMTAER_BAG("Flamtaer Bag"),
-    NIGHTMARE_ZONE("Nightmare Zone"),
-    SEEDS("Seed Box/Vault"),
-    OAK_TREASURE_CHEST("PoH Treasure Chest"),
-    TEAK_TREASURE_CHEST("PoH Treasure Chest"),
-    MAHOGANY_TREASURE_CHEST("PoH Treasure Chest"),
-    FANCY_DRESS_BOX("PoH Fancy Dress Box"),
-    MAGIC_WARDROBE("PoH Magic Wardrobe"),
-    TOY_BOX("PoH Toy Box"),
-    SPICE_RACK("PoH Spice rack"),
-    FORESTRY_KIT("Forestry kit"),
-    ARMOUR_CASE("PoH Armour Case"),
-    MYSTERIOUS_STRANGER("Mysterious Stranger"),
-    PET_HOUSE_SPACE("Pet House Space"),
-    BOOKCASE_HOUSE_SPACE("POH Bookcase"),
-    CAPE_RACK("PoH Cape rack"),
-    HUNTSMANS_KIT("Huntsman's Kit")
-    ;
+public class StorageLocations {
+    private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
+    private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
 
-    private final String uiRepresentation;
-
-    StorageLocation(String uiRepresentation)
-    {
-        this.uiRepresentation = uiRepresentation;
+    static {
+        registerItems(TackleBox.class);
+        // Register other sub-enums here...
     }
 
-    @Override
-    public String toString() {
-        return this.uiRepresentation;
+    private static <E extends Enum<E> & StorableItem> void registerItems(Class<E> enumClass) {
+        for (E item : enumClass.getEnumConstants()) {
+            ITEM_ID_MAP.put(item.getItemID(), item);
+        }
+    }
+
+    public static void prepareStorableItemNames(ItemManager itemManager) {
+        storableItemNameMap.clear();
+        for (StorableItem item : ITEM_ID_MAP.values()) {
+            storableItemNameMap.put(item, itemManager.getItemComposition(item.getItemID()).getName());
+        }
+    }
+
+    public static List<String> storableListToString(List<? extends StorableItem> items) {
+        return items.stream()
+                .filter(storableItemNameMap::containsKey)
+                .map(i -> String.format("%s", storableItemNameMap.get(i)))
+                .collect(Collectors.toList());
     }
 }
