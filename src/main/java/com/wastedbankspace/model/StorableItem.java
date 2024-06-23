@@ -2191,7 +2191,6 @@ public enum StorableItem {
     public static final List<StorableItem> capeRackItems = storableItemsAtLocation(StorageLocation.CAPE_RACK);
     public static final List<StorableItem> huntsmansKitItems = storableItemsAtLocation(StorageLocation.HUNTSMANS_KIT);
 
-    private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
     static
     {
@@ -2219,15 +2218,13 @@ public enum StorableItem {
         for(StorableItem i : StorableItem.values())
         {
             i.name = itemManager.getItemComposition(i.itemID).getName();
-            storableItemNameMap.put(i, i.name);
         }
     }
 
     public static List<String> storableListToString(List<StorableItem> items)
     {
         return items.stream()
-                .filter(storableItemNameMap::containsKey)
-                .map(i -> String.format("%s", storableItemNameMap.get(i)))
+                .map(i -> i.name)
                 .collect(Collectors.toList());
     }
 
