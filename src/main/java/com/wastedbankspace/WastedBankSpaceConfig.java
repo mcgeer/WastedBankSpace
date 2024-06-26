@@ -31,6 +31,7 @@ package com.wastedbankspace;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 
 @ConfigGroup("Wasted Bank Space")
 public interface WastedBankSpaceConfig extends Config
@@ -56,6 +57,25 @@ public interface WastedBankSpaceConfig extends Config
 	String HOUSE_BOOKCASE_CHECK_KEY = "bookcaseHouseSpaceCheck";
 	String CAPE_RACK_CHECK_KEY = "capeRackCheck";
 	String HUNTSMANS_KIT_SPACE_CHECK_KEY = "huntsmansKitSpaceCheck";
+
+	@ConfigSection(
+			name = "Item List",
+			description = "",
+			position = 0
+	)
+	String itemLists = "itemLists";
+
+	@ConfigItem(
+			keyName = "nonFlaggedItems",
+			name = "Non Flagged Items",
+			description = "Configures items to not be flagged as wasted bank space. Format: item, item",
+			position = 0,
+			section = itemLists
+	)
+	default String getNonFlaggedItems()
+	{
+		return "Fire cape, ";
+	}
 
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",

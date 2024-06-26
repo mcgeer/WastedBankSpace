@@ -49,11 +49,13 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 import net.runelite.client.util.ImageUtil;
+import net.runelite.client.util.Text;
 
 import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 @Slf4j
@@ -95,6 +97,8 @@ public class WastedBankSpacePlugin extends Plugin
 	private static final BufferedImage ICON = ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/overlaySmoll.png");
 	public static final String CONFIG_GROUP = "Wasted Bank Space";
 	private static boolean prepared = false;
+
+	private List<String> NonFlaggedItemList = new CopyOnWriteArrayList<>();
 
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
 			new StorageLocationEnabler(StorageLocation.TACKLE_BOX, () -> config.tackleBoxCheck(), StorableItem.tackleBoxItems),
@@ -250,10 +254,16 @@ public class WastedBankSpacePlugin extends Plugin
 
 	public List<StorableItem>  getEnabledItemLists()
 	{
+		NonFlaggedItemList = Text.fromCSV(config.getNonFlaggedItems());
+
 		List<StorableItem> ret = new ArrayList<>();
 		for (StorageLocationEnabler sle:
 				storageLocationEnablers) {
-			ret.addAll(sle.GetStorableItems());
+			for(StorableItem item: sle.GetStorableItems()){
+				if (!NonFlaggedItemList.contains(item.name)) {
+					ret.add(item);
+				}
+			}
 		}
 		return ret;
 	}
