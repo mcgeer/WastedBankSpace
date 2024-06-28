@@ -30,8 +30,6 @@ package com.wastedbankspace.model;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
 @Getter
@@ -45,9 +43,12 @@ public class StorageLocationEnabler {
         this.storableItems = storableItems;
     }
 
-    public StorableItem[] GetStorableItems()
+    public StorableItem[] GetStorableItemsIfEnabled()
     {
         return storageLocationEnabled.get() ? storableItems :new StorableItem[0];
     }
 
+    public StorableItem[] GetStorableItems(){
+        return storableItems;
+    }
 }

@@ -28,7 +28,7 @@
 
 package com.wastedbankspace.model;
 
-import com.wastedbankspace.locations.TackleBox;
+import com.wastedbankspace.locations.*;
 import lombok.Getter;
 import net.runelite.client.game.ItemManager;
 
@@ -43,8 +43,13 @@ public class StorageLocations {
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
 
     static {
+        registerItems(ArmourCase.class);
+        registerItems(Bookcase.class);
+        registerItems(CapeRack.class);
+        registerItems(ElnockInquisitor.class);
+        registerItems(FancyDressBox.class);
         registerItems(TackleBox.class);
-        // Register other sub-enums here...
+        //TODO dit wil ik nog verwijderen. MAar dan moet eerst andere PR af.
     }
 
     private static <E extends Enum<E> & StorableItem> void registerItems(Class<E> enumClass) {
