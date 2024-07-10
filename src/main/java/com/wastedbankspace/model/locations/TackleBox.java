@@ -1,4 +1,4 @@
-package com.wastedbankspace.locations;
+package com.wastedbankspace.model.locations;
 
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
