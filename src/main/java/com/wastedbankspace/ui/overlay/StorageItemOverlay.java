@@ -84,18 +84,18 @@ public class StorageItemOverlay extends WidgetItemOverlay
 
         if (items.isEmpty()
                 || itemWidget.getWidget().getParentId() != ComponentID.BANK_ITEM_CONTAINER
-                || items.stream().noneMatch(i -> i.itemID == itemId)
+                || items.stream().noneMatch(i -> i.getItemID() == itemId)
         )
         {
             return;
         }
 
-        StorableItem item =  items.stream().filter(i -> i.itemID == itemId).findFirst().get();
+        StorableItem item =  items.stream().filter(i -> i.getItemID() == itemId).findFirst().get();
         Rectangle bounds = itemWidget.getCanvasBounds();
 
         if (bounds.contains(client.getMouseCanvasPosition().getX(), client.getMouseCanvasPosition().getY()))
         {
-            Tooltip t = new Tooltip(ColorUtil.prependColorTag("Store @ " + item.location.getUiRepresentation(), new Color(238, 238, 238)));
+            Tooltip t = new Tooltip(ColorUtil.prependColorTag("Store @ " + item.getLocation(), new Color(238, 238, 238)));
             tooltipManager.add(t);
         }
 

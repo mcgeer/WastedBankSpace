@@ -30,27 +30,25 @@ package com.wastedbankspace.model;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
 @Getter
 public class StorageLocationEnabler {
-
-    public final StorageLocation storageLocation;
     private final Supplier<Boolean> storageLocationEnabled;
-    private final List<StorableItem> storableItems;
+    private final StorableItem[] storableItems;
 
-    public StorageLocationEnabler(StorageLocation storageLocation, Supplier<Boolean> storageLocationEnabled, List<StorableItem> storableItems)
+    public StorageLocationEnabler(Supplier<Boolean> storageLocationEnabled, StorableItem[] storableItems)
     {
-        this.storageLocation = storageLocation;
         this.storageLocationEnabled = storageLocationEnabled;
         this.storableItems = storableItems;
     }
 
-    public List<StorableItem> GetStorableItems()
+    public StorableItem[] GetStorableItemsIfEnabled()
     {
-        return storageLocationEnabled.get() ? storableItems : new ArrayList<>();
+        return storageLocationEnabled.get() ? storableItems :new StorableItem[0];
     }
 
+    public StorableItem[] GetStorableItems(){
+        return storableItems;
+    }
 }
