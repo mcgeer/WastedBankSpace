@@ -87,4 +87,9 @@ public class StorageLocations {
                 .map(i -> String.format("%s", storableItemNameMap.get(i)))
                 .collect(Collectors.toList());
     }
+
+    public static String getStorableItemName(StorableItem item)
+    {
+        return storableItemNameMap.getOrDefault(item, null);
+    }
 }

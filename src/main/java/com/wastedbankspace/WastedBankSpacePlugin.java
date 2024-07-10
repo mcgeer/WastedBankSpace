@@ -33,6 +33,7 @@ import com.wastedbankspace.model.locations.*;
 import com.wastedbankspace.model.*;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
+import static com.wastedbankspace.model.StorageLocations.getStorableItemName;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.ItemContainerChanged;
@@ -48,11 +49,14 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 import net.runelite.client.util.ImageUtil;
+import net.runelite.client.util.Text;
 
 import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 
 
 @Slf4j
@@ -95,6 +99,8 @@ public class WastedBankSpacePlugin extends Plugin
 	public static final String CONFIG_GROUP = "Wasted Bank Space";
 	private static boolean prepared = false;
 
+	private List<String> NonFlaggedItemList = new CopyOnWriteArrayList<>();
+
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
 			new StorageLocationEnabler(() -> config.tackleBoxStorageCheck(), TackleBox.values()),
 			new StorageLocationEnabler(() -> config.steelKeyRingStorageCheck(), SteelKeyRing.values()),
@@ -114,7 +120,7 @@ public class WastedBankSpacePlugin extends Plugin
 			new StorageLocationEnabler(() -> config.armourCaseStorageCheck(), ArmourCase.values()),
 			new StorageLocationEnabler(() -> config.mysteriousStrangerStorageCheck(), MysteriousStranger.values()),
 			new StorageLocationEnabler(() -> config.petHouseStorageCheck(), PetHouse.values()),
-			new StorageLocationEnabler(() -> config.BookcaseStorageCheck(), Bookcase.values()),
+			new StorageLocationEnabler(() -> config.bookcaseStorageCheck(), Bookcase.values()),
 			new StorageLocationEnabler(() -> config.capeRackStorageCheck(), CapeRack.values()),
 			new StorageLocationEnabler(() -> config.huntsmansKitStorageCheck(), HuntsmansKit.values())
 	);
@@ -247,10 +253,16 @@ public class WastedBankSpacePlugin extends Plugin
 
 	public List<StorableItem>  getEnabledItemLists()
 	{
+		NonFlaggedItemList = Text.fromCSV(config.getNonFlaggedItems());
+
 		List<StorableItem> ret = new ArrayList<>();
 		for (StorageLocationEnabler sle:
 				storageLocationEnablers) {
-			ret.addAll(Arrays.asList(sle.GetStorableItemsIfEnabled()));
+			for(StorableItem item: sle.GetStorableItems()){
+				if (!NonFlaggedItemList.contains(getStorableItemName(item))) {
+					ret.add(item);
+				}
+			}
 		}
 		return ret;
 	}
