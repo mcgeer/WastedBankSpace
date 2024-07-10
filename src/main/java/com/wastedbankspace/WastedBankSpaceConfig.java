@@ -88,11 +88,11 @@ public interface WastedBankSpaceConfig extends Config
 	}
 
 	@ConfigItem(keyName = SEED_CHECK_KEY,
-			name = "Seed Box/Vault",
-			description = "Seeds can be stored in a seed box, saplings and seeds in the vault",
+			name = "Seed Vault",
+			description = "Seeds and saplings can be stored in the vault",
 			position = 4
 	)
-	default boolean seedCheck()
+	default boolean seedVaultStorageCheck()
 	{
 		return true;
 	}
@@ -102,7 +102,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Check for items that could be in your tackle box",
 			position = 5
 	)
-	default boolean tackleBoxCheck()
+	default boolean tackleBoxStorageCheck()
 	{
 		return true;
 	}
@@ -112,7 +112,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Stores some keys - One small favor reward",
 			position = 6
 	)
-	default boolean keyRingCheck()
+	default boolean steelKeyRingStorageCheck()
 	{
 		return true;
 	}
@@ -122,7 +122,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Stores farming items, note low limits on many items",
 			position = 7
 	)
-	default boolean toolLepCheck()
+	default boolean toolLeprechaunStorageCheck()
 	{
 		return true;
 	}
@@ -132,7 +132,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Stores teleport scrolls",
 			position = 8
 	)
-	default boolean masterScrollBookCheck()
+	default boolean masterScrollBookStorageCheck()
 	{
 		return true;
 	}
@@ -142,7 +142,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Storage for fossils on Fossil Island and in Varrok Museum",
 			position = 9
 	)
-	default boolean fossilStorageCheck()
+	default boolean fossilStorageStrorageCheck()
 	{
 		return true;
 	}
@@ -152,7 +152,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Elnock Inquisitor will hold some items in Puro Puro",
 			position = 10
 	)
-	default boolean elnockInquisitorCheck()
+	default boolean elnockInquisitorStorageCheck()
 	{
 		return true;
 	}
@@ -162,7 +162,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Storage for Shades of Morton (minigame) items",
 			position = 11
 	)
-	default boolean flamtaerBagCheck()
+	default boolean flamtaerBagStorageCheck()
 	{
 		return true;
 	}
@@ -172,7 +172,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Potion's which store in the barrels at the nmz (minigame)",
 			position = 12
 	)
-	default boolean nightmareZoneCheck()
+	default boolean nightmareZoneStorageCheck()
 	{
 		return true;
 	}
@@ -182,7 +182,7 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Toy and holiday item storage",
 			position = 13
 	)
-	default	boolean toyBoxCheck()
+	default	boolean toyBoxStorageCheck()
 	{
 		return true;
 	}
@@ -192,20 +192,21 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Storage for spicy stew spices in the PoH kitchen",
 			position = 14
 	)
-	default boolean spiceRackStorageCheck() 
+	default boolean spiceRackStorageCheck()
 	{
-    return true; 
+    return true;
 	}
 
 	@ConfigItem(keyName = FORESTRY_KIT_CHECK_KEY,
 			name = "Forestry kit storage",
 			description = "Storage for Forestry-related items",
-			position = 15)
-	default boolean forestryKitCheck()
+			position = 15
+	)
+	default boolean forestryKitStorageCheck()
 	{
 		return true;
 	}
-  
+
 	@ConfigItem(keyName = ARMOUR_CASE_CHECK_KEY,
 			name = "PoH Armour Case storage",
 			description = "Armour and outfit storage",
@@ -221,23 +222,24 @@ public interface WastedBankSpaceConfig extends Config
 			description = "Storage for Hallowed Sepulchre items",
 			position = 17
 	)
-	default boolean mysteriousStrangerCheck() { return true; }
-  
+	default boolean mysteriousStrangerStorageCheck() { return true; }
+
 	@ConfigItem(keyName = PET_HOUSE_SPACE_CHECK_KEY,
 			name = "Pet House Space",
 			description = "Pet House Space inside the POH",
 			position = 18
 	)
-	default boolean petHouseSpaceCheck() {
-		return false; //Disabled by Default. Most people dont lose pets in their bank alike BIS gear. 
+	default boolean petHouseStorageCheck() {
+		return false; //Disabled by Default. Most people don't lose pets in their bank alike BIS gear.
 	}
 
 	@ConfigItem(keyName = HOUSE_BOOKCASE_CHECK_KEY,
-	name = "PoH Bookcase",
-	description = "Bookcase inside the PoH",
-	position = 19)
-	default boolean houseBookcaseCheck() { return true; }
-  
+		name = "PoH Bookcase",
+		description = "Bookcase inside the PoH",
+		position = 19
+	)
+	default boolean BookcaseStorageCheck() { return true; }
+
 	@ConfigItem(keyName = CAPE_RACK_CHECK_KEY,
 			name = "Cape rack storage",
 			description = "Storage for capes in the costume room",
@@ -245,14 +247,14 @@ public interface WastedBankSpaceConfig extends Config
 	)
     default boolean capeRackStorageCheck() {
 		return false;
-  }
-  
+  	}
+
 	@ConfigItem(keyName = HUNTSMANS_KIT_SPACE_CHECK_KEY,
 			name = "Huntsman's Kit",
 			description = "Check for items that could go in your Huntsman's kit",
 			position = 21
 	)
-    default boolean huntsmansKitCheck() {
+    default boolean huntsmansKitStorageCheck() {
 		return true;
 	}
 }

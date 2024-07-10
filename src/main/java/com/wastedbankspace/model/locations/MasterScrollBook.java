@@ -1,0 +1,32 @@
+package com.wastedbankspace.model.locations;
+
+import com.wastedbankspace.model.StorableItem;
+import lombok.Getter;
+import net.runelite.api.ItemID;
+
+@Getter
+public enum MasterScrollBook implements StorableItem {
+    NARDAH_TELEPORT(ItemID.NARDAH_TELEPORT),
+    DIGSITE_TELEPORT(ItemID.DIGSITE_TELEPORT),
+    FELDIP_HILLS_TELEPORT(ItemID.FELDIP_HILLS_TELEPORT),
+    LUNAR_ISLE_TELEPORT(ItemID.LUNAR_ISLE_TELEPORT),
+    MORTTON_TELEPORT(ItemID.MORTTON_TELEPORT),
+    PEST_CONTROL_TELEPORT(ItemID.PEST_CONTROL_TELEPORT),
+    PISCATORIS_TELEPORT(ItemID.PISCATORIS_TELEPORT),
+    TAI_BWO_WANNAI_TELEPORT(ItemID.TAI_BWO_WANNAI_TELEPORT),
+    IORWERTH_CAMP_TELEPORT(ItemID.IORWERTH_CAMP_TELEPORT),
+    MOS_LEHARMLESS_TELEPORT(ItemID.MOS_LEHARMLESS_TELEPORT),
+    LUMBERYARD_TELEPORT(ItemID.LUMBERYARD_TELEPORT),
+    ZULANDRA_TELEPORT(ItemID.ZULANDRA_TELEPORT),
+    KEY_MASTER_TELEPORT(ItemID.KEY_MASTER_TELEPORT),
+    REVENANT_CAVE_TELEPORT(ItemID.REVENANT_CAVE_TELEPORT),
+    WATSON_TELEPORT(ItemID.WATSON_TELEPORT);
+
+    private final int itemID;
+    @Getter
+    private final String location = "Master Scroll Book";
+
+    MasterScrollBook(int itemID) {
+        this.itemID = itemID;
+    }
+}

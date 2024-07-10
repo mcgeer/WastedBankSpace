@@ -29,9 +29,8 @@
 package com.wastedbankspace;
 
 import com.google.inject.Provides;
-import com.wastedbankspace.model.StorableItem;
-import com.wastedbankspace.model.StorageLocation;
-import com.wastedbankspace.model.StorageLocationEnabler;
+import com.wastedbankspace.model.locations.*;
+import com.wastedbankspace.model.*;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
 import lombok.extern.slf4j.Slf4j;
@@ -97,29 +96,27 @@ public class WastedBankSpacePlugin extends Plugin
 	private static boolean prepared = false;
 
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
-			new StorageLocationEnabler(StorageLocation.TACKLE_BOX, () -> config.tackleBoxCheck(), StorableItem.tackleBoxItems),
-			new StorageLocationEnabler(StorageLocation.STEEL_KEY_RING, () -> config.keyRingCheck(), StorableItem.steelKeyRingItems),
-			new StorageLocationEnabler(StorageLocation.TOOL_LEP, () -> config.toolLepCheck(), StorableItem.toolLepItems),
-			new StorageLocationEnabler(StorageLocation.MASTER_SCROLL_BOOK, () -> config.masterScrollBookCheck(), StorableItem.masterScrollBookItems),
-			new StorageLocationEnabler(StorageLocation.FOSSIL_STORAGE, () -> config.fossilStorageCheck(), StorableItem.fossilStorageItems),
-			new StorageLocationEnabler(StorageLocation.PURO_PURO, () -> config.elnockInquisitorCheck(), StorableItem.puroPuroItems),
-			new StorageLocationEnabler(StorageLocation.FLAMTAER_BAG, () -> config.flamtaerBagCheck(), StorableItem.flamtaerBagItems),
-			new StorageLocationEnabler(StorageLocation.NIGHTMARE_ZONE, () -> config.nightmareZoneCheck(), StorableItem.nightmareZoneItems),
-			new StorageLocationEnabler(StorageLocation.SEEDS, () -> config.seedCheck(), StorableItem.seedItems),
-			new StorageLocationEnabler(StorageLocation.OAK_TREASURE_CHEST, () -> config.treasureChestStorageCheck(), StorableItem.oakTreasureChestItems),
-			new StorageLocationEnabler(StorageLocation.TEAK_TREASURE_CHEST, () -> config.treasureChestStorageCheck(), StorableItem.teakTreasureChestItems),
-			new StorageLocationEnabler(StorageLocation.MAHOGANY_TREASURE_CHEST, () -> config.treasureChestStorageCheck(), StorableItem.mahoganyTreasureChestItems),
-			new StorageLocationEnabler(StorageLocation.FANCY_DRESS_BOX, () -> config.fancyDressBoxStorageCheck(), StorableItem.fancyDressBoxItems),
-			new StorageLocationEnabler(StorageLocation.MAGIC_WARDROBE, () -> config.magicWardrobeStorageCheck(), StorableItem.magicWardrobeItems),
-			new StorageLocationEnabler(StorageLocation.TOY_BOX, () -> config.toyBoxCheck(), StorableItem.toyBoxItems),
-			new StorageLocationEnabler(StorageLocation.SPICE_RACK, () -> config.spiceRackStorageCheck(), StorableItem.spiceRackItems),
-			new StorageLocationEnabler(StorageLocation.FORESTRY_KIT, () -> config.forestryKitCheck(), StorableItem.forestryKitItems),
-			new StorageLocationEnabler(StorageLocation.ARMOUR_CASE, () -> config.armourCaseStorageCheck(), StorableItem.armourCaseItems),
-			new StorageLocationEnabler(StorageLocation.MYSTERIOUS_STRANGER, () -> config.mysteriousStrangerCheck(), StorableItem.mysteriousStrangerItems),
-			new StorageLocationEnabler(StorageLocation.PET_HOUSE_SPACE, () -> config.petHouseSpaceCheck(), StorableItem.petHouseSpaceItems),
-			new StorageLocationEnabler(StorageLocation.BOOKCASE_HOUSE_SPACE, () -> config.houseBookcaseCheck(), StorableItem.bookcaseHouseSpaceItems),
-			new StorageLocationEnabler(StorageLocation.CAPE_RACK, () -> config.capeRackStorageCheck(), StorableItem.capeRackItems),
-			new StorageLocationEnabler(StorageLocation.HUNTSMANS_KIT, () -> config.huntsmansKitCheck(), StorableItem.huntsmansKitItems)
+			new StorageLocationEnabler(() -> config.tackleBoxStorageCheck(), TackleBox.values()),
+			new StorageLocationEnabler(() -> config.steelKeyRingStorageCheck(), SteelKeyRing.values()),
+			new StorageLocationEnabler(() -> config.toolLeprechaunStorageCheck(), ToolLeprechaun.values()),
+			new StorageLocationEnabler(() -> config.masterScrollBookStorageCheck(), MasterScrollBook.values()),
+			new StorageLocationEnabler(() -> config.fossilStorageStrorageCheck(), FossilStorage.values()),
+			new StorageLocationEnabler(() -> config.elnockInquisitorStorageCheck(), ElnockInquisitor.values()),
+			new StorageLocationEnabler(() -> config.flamtaerBagStorageCheck(), FlamtaerBag.values()),
+			new StorageLocationEnabler(() -> config.nightmareZoneStorageCheck(), NightmareZone.values()),
+			new StorageLocationEnabler(() -> config.seedVaultStorageCheck(), SeedVault.values()),
+			new StorageLocationEnabler(() -> config.treasureChestStorageCheck(), TreasureChest.values()),
+			new StorageLocationEnabler(() -> config.fancyDressBoxStorageCheck(), FancyDressBox.values()),
+			new StorageLocationEnabler(() -> config.magicWardrobeStorageCheck(), MagicWardrobe.values()),
+			new StorageLocationEnabler(() -> config.toyBoxStorageCheck(), ToyBox.values()),
+			new StorageLocationEnabler(() -> config.spiceRackStorageCheck(), SpiceRack.values()),
+			new StorageLocationEnabler(() -> config.forestryKitStorageCheck(), ForestryKit.values()),
+			new StorageLocationEnabler(() -> config.armourCaseStorageCheck(), ArmourCase.values()),
+			new StorageLocationEnabler(() -> config.mysteriousStrangerStorageCheck(), MysteriousStranger.values()),
+			new StorageLocationEnabler(() -> config.petHouseStorageCheck(), PetHouse.values()),
+			new StorageLocationEnabler(() -> config.BookcaseStorageCheck(), Bookcase.values()),
+			new StorageLocationEnabler(() -> config.capeRackStorageCheck(), CapeRack.values()),
+			new StorageLocationEnabler(() -> config.huntsmansKitStorageCheck(), HuntsmansKit.values())
 	);
 
 	private NavigationButton navButton;
@@ -153,7 +150,7 @@ public class WastedBankSpacePlugin extends Plugin
 					case LOGGED_IN:
 					case CONNECTION_LOST:
 					case HOPPING:
-						StorableItem.prepareStorableItemNames(itemManager);
+						StorageLocations.prepareStorableItemNames(itemManager);
 						prepared = true;
 						return true;
 					default:
@@ -236,7 +233,7 @@ public class WastedBankSpacePlugin extends Plugin
 		List<StorableItem> storableItemsInBank = new ArrayList<>();
 		for (StorableItem item:
 				getEnabledItemLists()) {
-			int id = item.itemID;
+			int id = item.getItemID();
 			if(inventoryMap.containsKey(id))
 			{
 				storableItemsInBank.add(item);
@@ -253,7 +250,7 @@ public class WastedBankSpacePlugin extends Plugin
 		List<StorableItem> ret = new ArrayList<>();
 		for (StorageLocationEnabler sle:
 				storageLocationEnablers) {
-			ret.addAll(sle.GetStorableItems());
+			ret.addAll(Arrays.asList(sle.GetStorableItemsIfEnabled()));
 		}
 		return ret;
 	}
