@@ -28,7 +28,7 @@
 
 package com.wastedbankspace.model;
 
-import com.wastedbankspace.locations.*;
+import com.wastedbankspace.model.locations.*;
 import lombok.Getter;
 import net.runelite.client.game.ItemManager;
 
@@ -43,13 +43,29 @@ public class StorageLocations {
     private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
 
     static {
+        //Currently just run ([A-Za-z]+)\.java replaced with registerItems($1.class);
+        // on the ls of the model.locations folder
         registerItems(ArmourCase.class);
         registerItems(Bookcase.class);
         registerItems(CapeRack.class);
         registerItems(ElnockInquisitor.class);
         registerItems(FancyDressBox.class);
+        registerItems(FlamtaerBag.class);
+        registerItems(ForestryKit.class);
+        registerItems(FossilStorage.class);
+        registerItems(HuntsmansKit.class);
+        registerItems(MagicWardrobe.class);
+        registerItems(MasterScrollBook.class);
+        registerItems(MysteriousStranger.class);
+        registerItems(NightmareZone.class);
+        registerItems(PetHouse.class);
+        registerItems(SeedVault.class);
+        registerItems(SpiceRack.class);
+        registerItems(SteelKeyRing.class);
         registerItems(TackleBox.class);
-        //TODO dit wil ik nog verwijderen. MAar dan moet eerst andere PR af.
+        registerItems(ToolLeprechaun.class);
+        registerItems(ToyBox.class);
+        registerItems(TreasureChest.class);
     }
 
     private static <E extends Enum<E> & StorableItem> void registerItems(Class<E> enumClass) {

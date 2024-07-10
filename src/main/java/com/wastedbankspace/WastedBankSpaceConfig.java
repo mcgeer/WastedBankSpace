@@ -230,7 +230,7 @@ public interface WastedBankSpaceConfig extends Config
 			position = 18
 	)
 	default boolean petHouseStorageCheck() {
-		return false; //Disabled by Default. Most people dont lose pets in their bank alike BIS gear.
+		return false; //Disabled by Default. Most people don't lose pets in their bank alike BIS gear.
 	}
 
 	@ConfigItem(keyName = HOUSE_BOOKCASE_CHECK_KEY,

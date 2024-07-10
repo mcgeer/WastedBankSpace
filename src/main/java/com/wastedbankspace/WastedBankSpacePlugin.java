@@ -29,7 +29,7 @@
 package com.wastedbankspace;
 
 import com.google.inject.Provides;
-import com.wastedbankspace.locations.*;
+import com.wastedbankspace.model.locations.*;
 import com.wastedbankspace.model.*;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
@@ -99,7 +99,7 @@ public class WastedBankSpacePlugin extends Plugin
 			new StorageLocationEnabler(() -> config.tackleBoxStorageCheck(), TackleBox.values()),
 			new StorageLocationEnabler(() -> config.steelKeyRingStorageCheck(), SteelKeyRing.values()),
 			new StorageLocationEnabler(() -> config.toolLeprechaunStorageCheck(), ToolLeprechaun.values()),
-			new StorageLocationEnabler(()-> config.masterScrollBookStorageCheck(), MasterScrollBook.values()),
+			new StorageLocationEnabler(() -> config.masterScrollBookStorageCheck(), MasterScrollBook.values()),
 			new StorageLocationEnabler(() -> config.fossilStorageStrorageCheck(), FossilStorage.values()),
 			new StorageLocationEnabler(() -> config.elnockInquisitorStorageCheck(), ElnockInquisitor.values()),
 			new StorageLocationEnabler(() -> config.flamtaerBagStorageCheck(), FlamtaerBag.values()),

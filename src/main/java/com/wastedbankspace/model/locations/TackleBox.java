@@ -66,6 +66,7 @@ public enum TackleBox implements StorableItem {
     FISHING_POTION3(ItemID.FISHING_POTION3),
     FISHING_POTION4(ItemID.FISHING_POTION4),
     MOLCH_PEARLS(ItemID.MOLCH_PEARL);
+
     private final int itemID;
     @Getter
     private final String location = "Tackle Box";
