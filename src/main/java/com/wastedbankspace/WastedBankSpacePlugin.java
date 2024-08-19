@@ -33,10 +33,17 @@ import com.wastedbankspace.model.locations.*;
 import com.wastedbankspace.model.*;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
-import static com.wastedbankspace.model.StorageLocations.getStorableItemName;
+
+import static com.wastedbankspace.model.StorageLocations.isItemStorable;
+
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.events.MenuOpened;
+import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetUtil;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -49,7 +56,6 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 import net.runelite.client.util.ImageUtil;
-import net.runelite.client.util.Text;
 
 import javax.inject.Inject;
 import javax.swing.*;
@@ -125,9 +131,13 @@ public class WastedBankSpacePlugin extends Plugin
 			new StorageLocationEnabler(() -> config.huntsmansKitStorageCheck(), HuntsmansKit.values())
 	);
 
+	private List<Integer> unflaggedItemIds = new ArrayList<>();
+
 	private NavigationButton navButton;
 	private WastedBankSpacePanel panel;
 	private Map<Integer, Integer> inventoryMap = new HashMap<>();
+
+	private boolean isBankOpen = false;
 
 	@Override
 	protected void startUp() throws Exception
@@ -182,6 +192,11 @@ public class WastedBankSpacePlugin extends Plugin
 		if (ev.getContainerId() == InventoryID.BANK.getId())
 		{
 			updateItemsFromBankContainer(ev.getItemContainer());
+			isBankOpen = true;
+		}
+		else
+		{
+			isBankOpen = false;
 		}
 	}
 
@@ -194,6 +209,53 @@ public class WastedBankSpacePlugin extends Plugin
 		}
 
 		updateWastedBankSpace();
+	}
+
+	@Subscribe
+	public void onMenuOpened(final MenuOpened event)
+	{
+		if (!client.isKeyPressed(KeyCode.KC_SHIFT) || !isBankOpen)
+		{
+			return;
+		}
+
+		final MenuEntry[] entries = event.getMenuEntries();
+
+		for(int i = entries.length - 1; i >= 0; i--)
+		{
+			final MenuEntry entry = entries[i];
+			final Widget w = entry.getWidget();
+
+			if(w != null && (WidgetUtil.componentToInterface(w.getId()) == InterfaceID.BANK))
+			{
+				final int itemId = w.getItemId();
+				final boolean flagged = !unflaggedItemIds.contains(itemId);
+
+				final MenuEntry parent = client.createMenuEntry(i)
+						.setOption(flagged ?  "Unflag Item" : "Flag Item")
+						.setTarget(entry.getTarget())
+						.setType(MenuAction.RUNELITE)
+						.onClick(x -> blacklistItem(itemId, flagged));
+				return;
+			}
+		}
+	}
+
+	private void blacklistItem(int id, boolean flagged)
+	{
+		if (isItemStorable(id))
+		{
+			if(!flagged)
+			{
+				unflaggedItemIds.remove((Integer)id);
+			}
+			else
+			{
+				unflaggedItemIds.add((Integer)id);
+			}
+		}
+		//TODO call update to list on screen
+		//TODO might have to update items (below function)
 	}
 
 	private void updateItemsFromBankContainer(final ItemContainer c)
@@ -250,16 +312,19 @@ public class WastedBankSpacePlugin extends Plugin
 				() -> panel.setWastedBankSpaceItems(storableItemsInBank)
 		);
 	}
-
+//NonFlaggedItemList = Text.fromCSV(config.getNonFlaggedItems());
 	public List<StorableItem>  getEnabledItemLists()
 	{
-		NonFlaggedItemList = Text.fromCSV(config.getNonFlaggedItems());
 
+		//TODO unflaggedItemIds needs to be updated from the list
+
+		// ON change and subscribe for the above
+		//End this needs to Change
 		List<StorableItem> ret = new ArrayList<>();
 		for (StorageLocationEnabler sle:
 				storageLocationEnablers) {
 			for(StorableItem item: sle.GetStorableItems()){
-				if (!NonFlaggedItemList.contains(getStorableItemName(item))) {
+				if (!unflaggedItemIds.contains(item.getItemID())) {
 					ret.add(item);
 				}
 			}

@@ -36,6 +36,7 @@ import net.runelite.client.config.ConfigSection;
 @ConfigGroup("Wasted Bank Space")
 public interface WastedBankSpaceConfig extends Config
 {
+	/* Storage Location Keys */
 	String CLUE_ITEM_CHECK_KEY = "clueItemCheck";
 	String FANCY_DRESS_BOX_KEY = "poHFancyDressBox";
 	String MAGIC_WARDROBE_KEY = "poHMagicWardrobe";
@@ -58,30 +59,51 @@ public interface WastedBankSpaceConfig extends Config
 	String CAPE_RACK_CHECK_KEY = "capeRackCheck";
 	String HUNTSMANS_KIT_SPACE_CHECK_KEY = "huntsmansKitSpaceCheck";
 
+	/* Filtering and Blacklist Flags */
+	String FILTER_ENABLED_CHECK_KEY = "filterEnabledCheck";
+
+	@ConfigSection(
+			name = "General Config",
+			description = "Genera plugin config flags",
+			position = 0
+	)
+	String generalConfig = "generalConfig";
+
 	@ConfigSection(
 			name = "Non Flagged Items",
-			description = "",
-			position = 0
+			description = "Items blacklisted for being flagged",
+			position = 1
 	)
 	String nonFlaggedItems = "nonFlaggedItems";
 
 	@ConfigSection(
-			name = "General Config",
-			description = "",
-			position = 0
+			name = "Bank Interface Config",
+			description = "Configure bank interface changes",
+			position = 2
 	)
-	String generalConfig = "generalConfig";
+	String bankInterfaceConfig = "bankInterfaceConfig";
+
+	@ConfigItem(keyName = FILTER_ENABLED_CHECK_KEY,
+			name = "Enable Filtering",
+			description = "Enable Item Filters and Blacklist",
+			position = 0,
+			section = nonFlaggedItems
+	)
+	default boolean filterEnabledCheck()
+	{
+		return true;
+	}
 
 	@ConfigItem(
 			keyName = "nonFlaggedItems",
 			name = "Non Flagged Items",
 			description = "Configures items to not be flagged as wasted bank space. Format: item, item",
-			position = 0,
+			position = 1,
 			section = nonFlaggedItems
 	)
 	default String getNonFlaggedItems()
 	{
-		return "Fire cape, ";
+		return "";
 	}
 
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,

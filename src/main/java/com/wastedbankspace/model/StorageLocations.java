@@ -81,6 +81,11 @@ public class StorageLocations {
         }
     }
 
+    public static boolean isItemStorable(int id)
+    {
+        return ITEM_ID_MAP.containsKey(id);
+    }
+
     public static List<String> storableListToString(List<? extends StorableItem> items) {
         return items.stream()
                 .filter(storableItemNameMap::containsKey)

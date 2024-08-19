@@ -45,7 +45,7 @@ public class StorageLocationEnabler {
 
     public StorableItem[] GetStorableItemsIfEnabled()
     {
-        return storageLocationEnabled.get() ? storableItems :new StorableItem[0];
+        return storageLocationEnabled.get() ? storableItems : new StorableItem[0];
     }
 
     public StorableItem[] GetStorableItems(){
