@@ -9,6 +9,7 @@ Additionally, a panel can be seen on the right-hand side of RuneLite by selectin
 You must view your bank while the plugin is enabled for it to register what items you have. This data does not persist between client sessions so closing the client will require you to redo this step.
 
 # Configuration
+## General Configuration
 All the following configurations are enabled by default.
 
 - Tackle Box
@@ -34,6 +35,10 @@ All the following configurations are disabled by default.
 - PoH Armour Case
 - PoH Cape Rack
 - Pet House ( Skilling & Bossing Pets )
+
+## Filtering Configuration
+- Enable Filtering, enables the ability to selectively not flag specific items
+- Never Filter BIS Items, do not flag items determined BIS i.e. Skill/MAX Capes, Ancestral, ...
 
 # Issue or Feature Requests
 Please create an issue under the Issues tab, or @evilrail on Discord.
