@@ -36,6 +36,7 @@ import com.wastedbankspace.ui.overlay.StorageItemOverlay;
 
 import static com.wastedbankspace.model.StorageLocations.isItemStorable;
 
+import com.wastedbankspace.util.DelayedRunnable;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.ItemContainerChanged;
@@ -56,13 +57,14 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 import net.runelite.client.util.ImageUtil;
+import net.runelite.client.util.Text;
 
 import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-
+import java.util.function.Consumer;
 
 
 @Slf4j
@@ -95,17 +97,19 @@ public class WastedBankSpacePlugin extends Plugin
 	@Inject
 	private WastedBankSpaceConfig config;
 
+	@Inject
+	private ConfigManager configManager;
+
 	@Provides
 	WastedBankSpaceConfig provideConfig(ConfigManager configManager)
 	{
+
 		return configManager.getConfig(WastedBankSpaceConfig.class);
 	}
 
 	private static final BufferedImage ICON = ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/overlaySmoll.png");
 	public static final String CONFIG_GROUP = "Wasted Bank Space";
 	private static boolean prepared = false;
-
-	private List<String> NonFlaggedItemList = new CopyOnWriteArrayList<>();
 
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
 			new StorageLocationEnabler(() -> config.tackleBoxStorageCheck(), TackleBox.values()),
@@ -142,7 +146,12 @@ public class WastedBankSpacePlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager);
+		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager, new Consumer<String>() {
+			@Override
+			public void accept(String s) {
+				processBlackListChanged(s);
+			}
+		});
 		navButton = NavigationButton.builder()
 				.tooltip("Wasted Bank Space")
 				.priority(8)
@@ -167,6 +176,7 @@ public class WastedBankSpacePlugin extends Plugin
 					case CONNECTION_LOST:
 					case HOPPING:
 						StorageLocations.prepareStorableItemNames(itemManager);
+						panel.updatePluginFilter();
 						prepared = true;
 						return true;
 					default:
@@ -207,7 +217,6 @@ public class WastedBankSpacePlugin extends Plugin
 		{
 			return;
 		}
-
 		updateWastedBankSpace();
 	}
 
@@ -230,12 +239,14 @@ public class WastedBankSpacePlugin extends Plugin
 			{
 				final int itemId = w.getItemId();
 				final boolean flagged = !unflaggedItemIds.contains(itemId);
-
-				final MenuEntry parent = client.createMenuEntry(i)
-						.setOption(flagged ?  "Unflag Item" : "Flag Item")
-						.setTarget(entry.getTarget())
-						.setType(MenuAction.RUNELITE)
-						.onClick(x -> blacklistItem(itemId, flagged));
+				if(isItemStorable(itemId))
+				{
+					final MenuEntry parent = client.createMenuEntry(i)
+							.setOption(flagged ? "Unflag Item" : "Flag Item")
+							.setTarget(entry.getTarget())
+							.setType(MenuAction.RUNELITE)
+							.onClick(x -> blacklistItem(itemId, flagged));
+				}
 				return;
 			}
 		}
@@ -243,19 +254,24 @@ public class WastedBankSpacePlugin extends Plugin
 
 	private void blacklistItem(int id, boolean flagged)
 	{
-		if (isItemStorable(id))
+		//flagged = unflaggedItemIds !contains item
+		if(!flagged)
 		{
-			if(!flagged)
+			if(unflaggedItemIds.contains(id))
 			{
 				unflaggedItemIds.remove((Integer)id);
-			}
-			else
-			{
-				unflaggedItemIds.add((Integer)id);
+				panel.removeFilteredItem(StorageLocations.getStorableItemName(id), id);
 			}
 		}
-		//TODO call update to list on screen
-		//TODO might have to update items (below function)
+		else
+		{
+
+			if(!unflaggedItemIds.contains(id))
+			{
+				unflaggedItemIds.add((Integer)id);
+				panel.addFilteredItem(StorageLocations.getStorableItemName(id));
+			}
+		}
 	}
 
 	private void updateItemsFromBankContainer(final ItemContainer c)
@@ -312,14 +328,46 @@ public class WastedBankSpacePlugin extends Plugin
 				() -> panel.setWastedBankSpaceItems(storableItemsInBank)
 		);
 	}
-//NonFlaggedItemList = Text.fromCSV(config.getNonFlaggedItems());
+
+	public void processBlackListChanged(String fliter)
+	{
+		List<String> nonFlaggedItemList = Text.fromCSV(fliter);
+
+		unflaggedItemIds = new ArrayList<>();
+		for(String rule : nonFlaggedItemList)
+		{
+			if(rule.replaceAll("\\s+", "").matches("^\\d+$"))
+			{
+				unflaggedItemIds.add(Integer.parseInt(rule));
+			}
+			else
+			{
+				//Likely slow, should link each item in the text list to a key and find what keys changed/added
+				for (StorageLocationEnabler sle:
+						storageLocationEnablers) {
+					for(StorableItem item: sle.GetStorableItems()){
+						String name = StorageLocations.getStorableItemName(item);
+						if(name == null)
+						{
+							continue;
+						}
+						if (rule.replaceAll("\\s+", "")
+								.equalsIgnoreCase(name.replaceAll("\\s+", ""))
+								&& !unflaggedItemIds.contains(item.getItemID())) {
+							unflaggedItemIds.add(item.getItemID());
+						}
+					}
+				}
+			}
+		}
+
+		updateWastedBankSpace();
+	}
+
 	public List<StorableItem>  getEnabledItemLists()
 	{
-
-		//TODO unflaggedItemIds needs to be updated from the list
-
 		// ON change and subscribe for the above
-		//End this needs to Change
+		// End this needs to Change
 		List<StorableItem> ret = new ArrayList<>();
 		for (StorageLocationEnabler sle:
 				storageLocationEnablers) {

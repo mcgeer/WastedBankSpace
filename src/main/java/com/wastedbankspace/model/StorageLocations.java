@@ -93,6 +93,7 @@ public class StorageLocations {
                 .collect(Collectors.toList());
     }
 
+    public static String getStorableItemName(Integer id) { return getStorableItemName(ITEM_ID_MAP.get(id)); }
     public static String getStorableItemName(StorableItem item)
     {
         return storableItemNameMap.getOrDefault(item, null);

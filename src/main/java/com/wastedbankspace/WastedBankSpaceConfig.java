@@ -61,6 +61,8 @@ public interface WastedBankSpaceConfig extends Config
 
 	/* Filtering and Blacklist Flags */
 	String FILTER_ENABLED_CHECK_KEY = "filterEnabledCheck";
+	String BIS_FILTER_ENABLED_CHECK_KEY = "bisFilterEnabledCheck";
+
 
 	@ConfigSection(
 			name = "General Config",
@@ -94,17 +96,35 @@ public interface WastedBankSpaceConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(
-			keyName = "nonFlaggedItems",
-			name = "Non Flagged Items",
-			description = "Configures items to not be flagged as wasted bank space. Format: item, item",
+	@ConfigItem(keyName = BIS_FILTER_ENABLED_CHECK_KEY,
+			name = "Never Filter BIS",
+			description = "Never Filter Best in Slot Items",
 			position = 1,
 			section = nonFlaggedItems
 	)
-	default String getNonFlaggedItems()
+	default boolean bisfilterEnabledCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "nonFlaggedItems",
+			name = "",
+			description = "Configures items to not be flagged as wasted bank space. Format: item, item",
+			section = nonFlaggedItems,
+			hidden = true
+	)
+	default String nonFlaggedItems()
 	{
 		return "";
 	}
+
+	@ConfigItem(
+			keyName = "nonFlaggedItems",
+			name = "",
+			description = "Setter for storing notes data"
+	)
+	void nonFlaggedItems(String str);
 
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
