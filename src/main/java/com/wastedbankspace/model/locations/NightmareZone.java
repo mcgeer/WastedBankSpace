@@ -54,8 +54,10 @@ public enum NightmareZone implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Nightmare Zone";
-
+    @Getter
+    private final boolean isBis;
     NightmareZone(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

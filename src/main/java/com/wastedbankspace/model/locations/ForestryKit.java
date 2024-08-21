@@ -63,8 +63,11 @@ public enum ForestryKit implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Forestry Kit";
+    @Getter
+    private final boolean isBis;
 
     ForestryKit(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

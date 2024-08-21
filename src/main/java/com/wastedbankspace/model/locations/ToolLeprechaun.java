@@ -61,8 +61,10 @@ public enum ToolLeprechaun implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Tool Leprechaun";
-
+    @Getter
+    private final boolean isBis;
     ToolLeprechaun(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

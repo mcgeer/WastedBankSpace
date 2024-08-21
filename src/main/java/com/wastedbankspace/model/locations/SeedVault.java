@@ -151,8 +151,10 @@ public enum SeedVault implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Seed vault";
-
+    @Getter
+    private final boolean isBis;
     SeedVault(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

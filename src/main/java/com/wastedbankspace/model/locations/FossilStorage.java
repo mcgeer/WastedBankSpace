@@ -61,8 +61,11 @@ public enum FossilStorage implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Fossil Storage";
+    @Getter
+    private final boolean isBis;
 
     FossilStorage(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

@@ -54,8 +54,10 @@ public enum SpiceRack implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Spice Rack";
-
+    @Getter
+    private final boolean isBis;
     SpiceRack(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }
