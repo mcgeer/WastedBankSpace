@@ -41,8 +41,11 @@ public enum ElnockInquisitor implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Elnock Inquisitor";
+    @Getter
+    private final boolean isBis;
 
     ElnockInquisitor(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

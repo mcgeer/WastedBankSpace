@@ -79,8 +79,11 @@ public enum HuntsmansKit implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Huntsman's Kit";
+    @Getter
+    private final boolean isBis;
 
     HuntsmansKit(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

@@ -187,7 +187,12 @@ public enum Bookcase implements StorableItem {
     @Getter
     private final String location = "Bookcase";
 
-    Bookcase(int itemID) {
+    @Getter
+    private final boolean isBis;
+
+    Bookcase(int itemID)
+    {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

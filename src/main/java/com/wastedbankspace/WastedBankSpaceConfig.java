@@ -31,10 +31,12 @@ package com.wastedbankspace;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 
 @ConfigGroup("Wasted Bank Space")
 public interface WastedBankSpaceConfig extends Config
 {
+	/* Storage Location Keys */
 	String CLUE_ITEM_CHECK_KEY = "clueItemCheck";
 	String FANCY_DRESS_BOX_KEY = "poHFancyDressBox";
 	String MAGIC_WARDROBE_KEY = "poHMagicWardrobe";
@@ -57,10 +59,78 @@ public interface WastedBankSpaceConfig extends Config
 	String CAPE_RACK_CHECK_KEY = "capeRackCheck";
 	String HUNTSMANS_KIT_SPACE_CHECK_KEY = "huntsmansKitSpaceCheck";
 
+	/* Filtering and Blacklist Flags */
+	String FILTER_ENABLED_CHECK_KEY = "filterEnabledCheck";
+	String BIS_FILTER_ENABLED_CHECK_KEY = "bisFilterEnabledCheck";
+
+
+	@ConfigSection(
+			name = "General Config",
+			description = "Genera plugin config flags",
+			position = 0
+	)
+	String generalConfig = "generalConfig";
+
+	@ConfigSection(
+			name = "Non Flagged Items",
+			description = "Items blacklisted for being flagged",
+			position = 1
+	)
+	String nonFlaggedItems = "nonFlaggedItems";
+
+	@ConfigSection(
+			name = "Bank Interface Config",
+			description = "Configure bank interface changes",
+			position = 2
+	)
+	String bankInterfaceConfig = "bankInterfaceConfig";
+
+	@ConfigItem(keyName = FILTER_ENABLED_CHECK_KEY,
+			name = "Enable Filtering",
+			description = "Enable Item Filters and Blacklist",
+			position = 0,
+			section = nonFlaggedItems
+	)
+	default boolean filterEnabledCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(keyName = BIS_FILTER_ENABLED_CHECK_KEY,
+			name = "Never Filter BIS",
+			description = "Never Filter Best in Slot Items",
+			position = 1,
+			section = nonFlaggedItems
+	)
+	default boolean bisfilterEnabledCheck()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "nonFlaggedItems",
+			name = "",
+			description = "Configures items to not be flagged as wasted bank space. Format: item, item",
+			section = nonFlaggedItems,
+			hidden = true
+	)
+	default String nonFlaggedItems()
+	{
+		return "";
+	}
+
+	@ConfigItem(
+			keyName = "nonFlaggedItems",
+			name = "",
+			description = "Setter for storing notes data"
+	)
+	void nonFlaggedItems(String str);
+
 	@ConfigItem(keyName = CLUE_ITEM_CHECK_KEY,
 			name = "PoH Clue Item Storage",
 			description = "Treasure Chest Storage",
-			position = 1
+			position = 1,
+			section = generalConfig
 	)
 	default boolean treasureChestStorageCheck()
 	{
@@ -70,7 +140,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = FANCY_DRESS_BOX_KEY,
 			name = "PoH Fancy Dress Box",
 			description = "Random Event Items",
-			position = 2
+			position = 2,
+			section = generalConfig
 	)
 	default boolean fancyDressBoxStorageCheck()
 	{
@@ -80,7 +151,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = MAGIC_WARDROBE_KEY,
 			name = "PoH Magic Wardrobe Storage",
 			description = "Magic armour and robe sets",
-			position = 3
+			position = 3,
+			section = generalConfig
 	)
 	default boolean magicWardrobeStorageCheck()
 	{
@@ -88,9 +160,10 @@ public interface WastedBankSpaceConfig extends Config
 	}
 
 	@ConfigItem(keyName = SEED_CHECK_KEY,
-			name = "Seed Vault",
-			description = "Seeds and saplings can be stored in the vault",
-			position = 4
+			name = "Seed Box/Vault",
+			description = "Seeds can be stored in a seed box, saplings and seeds in the vault",
+			position = 4,
+			section = generalConfig
 	)
 	default boolean seedVaultStorageCheck()
 	{
@@ -100,7 +173,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = TACKLE_BOX_CHECK_KEY,
 			name = "Tackle Box Items",
 			description = "Check for items that could be in your tackle box",
-			position = 5
+			position = 5,
+			section = generalConfig
 	)
 	default boolean tackleBoxStorageCheck()
 	{
@@ -110,7 +184,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = STEEL_KEY_RING_CHECK_KEY,
 			name = "Steel Key Ring",
 			description = "Stores some keys - One small favor reward",
-			position = 6
+			position = 6,
+			section = generalConfig
 	)
 	default boolean steelKeyRingStorageCheck()
 	{
@@ -120,7 +195,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = TOOL_LEP_CHECK_KEY,
 			name = "Tool Leprechaun",
 			description = "Stores farming items, note low limits on many items",
-			position = 7
+			position = 7,
+			section = generalConfig
 	)
 	default boolean toolLeprechaunStorageCheck()
 	{
@@ -130,7 +206,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = MASTER_SCROLL_BOOK_CHECK_KEY,
 			name = "Master Scroll Book",
 			description = "Stores teleport scrolls",
-			position = 8
+			position = 8,
+			section = generalConfig
 	)
 	default boolean masterScrollBookStorageCheck()
 	{
@@ -140,7 +217,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = FOSSIL_STORAGE_CHECK_KEY,
 			name = "Fossil Storage",
 			description = "Storage for fossils on Fossil Island and in Varrok Museum",
-			position = 9
+			position = 9,
+			section = generalConfig
 	)
 	default boolean fossilStorageStrorageCheck()
 	{
@@ -150,7 +228,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = ELNOCK_INQUISITOR_CHECK_KEY,
 			name = "Puro Puro Storage",
 			description = "Elnock Inquisitor will hold some items in Puro Puro",
-			position = 10
+			position = 10,
+			section = generalConfig
 	)
 	default boolean elnockInquisitorStorageCheck()
 	{
@@ -160,7 +239,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = FLAMTAER_BAG_CHECK_KEY,
 			name = "Flamtaer Bag Storage",
 			description = "Storage for Shades of Morton (minigame) items",
-			position = 11
+			position = 11,
+			section = generalConfig
 	)
 	default boolean flamtaerBagStorageCheck()
 	{
@@ -170,7 +250,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = NIGHTMARE_ZONE_CHECK_KEY,
 			name = "Nightmare Zone Potion Storage",
 			description = "Potion's which store in the barrels at the nmz (minigame)",
-			position = 12
+			position = 12,
+			section = generalConfig
 	)
 	default boolean nightmareZoneStorageCheck()
 	{
@@ -180,7 +261,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = TOY_BOX_CHECK_KEY,
 			name = "PoH Toy Box Storage",
 			description = "Toy and holiday item storage",
-			position = 13
+			position = 13,
+			section = generalConfig
 	)
 	default	boolean toyBoxStorageCheck()
 	{
@@ -190,17 +272,19 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = SPICE_RACK_CHECK_KEY,
 			name = "Spice rack storage",
 			description = "Storage for spicy stew spices in the PoH kitchen",
-			position = 14
+			position = 14,
+			section = generalConfig
 	)
 	default boolean spiceRackStorageCheck()
 	{
-    return true;
+    	return true;
 	}
 
 	@ConfigItem(keyName = FORESTRY_KIT_CHECK_KEY,
 			name = "Forestry kit storage",
 			description = "Storage for Forestry-related items",
-			position = 15
+			position = 15,
+			section = generalConfig
 	)
 	default boolean forestryKitStorageCheck()
 	{
@@ -210,7 +294,8 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = ARMOUR_CASE_CHECK_KEY,
 			name = "PoH Armour Case storage",
 			description = "Armour and outfit storage",
-			position = 16
+			position = 16,
+			section = generalConfig
 	)
 	default boolean armourCaseStorageCheck()
 	{
@@ -220,41 +305,51 @@ public interface WastedBankSpaceConfig extends Config
 	@ConfigItem(keyName = MYSTERIOUS_STRANGER_CHECK_KEY,
 			name = "Mysterious Stranger",
 			description = "Storage for Hallowed Sepulchre items",
-			position = 17
+			position = 17,
+			section = generalConfig
 	)
 	default boolean mysteriousStrangerStorageCheck() { return true; }
 
 	@ConfigItem(keyName = PET_HOUSE_SPACE_CHECK_KEY,
 			name = "Pet House Space",
 			description = "Pet House Space inside the POH",
-			position = 18
+			position = 18,
+			section = generalConfig
 	)
 	default boolean petHouseStorageCheck() {
 		return false; //Disabled by Default. Most people don't lose pets in their bank alike BIS gear.
 	}
 
 	@ConfigItem(keyName = HOUSE_BOOKCASE_CHECK_KEY,
-		name = "PoH Bookcase",
-		description = "Bookcase inside the PoH",
-		position = 19
+			name = "PoH Bookcase",
+			description = "Bookcase inside the PoH",
+			position = 19,
+			section = generalConfig
 	)
-	default boolean BookcaseStorageCheck() { return true; }
+	default boolean bookcaseStorageCheck()
+	{
+		return true;
+	}
 
 	@ConfigItem(keyName = CAPE_RACK_CHECK_KEY,
 			name = "Cape rack storage",
 			description = "Storage for capes in the costume room",
-			position = 20
+			position = 20,
+			section = generalConfig
 	)
-    default boolean capeRackStorageCheck() {
+    default boolean capeRackStorageCheck()
+	{
 		return false;
   	}
 
 	@ConfigItem(keyName = HUNTSMANS_KIT_SPACE_CHECK_KEY,
 			name = "Huntsman's Kit",
 			description = "Check for items that could go in your Huntsman's kit",
-			position = 21
+			position = 21,
+			section = generalConfig
 	)
-    default boolean huntsmansKitStorageCheck() {
+    default boolean huntsmansKitStorageCheck()
+	{
 		return true;
 	}
 }

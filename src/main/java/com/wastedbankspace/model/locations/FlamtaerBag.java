@@ -41,8 +41,11 @@ public enum FlamtaerBag implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Flamtaer Bag";
+    @Getter
+    private final boolean isBis;
 
     FlamtaerBag(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

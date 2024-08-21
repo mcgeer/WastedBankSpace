@@ -98,8 +98,10 @@ public enum TackleBox implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Tackle Box";
-
+    @Getter
+    private final boolean isBis;
     TackleBox(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

@@ -53,8 +53,11 @@ public enum MasterScrollBook implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Master Scroll Book";
+    @Getter
+    private final boolean isBis;
 
     MasterScrollBook(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

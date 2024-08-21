@@ -31,34 +31,87 @@ package com.wastedbankspace.ui;
 import com.wastedbankspace.WastedBankSpaceConfig;
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
+import com.wastedbankspace.util.DelayedRunnable;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.overlay.tooltip.TooltipManager;
+import net.runelite.client.util.Text;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class WastedBankSpacePanel extends PluginPanel
 {
-
+    private final WastedBankSpaceConfig config;
+    private final JTextArea filtersEditor;
     private final JLabel numberOfItemsText;
     private final JList<String> data;
     private List<StorableItem> items;
+    private DelayedRunnable delayedBlacklistChangedRunnable = new DelayedRunnable(250, this::updatePluginFilter);
+    private Document filterDoc;
+    private Consumer<String> filterUiCallback;
 
-    public WastedBankSpacePanel(Client client, TooltipManager tooltipManager, WastedBankSpaceConfig config, ItemManager itemManager)
+    public WastedBankSpacePanel(Client client, TooltipManager tooltipManager, WastedBankSpaceConfig config,
+                                ItemManager itemManager, Consumer<String> filterUi)
     {
         super();
+        this.config = config;
+        this.filterUiCallback = filterUi;
 
         setBorder(new EmptyBorder(10, 10, 10, 10));
         setLayout(new GridBagLayout());
+        final GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1;
+        c.gridx = 0;
+        c.gridy = 0;
 
+        /* FILTERS */
+        JLabel filtersLabel = new JLabel("Filters");
+
+        filtersEditor = new JTextArea();
+        String filterData = config.nonFlaggedItems();
+        filtersEditor.setText(filterData);
+        filtersEditor.setRows(6);
+        filtersEditor.setLineWrap(true);
+        filtersEditor.addFocusListener(new FocusListener()
+        {
+            @Override
+            public void focusGained(FocusEvent e)
+            {
+
+            }
+
+            @Override
+            public void focusLost(FocusEvent e)
+            {
+                delayedBlacklistChangedRunnable.onDataUpdate();
+            }
+
+        });
+        filtersEditor.setToolTipText("Format as comma separated values " +
+                "\n Item ID, <OR> name of item ignore case");
+        add(filtersLabel,c);
+        c.gridy++;
+        add(filtersEditor, c);
+        c.gridy+=6;
+
+        /* WASTED SLOTS PRINT */
+        JLabel statsLabel = new JLabel("\nWasted Space Stats");
         numberOfItemsText = new JLabel("Please Visit Your Bank");
 
         data = new JList<String>()
@@ -75,9 +128,10 @@ public class WastedBankSpacePanel extends PluginPanel
         data.setSelectedIndex(0);
         data.setVisibleRowCount(10);
 
+        /* TIPS */
         final String tipTab = "    ";
         final String[] tips = new String[]{
-                "Tips",
+                "\nTips",
                 "1: Talk to the Wise Old Man",
                 tipTab + "to remove Junk Quest Items",
                 "2: Murky Matt combines ",
@@ -89,11 +143,6 @@ public class WastedBankSpacePanel extends PluginPanel
                 "6: Store bolts in a bolt pouch"
         };
 
-        final GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1;
-        c.gridx = 0;
-        c.gridy = 0;
 
         add(numberOfItemsText,c);
         c.gridy++;
@@ -103,6 +152,7 @@ public class WastedBankSpacePanel extends PluginPanel
             add(new JLabel(tipString),c);
             c.gridy++;
         }
+
     }
 
     public void setWastedBankSpaceItems(List<StorableItem> items)
@@ -114,4 +164,72 @@ public class WastedBankSpacePanel extends PluginPanel
         this.updateUI();
     }
 
+    public void updatePluginFilter()
+    {
+        try
+        {
+            Document doc = filtersEditor.getDocument();
+            String data = doc.getText(0, doc.getLength());
+            //Save data to config
+            config.nonFlaggedItems(data);
+
+            //Update the UI with changed filters
+            filterUiCallback.accept(data);
+        }
+        catch (BadLocationException ex)
+        {
+            //Should not get here
+        }
+    }
+
+    public void removeFilteredItem(String item, int id)
+    {
+        Document doc = filtersEditor.getDocument();
+        try
+        {
+            String data = doc.getText(0, doc.getLength());
+            List<String> filtersReadOnly = Text.fromCSV(data);
+            List<String> filters = filtersReadOnly.stream().collect(Collectors.toList());
+            List<Integer> pop = new ArrayList<>();
+
+            for(int i = 0; i < filters.size(); i++)
+            {
+                if(item.equalsIgnoreCase(filters.get(i))
+                        || Integer.toString(id).equalsIgnoreCase(filters.get(i)))
+                {
+                    //Add to start to loop reverse for no issues when popping
+                    pop.add(0, i);
+                }
+            }
+
+            for(Integer i : pop)
+            {
+                filters.remove((int)i);
+            }
+
+            filtersEditor.setText(String.join(",", filters));
+            updatePluginFilter();
+        }
+        catch (BadLocationException ex)
+        {
+            //Should not get here
+        }
+
+    }
+
+    public void addFilteredItem(String item)
+    {
+        try
+        {
+            //ID isn't needed as the tool only adds the name for ease of reading by user
+            Document doc = filtersEditor.getDocument();
+            String data = doc.getText(0, doc.getLength());
+            filtersEditor.setText(data + (data.isEmpty() ? "" : ",") + item);
+            updatePluginFilter();
+        }
+        catch (BadLocationException ex)
+        {
+            //Should not get here
+        }
+    }
 }

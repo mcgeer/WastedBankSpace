@@ -44,8 +44,11 @@ public enum MysteriousStranger implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Mysterious Stranger";
+    @Getter
+    private final boolean isBis;
 
     MysteriousStranger(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

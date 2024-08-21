@@ -34,13 +34,13 @@ import net.runelite.api.ItemID;
 
 @Getter
 public enum MagicWardrobe implements StorableItem {
-    AMYS_SAW(ItemID.AMYS_SAW),
-    ANCESTRAL_HAT(ItemID.ANCESTRAL_HAT),
-    ANCESTRAL_ROBE_BOTTOM(ItemID.ANCESTRAL_ROBE_BOTTOM),
-    ANCESTRAL_ROBE_TOP(ItemID.ANCESTRAL_ROBE_TOP),
-    TWISTED_ANCESTRAL_HAT(ItemID.TWISTED_ANCESTRAL_HAT),
-    TWISTED_ANCESTRAL_ROBE_BOTTOM(ItemID.TWISTED_ANCESTRAL_ROBE_BOTTOM),
-    TWISTED_ANCESTRAL_ROBE_TOP(ItemID.TWISTED_ANCESTRAL_ROBE_TOP),
+    AMYS_SAW(ItemID.AMYS_SAW, true),
+    ANCESTRAL_HAT(ItemID.ANCESTRAL_HAT, true),
+    ANCESTRAL_ROBE_BOTTOM(ItemID.ANCESTRAL_ROBE_BOTTOM, true),
+    ANCESTRAL_ROBE_TOP(ItemID.ANCESTRAL_ROBE_TOP, true),
+    TWISTED_ANCESTRAL_HAT(ItemID.TWISTED_ANCESTRAL_HAT, true),
+    TWISTED_ANCESTRAL_ROBE_BOTTOM(ItemID.TWISTED_ANCESTRAL_ROBE_BOTTOM, true),
+    TWISTED_ANCESTRAL_ROBE_TOP(ItemID.TWISTED_ANCESTRAL_ROBE_TOP, true),
     BLOODBARK_BODY(ItemID.BLOODBARK_BODY),
     BLOODBARK_BOOTS(ItemID.BLOODBARK_BOOTS),
     BLOODBARK_HELM(ItemID.BLOODBARK_HELM),
@@ -80,7 +80,7 @@ public enum MagicWardrobe implements StorableItem {
     GHOSTLY_GLOVES(ItemID.GHOSTLY_GLOVES),
     GHOSTLY_ROBE_6108(ItemID.GHOSTLY_ROBE_6108),
     //GRACEFUL
-    IMCANDO_HAMMER(ItemID.IMCANDO_HAMMER),
+    IMCANDO_HAMMER(ItemID.IMCANDO_HAMMER, true),
     INFINITY_BOOTS(ItemID.INFINITY_BOOTS),
     INFINITY_BOTTOMS(ItemID.INFINITY_BOTTOMS),
     INFINITY_HAT(ItemID.INFINITY_HAT),
@@ -210,8 +210,14 @@ public enum MagicWardrobe implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Magic Wardrobe";
+    @Getter
+    private final boolean isBis;
 
+    MagicWardrobe(int itemID, boolean isBis) {
+        this.itemID = itemID; this.isBis = isBis;
+    }
     MagicWardrobe(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

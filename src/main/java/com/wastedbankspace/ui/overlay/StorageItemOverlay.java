@@ -109,11 +109,4 @@ public class StorageItemOverlay extends WidgetItemOverlay
         ribbon.render(graphics);
     }
 
-    //Fills image with a color
-//    private BufferedImage getImage(int id)
-//    {
-//        BufferedImage image = itemManager.getImage(id);
-//        Color color = new Color(255, 251, 0, 62);
-//        return ImageUtil.fillImage(image, color);
-//    }
 }

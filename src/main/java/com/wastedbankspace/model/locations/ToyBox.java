@@ -258,8 +258,10 @@ public enum ToyBox implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Toy Box";
-
+    @Getter
+    private final boolean isBis;
     ToyBox(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

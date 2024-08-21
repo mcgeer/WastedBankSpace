@@ -591,8 +591,10 @@ public enum TreasureChest implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Treasure Chest";
-
+    @Getter
+    private final boolean isBis;
     TreasureChest(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

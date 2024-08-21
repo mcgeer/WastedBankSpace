@@ -51,8 +51,10 @@ public enum SteelKeyRing implements StorableItem {
     private final int itemID;
     @Getter
     private final String location = "Steel Key Ring";
-
+    @Getter
+    private final boolean isBis;
     SteelKeyRing(int itemID) {
         this.itemID = itemID;
+        this.isBis = false;
     }
 }

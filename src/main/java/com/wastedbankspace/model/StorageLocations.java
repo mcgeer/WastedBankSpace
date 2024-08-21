@@ -81,10 +81,21 @@ public class StorageLocations {
         }
     }
 
+    public static boolean isItemStorable(int id)
+    {
+        return ITEM_ID_MAP.containsKey(id);
+    }
+
     public static List<String> storableListToString(List<? extends StorableItem> items) {
         return items.stream()
                 .filter(storableItemNameMap::containsKey)
                 .map(i -> String.format("%s", storableItemNameMap.get(i)))
                 .collect(Collectors.toList());
+    }
+
+    public static String getStorableItemName(Integer id) { return getStorableItemName(ITEM_ID_MAP.get(id)); }
+    public static String getStorableItemName(StorableItem item)
+    {
+        return storableItemNameMap.getOrDefault(item, null);
     }
 }
