@@ -52,7 +52,6 @@ import java.util.concurrent.TimeUnit;
 
 public class StorageItemOverlay extends WidgetItemOverlay
 {
-    private static final ImageComponent ICON = new ImageComponent(ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/overlaySmoller.png"));
     private final Point point;
 
     private final Client client;
@@ -99,7 +98,7 @@ public class StorageItemOverlay extends WidgetItemOverlay
             tooltipManager.add(t);
         }
 
-        renderRibbon(graphics, ICON,bounds.x + bounds.width - 12,bounds.y + bounds.height - 12);
+        renderRibbon(graphics, plugin.getOverlayImage().getImage(), bounds.x + bounds.width - 12,bounds.y + bounds.height - 12);
     }
 
     private void renderRibbon(Graphics2D graphics, ImageComponent ribbon, int x, int y)
@@ -108,5 +107,4 @@ public class StorageItemOverlay extends WidgetItemOverlay
         ribbon.setPreferredLocation(this.point);
         ribbon.render(graphics);
     }
-
 }

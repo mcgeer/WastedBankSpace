@@ -1,0 +1,7 @@
+Icon attributions:
+<div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div><div>Icons made by <a href="https://www.flaticon.com/authors/taufik-ramadhan" title="Taufik Ramadhan">Taufik Ramadhan</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div><div>Icons made by <a href="https://www.flaticon.com/authors/frelayasia" title="frelayasia">frelayasia</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div><div>Icons made by <a href="https://www.flaticon.com/authors/hussaindev-icon" title="HussainDev-Icon">HussainDev-Icon</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div><div>Icons made by <a href="https://www.flaticon.com/authors/dooder" title="Dooder">Dooder</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div><div>Icons made by <a href="https://www.flaticon.com/authors/libertyink" title="Libertyink">Libertyink</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div><div>Icons made by <a href="https://www.flaticon.com/authors/gowi" title="GOWI">GOWI</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
+Many of these have been modified, but initial artistic credit comes from the above creators!
+
+Custom icons:
+overlaySmoll.png and overlaySmoller.png were created by mcgeer, and are free to use whereever.

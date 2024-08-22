@@ -32,6 +32,7 @@ import com.google.inject.Provides;
 import com.wastedbankspace.model.locations.*;
 import com.wastedbankspace.model.*;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
+import com.wastedbankspace.ui.overlay.OverlayImage;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
 
 import static com.wastedbankspace.model.StorageLocations.isItemStorable;
@@ -194,6 +195,11 @@ public class WastedBankSpacePlugin extends Plugin
 
 		navButton = null;
 		panel = null;
+	}
+
+	public OverlayImage getOverlayImage()
+	{
+		return config.overlayImage();
 	}
 
 	@Subscribe
