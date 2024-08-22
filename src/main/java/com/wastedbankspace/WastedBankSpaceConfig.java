@@ -28,6 +28,7 @@
 
 package com.wastedbankspace;
 
+import com.wastedbankspace.ui.overlay.OverlayImage;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -352,4 +353,18 @@ public interface WastedBankSpaceConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			keyName = "overlayImage",
+			name = "Overlay Image",
+			description = "Configures images to overlay on items wasting space",
+			position = 0,
+			section = bankInterfaceConfig
+	)
+	default OverlayImage overlayImage()
+	{
+		return OverlayImage.DEFAULT;
+	}
 }
+
+
