@@ -59,7 +59,8 @@ public enum ArmourCase implements StorableItem {
     BUILDERS_TROUSERS(ItemID.BUILDERS_TROUSERS),
     BUILDERS_BOOTS(ItemID.BUILDERS_BOOTS),
     DESERT_CAMO_TOP(ItemID.DESERT_CAMO_TOP),
-    DESERT_CAMO_LEGS(ItemID.DESERT_CAMO_LEGS),
+    DESERT_CAMO_LEGS(
+ItemID.DESERT_CAMO_LEGS),
     JUNGLE_CAMO_TOP(ItemID.JUNGLE_CAMO_TOP),
     JUNGLE_CAMO_LEGS(ItemID.JUNGLE_CAMO_LEGS),
     POLAR_CAMO_TOP(ItemID.POLAR_CAMO_TOP),
@@ -340,7 +341,7 @@ public enum ArmourCase implements StorableItem {
 
     private final int itemID;
     @Getter
-    private final String location = "Amour Case";
+    private final String location = "Armour Case";
 
     @Getter
     private final boolean isBis;
