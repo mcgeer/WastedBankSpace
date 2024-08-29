@@ -30,6 +30,7 @@ package com.wastedbankspace.model.locations;
 
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
+import net.runelite.api.Item;
 import net.runelite.api.ItemID;
 
 @Getter
@@ -91,7 +92,8 @@ public enum PetHouse implements StorableItem {
     BUTCH(ItemID.BUTCH),
     LILVIATHAN(ItemID.LILVIATHAN),
     BARON(ItemID.BARON),
-    SCURRY(ItemID.SCURRY);
+    SCURRY(ItemID.SCURRY),
+    NID(ItemID.NID);
 
     private final int itemID;
     @Getter

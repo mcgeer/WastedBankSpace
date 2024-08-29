@@ -340,7 +340,7 @@ public interface WastedBankSpaceConfig extends Config
 	)
     default boolean capeRackStorageCheck()
 	{
-		return false;
+		return true;
   	}
 
 	@ConfigItem(keyName = HUNTSMANS_KIT_SPACE_CHECK_KEY,
