@@ -340,7 +340,7 @@ public enum ArmourCase implements StorableItem {
 
     private final int itemID;
     @Getter
-    private final String location = "Amour Case";
+    private final String location = "Armour Case";
 
     @Getter
     private final boolean isBis;
