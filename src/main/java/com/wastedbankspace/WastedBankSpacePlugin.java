@@ -377,7 +377,7 @@ public class WastedBankSpacePlugin extends Plugin
 		List<StorableItem> ret = new ArrayList<>();
 		for (StorageLocationEnabler sle:
 				storageLocationEnablers) {
-			for(StorableItem item: sle.GetStorableItems()){
+			for(StorableItem item: sle.GetStorableItemsIfEnabled()){
 				if (unflaggedItemIds.contains(item.getItemID())
 					|| (item.isBis() && config.bisfilterEnabledCheck())
 				) {
