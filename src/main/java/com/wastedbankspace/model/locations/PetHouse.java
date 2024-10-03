@@ -93,7 +93,11 @@ public enum PetHouse implements StorableItem {
     LILVIATHAN(ItemID.LILVIATHAN),
     BARON(ItemID.BARON),
     SCURRY(ItemID.SCURRY),
-    NID(ItemID.NID);
+    SMOL_HEREDIT(ItemID.SMOL_HEREDIT),
+    QUETZIN(ItemID.QUETZIN),
+    NID(ItemID.NID),
+    HUBERTE(ItemID.HUBERTE),
+    MOXI(ItemID.MOXI);
 
     private final int itemID;
     @Getter
