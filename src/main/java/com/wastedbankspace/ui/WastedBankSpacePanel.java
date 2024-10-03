@@ -31,7 +31,6 @@ package com.wastedbankspace.ui;
 import com.wastedbankspace.WastedBankSpaceConfig;
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
-import com.wastedbankspace.util.DelayedRunnable;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.game.ItemManager;
@@ -50,6 +49,10 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -61,12 +64,12 @@ public class WastedBankSpacePanel extends PluginPanel
     private final JLabel numberOfItemsText;
     private final JList<String> data;
     private List<StorableItem> items;
-    private DelayedRunnable delayedBlacklistChangedRunnable = new DelayedRunnable(250, this::updatePluginFilter);
     private Document filterDoc;
     private Consumer<String> filterUiCallback;
 
     public WastedBankSpacePanel(Client client, TooltipManager tooltipManager, WastedBankSpaceConfig config,
-                                ItemManager itemManager, Consumer<String> filterUi)
+                                ItemManager itemManager, Consumer<String> filterUi,
+                                ScheduledExecutorService scheduledExecutorService)
     {
         super();
         this.config = config;
@@ -90,6 +93,8 @@ public class WastedBankSpacePanel extends PluginPanel
         filtersEditor.setLineWrap(true);
         filtersEditor.addFocusListener(new FocusListener()
         {
+            private Future<?> updateFilterFuture = CompletableFuture.completedFuture(null);
+
             @Override
             public void focusGained(FocusEvent e)
             {
@@ -99,7 +104,11 @@ public class WastedBankSpacePanel extends PluginPanel
             @Override
             public void focusLost(FocusEvent e)
             {
-                delayedBlacklistChangedRunnable.onDataUpdate();
+                this.updateFilterFuture.cancel(false);
+                this.updateFilterFuture = scheduledExecutorService.schedule(
+                        WastedBankSpacePanel.this::updatePluginFilter,
+                        250,
+                        TimeUnit.MILLISECONDS);
             }
 
         });

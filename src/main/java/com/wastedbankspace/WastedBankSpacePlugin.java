@@ -29,19 +29,16 @@
 package com.wastedbankspace;
 
 import com.google.inject.Provides;
+import com.wastedbankspace.model.StorableItem;
+import com.wastedbankspace.model.StorageLocationEnabler;
+import com.wastedbankspace.model.StorageLocations;
 import com.wastedbankspace.model.locations.*;
-import com.wastedbankspace.model.*;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
 import com.wastedbankspace.ui.overlay.OverlayImage;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
-
-import static com.wastedbankspace.model.StorageLocations.isItemStorable;
-
-import com.wastedbankspace.util.DelayedRunnable;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.ItemContainerChanged;
-import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.MenuOpened;
 import net.runelite.api.widgets.InterfaceID;
 import net.runelite.api.widgets.Widget;
@@ -64,8 +61,9 @@ import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Consumer;
+import java.util.concurrent.ScheduledExecutorService;
+
+import static com.wastedbankspace.model.StorageLocations.isItemStorable;
 
 
 @Slf4j
@@ -100,6 +98,9 @@ public class WastedBankSpacePlugin extends Plugin
 
 	@Inject
 	private ConfigManager configManager;
+
+	@Inject
+	private ScheduledExecutorService scheduledExecutorService;
 
 	@Provides
 	WastedBankSpaceConfig provideConfig(ConfigManager configManager)
@@ -147,12 +148,7 @@ public class WastedBankSpacePlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager, new Consumer<String>() {
-			@Override
-			public void accept(String s) {
-				processBlackListChanged(s);
-			}
-		});
+		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager, this::processBlackListChanged, scheduledExecutorService);
 		navButton = NavigationButton.builder()
 				.tooltip("Wasted Bank Space")
 				.priority(8)
