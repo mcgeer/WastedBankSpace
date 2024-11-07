@@ -33,6 +33,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
 import com.wastedbankspace.WastedBankSpacePlugin;
 import com.wastedbankspace.model.StorableItem;
+import com.wastedbankspace.model.StorageLocations;
+import java.util.Set;
 import lombok.Getter;
 import net.runelite.api.Client;
 import net.runelite.api.widgets.ComponentID;
@@ -79,17 +81,17 @@ public class StorageItemOverlay extends WidgetItemOverlay
     @Override
     public void renderItemOverlay(Graphics2D graphics, int itemId, WidgetItem itemWidget)
     {
-        List<StorableItem> items =  plugin.getEnabledItemLists();
+        Set<Integer> items =  plugin.getEnabledItems();
 
         if (items.isEmpty()
                 || itemWidget.getWidget().getParentId() != ComponentID.BANK_ITEM_CONTAINER
-                || items.stream().noneMatch(i -> i.getItemID() == itemId)
+                || !items.contains(itemId)
         )
         {
             return;
         }
 
-        StorableItem item =  items.stream().filter(i -> i.getItemID() == itemId).findFirst().get();
+        StorableItem item = StorageLocations.getStorableItem(itemId);
         Rectangle bounds = itemWidget.getCanvasBounds();
 
         if (bounds.contains(client.getMouseCanvasPosition().getX(), client.getMouseCanvasPosition().getY()))

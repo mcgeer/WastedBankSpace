@@ -29,6 +29,9 @@
 package com.wastedbankspace.model;
 
 import com.wastedbankspace.model.locations.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeMap;
 import lombok.Getter;
 import net.runelite.client.game.ItemManager;
 
@@ -38,64 +41,91 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
-public class StorageLocations {
-    private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
-    private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
+public class StorageLocations
+{
+	@Getter
+	private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
+	@Getter
+	private static final Map<Integer, StorableItem> itemIdMap = new HashMap<>();
+	// Use TreeMap instead of hashmap so that we can use string insensitive comparison in order to access values
+	@Getter
+	private static final Map<String, Integer> itemNameMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-    static {
-        //Currently just run ([A-Za-z]+)\.java replaced with registerItems($1.class);
-        // on the ls of the model.locations folder
-        registerItems(ArmourCase.class);
-        registerItems(Bookcase.class);
-        registerItems(CapeRack.class);
-        registerItems(ElnockInquisitor.class);
-        registerItems(FancyDressBox.class);
-        registerItems(FlamtaerBag.class);
-        registerItems(ForestryKit.class);
-        registerItems(FossilStorage.class);
-        registerItems(HuntsmansKit.class);
-        registerItems(MagicWardrobe.class);
-        registerItems(MasterScrollBook.class);
-        registerItems(MysteriousStranger.class);
-        registerItems(NightmareZone.class);
-        registerItems(PetHouse.class);
-        registerItems(SeedVault.class);
-        registerItems(SpiceRack.class);
-        registerItems(SteelKeyRing.class);
-        registerItems(TackleBox.class);
-        registerItems(ToolLeprechaun.class);
-        registerItems(ToyBox.class);
-        registerItems(TreasureChest.class);
-    }
+	static
+	{
+		// Currently just run ([A-Za-z]+)\.java replaced with registerItems($1.class);
+		// on the ls of the model.locations folder
+		registerItems(ArmourCase.class);
+		registerItems(Bookcase.class);
+		registerItems(CapeRack.class);
+		registerItems(ElnockInquisitor.class);
+		registerItems(FancyDressBox.class);
+		registerItems(FlamtaerBag.class);
+		registerItems(ForestryKit.class);
+		registerItems(FossilStorage.class);
+		registerItems(HuntsmansKit.class);
+		registerItems(MagicWardrobe.class);
+		registerItems(MasterScrollBook.class);
+		registerItems(MysteriousStranger.class);
+		registerItems(NightmareZone.class);
+		registerItems(PetHouse.class);
+		registerItems(SeedVault.class);
+		registerItems(SpiceRack.class);
+		registerItems(SteelKeyRing.class);
+		registerItems(TackleBox.class);
+		registerItems(ToolLeprechaun.class);
+		registerItems(ToyBox.class);
+		registerItems(TreasureChest.class);
+	}
 
-    private static <E extends Enum<E> & StorableItem> void registerItems(Class<E> enumClass) {
-        for (E item : enumClass.getEnumConstants()) {
-            ITEM_ID_MAP.put(item.getItemID(), item);
-        }
-    }
+	private static <E extends Enum<E> & StorableItem> void registerItems(Class<E> enumClass)
+	{
+		for (E item : enumClass.getEnumConstants())
+		{
+			itemIdMap.put(item.getItemID(), item);
+		}
+	}
 
-    public static void prepareStorableItemNames(ItemManager itemManager) {
-        storableItemNameMap.clear();
-        for (StorableItem item : ITEM_ID_MAP.values()) {
-            storableItemNameMap.put(item, itemManager.getItemComposition(item.getItemID()).getName());
-        }
-    }
+	public static void prepareStorableItemNames(ItemManager itemManager)
+	{
+		storableItemNameMap.clear();
+		for (StorableItem item : itemIdMap.values())
+		{
+			storableItemNameMap.put(item, itemManager.getItemComposition(item.getItemID()).getName());
+		}
+	}
 
-    public static boolean isItemStorable(int id)
-    {
-        return ITEM_ID_MAP.containsKey(id);
-    }
+	public static boolean isItemStorable(int id)
+	{
+		return itemIdMap.containsKey(id);
+	}
 
-    public static List<String> storableListToString(List<? extends StorableItem> items) {
-        return items.stream()
-                .filter(storableItemNameMap::containsKey)
-                .map(i -> String.format("%s", storableItemNameMap.get(i)))
-                .collect(Collectors.toList());
-    }
+	public static Set<String> storableListToString(Set<Integer> itemIds)
+	{
+		// TODO: may be able to collapse the for loop into a stream call
+		Set<String> itemNames = new HashSet<>();
+		for (int i : itemIds) {
+			itemNames.add(getStorableItemName(i));
+		}
+		return itemNames;
+	}
 
-    public static String getStorableItemName(Integer id) { return getStorableItemName(ITEM_ID_MAP.get(id)); }
-    public static String getStorableItemName(StorableItem item)
-    {
-        return storableItemNameMap.getOrDefault(item, null);
-    }
+	public static StorableItem getStorableItem(Integer id)
+	{
+		return itemIdMap.get(id);
+	}
+	public static String getStorableItemName(Integer id)
+	{
+		return getStorableItemName(itemIdMap.get(id));
+	}
+
+	public static String getStorableItemName(StorableItem item)
+	{
+		return storableItemNameMap.getOrDefault(item, null);
+	}
+
+	public static Integer getStorableItemId(String name)
+	{
+		return itemNameMap.get(name);
+	}
 }

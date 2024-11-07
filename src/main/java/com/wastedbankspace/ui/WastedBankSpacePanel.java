@@ -28,9 +28,12 @@
 
 package com.wastedbankspace.ui;
 
+import com.google.common.collect.Sets;
 import com.wastedbankspace.WastedBankSpaceConfig;
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
+import java.util.Map;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.game.ItemManager;
@@ -164,9 +167,14 @@ public class WastedBankSpacePanel extends PluginPanel
 
     }
 
-    public void setWastedBankSpaceItems(List<StorableItem> items)
+	// TODO: update data structure
+    public void setWastedBankSpaceItems(Set<Integer> items)
     {
-        this.items = items;
+		// use StorageLocations.getitemIdMap() to get an Int/StorableItem list and use items set for all keys to get
+		// values
+		this.items = items.stream()
+						  .map(StorageLocations.getItemIdMap()::get)
+						  .collect(Collectors.toList());
         //Update number of items that can be moved
         numberOfItemsText.setText("Number of Items Wasting Space: " + items.size());
         data.setListData(new Vector<>(StorageLocations.storableListToString(items)));
