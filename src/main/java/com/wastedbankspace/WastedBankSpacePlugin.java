@@ -338,7 +338,8 @@ public class WastedBankSpacePlugin extends Plugin
 		unflaggedItemIds = new ArrayList<>();
 		for(String rule : nonFlaggedItemList)
 		{
-			if(rule.replaceAll("\\s+", "").matches("^\\d+$"))
+			rule = rule.replaceAll("\\s+", "");
+			if(rule.matches("^\\d+$"))
 			{
 				unflaggedItemIds.add(Integer.parseInt(rule));
 			}
@@ -353,8 +354,8 @@ public class WastedBankSpacePlugin extends Plugin
 						{
 							continue;
 						}
-						if (rule.replaceAll("\\s+", "")
-								.equalsIgnoreCase(name.replaceAll("\\s+", ""))
+						if (name.replaceAll("\\s+", "")
+								.matches("(?i)" + rule.replaceAll("\\*","(.*)"))
 								&& !unflaggedItemIds.contains(item.getItemID())) {
 							unflaggedItemIds.add(item.getItemID());
 						}
