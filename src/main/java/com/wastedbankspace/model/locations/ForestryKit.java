@@ -28,46 +28,48 @@
 
 package com.wastedbankspace.model.locations;
 
-import com.wastedbankspace.model.StorableItem;
-import lombok.Getter;
+import com.wastedbankspace.model.StorageLocation;
 import net.runelite.api.ItemID;
 
-@Getter
-public enum ForestryKit implements StorableItem {
-    ANIMAINFUSED_BARK(ItemID.ANIMAINFUSED_BARK),
-    FORESTERS_RATION(ItemID.FORESTERS_RATION),
-    SECATEURS_ATTACHMENT(ItemID.SECATEURS_ATTACHMENT),
-    NATURE_OFFERINGS(ItemID.NATURE_OFFERINGS),
-    WOODCUTTING_CAPE(ItemID.WOODCUTTING_CAPE),
-    LUMBERJACK_TOP(ItemID.LUMBERJACK_TOP),
-    LUMBERJACK_HAT(ItemID.LUMBERJACK_HAT),
-    LUMBERJACK_BOOTS(ItemID.LUMBERJACK_BOOTS),
-    LUMBERJACK_LEGS(ItemID.LUMBERJACK_LEGS),
-    FORESTRY_TOP(ItemID.FORESTRY_TOP),
-    FORESTRY_HAT(ItemID.FORESTRY_HAT),
-    FORESTRY_BOOTS(ItemID.FORESTRY_BOOTS),
-    FORESTRY_LEGS(ItemID.FORESTRY_LEGS),
-    BEE_ON_A_STICK(ItemID.BEE_ON_A_STICK),
-    LEPRECHAUN_CHARM(ItemID.LEPRECHAUN_CHARM),
-    PADDED_SPOON(ItemID.PADDED_SPOON),
-    PETAL_CIRCLET(ItemID.PETAL_CIRCLET),
-    SMOKER_CANISTER(ItemID.SMOKER_CANISTER),
-    TRAP_DISARMER(ItemID.TRAP_DISARMER),
-    MAGIC_LEAVES(ItemID.MAGIC_LEAVES),
-    YEW_LEAVES(ItemID.YEW_LEAVES),
-    MAPLE_LEAVES(ItemID.MAPLE_LEAVES),
-    WILLOW_LEAVES(ItemID.WILLOW_LEAVES),
-    OAK_LEAVES(ItemID.OAK_LEAVES),
-    LEAVES(ItemID.LEAVES);
+import java.util.Set;
 
-    private final int itemID;
-    @Getter
-    private final String location = "Forestry Kit";
-    @Getter
-    private final boolean isBis;
+public class ForestryKit implements StorageLocation {
 
-    ForestryKit(int itemID) {
-        this.itemID = itemID;
-        this.isBis = false;
+    private static final Set<Integer> ITEMS = Set.of(
+            ItemID.ANIMAINFUSED_BARK,
+            ItemID.FORESTERS_RATION,
+            ItemID.SECATEURS_ATTACHMENT,
+            ItemID.NATURE_OFFERINGS,
+            ItemID.WOODCUTTING_CAPE,
+            ItemID.LUMBERJACK_TOP,
+            ItemID.LUMBERJACK_HAT,
+            ItemID.LUMBERJACK_BOOTS,
+            ItemID.LUMBERJACK_LEGS,
+            ItemID.FORESTRY_TOP,
+            ItemID.FORESTRY_HAT,
+            ItemID.FORESTRY_BOOTS,
+            ItemID.FORESTRY_LEGS,
+            ItemID.BEE_ON_A_STICK,
+            ItemID.LEPRECHAUN_CHARM,
+            ItemID.PADDED_SPOON,
+            ItemID.PETAL_CIRCLET,
+            ItemID.SMOKER_CANISTER,
+            ItemID.TRAP_DISARMER,
+            ItemID.MAGIC_LEAVES,
+            ItemID.YEW_LEAVES,
+            ItemID.MAPLE_LEAVES,
+            ItemID.WILLOW_LEAVES,
+            ItemID.OAK_LEAVES,
+            ItemID.LEAVES
+    );
+
+    @Override
+    public String getName() {
+        return "Forestry Kit";
+    }
+
+    @Override
+    public Set<Integer> getStorableItems() {
+        return ITEMS;
     }
 }

@@ -45,39 +45,41 @@ public class StorageLocations {
     static {
         //Currently just run ([A-Za-z]+)\.java replaced with registerItems($1.class);
         // on the ls of the model.locations folder
-        registerItems(ArmourCase.class);
-        registerItems(Bookcase.class);
-        registerItems(CapeRack.class);
-        registerItems(ElnockInquisitor.class);
-        registerItems(FancyDressBox.class);
-        registerItems(FlamtaerBag.class);
-        registerItems(ForestryKit.class);
-        registerItems(FossilStorage.class);
-        registerItems(HuntsmansKit.class);
-        registerItems(MagicWardrobe.class);
-        registerItems(MasterScrollBook.class);
-        registerItems(MysteriousStranger.class);
-        registerItems(NightmareZone.class);
-        registerItems(PetHouse.class);
-        registerItems(SeedVault.class);
-        registerItems(SpiceRack.class);
-        registerItems(SteelKeyRing.class);
-        registerItems(TackleBox.class);
-        registerItems(ToolLeprechaun.class);
-        registerItems(ToyBox.class);
-        registerItems(TreasureChest.class);
+        registerItems(new ArmourCase());
+        registerItems(new Bookcase());
+        registerItems(new CapeRack());
+        registerItems(new ElnockInquisitor());
+        registerItems(new FancyDressBox());
+        registerItems(new FlamtaerBag());
+        registerItems(new ForestryKit());
+        registerItems(new FossilStorage());
+        registerItems(new HuntsmansKit());
+        registerItems(new MagicWardrobe());
+        registerItems(new MasterScrollBook());
+        registerItems(new MysteriousStranger());
+        registerItems(new NightmareZone());
+        registerItems(new PetHouse());
+        registerItems(new SeedVault());
+        registerItems(new SpiceRack());
+        registerItems(new SteelKeyRing());
+        registerItems(new TackleBox());
+        registerItems(new ToolLeprechaun());
+        registerItems(new ToyBox());
+        registerItems(new TreasureChest());
     }
 
-    private static <E extends Enum<E> & StorableItem> void registerItems(Class<E> enumClass) {
-        for (E item : enumClass.getEnumConstants()) {
-            ITEM_ID_MAP.put(item.getItemID(), item);
+    private static void registerItems(StorageLocation storageLocation) {
+        for (int itemId : storageLocation.getStorableItems()) {
+            StorableItem storableItem = new StorableItem(
+                    itemId, storageLocation.getName(), BestInSlot.ITEMS.contains(itemId));
+            ITEM_ID_MAP.put(itemId, storableItem);
         }
     }
 
     public static void prepareStorableItemNames(ItemManager itemManager) {
         storableItemNameMap.clear();
         for (StorableItem item : ITEM_ID_MAP.values()) {
-            storableItemNameMap.put(item, itemManager.getItemComposition(item.getItemID()).getName());
+            storableItemNameMap.put(item, itemManager.getItemComposition(item.getItemId()).getName());
         }
     }
 

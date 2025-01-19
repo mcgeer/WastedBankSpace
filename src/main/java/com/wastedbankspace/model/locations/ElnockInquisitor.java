@@ -28,24 +28,27 @@
 
 package com.wastedbankspace.model.locations;
 
-import com.wastedbankspace.model.StorableItem;
-import lombok.Getter;
+import com.wastedbankspace.model.StorageLocation;
 import net.runelite.api.ItemID;
 
-@Getter
-public enum ElnockInquisitor implements StorableItem {
-    BUTTERFLY_NET(ItemID.BUTTERFLY_NET),
-    MAGIC_BUTTERFLY_NET(ItemID.MAGIC_BUTTERFLY_NET),
-    IMPLING_JAR(ItemID.IMPLING_JAR),
-    IMP_REPELLENT(ItemID.IMP_REPELLENT);
-    private final int itemID;
-    @Getter
-    private final String location = "Elnock Inquisitor";
-    @Getter
-    private final boolean isBis;
+import java.util.Set;
 
-    ElnockInquisitor(int itemID) {
-        this.itemID = itemID;
-        this.isBis = false;
+public class ElnockInquisitor implements StorageLocation {
+
+    private static final Set<Integer> ITEMS = Set.of(
+            ItemID.BUTTERFLY_NET,
+            ItemID.MAGIC_BUTTERFLY_NET,
+            ItemID.IMPLING_JAR,
+            ItemID.IMP_REPELLENT
+    );
+
+    @Override
+    public String getName() {
+        return "Elnock Inquisitor";
+    }
+
+    @Override
+    public Set<Integer> getStorableItems() {
+        return ITEMS;
     }
 }

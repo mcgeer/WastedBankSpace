@@ -28,39 +28,41 @@
 
 package com.wastedbankspace.model.locations;
 
-import com.wastedbankspace.model.StorableItem;
-import lombok.Getter;
+import com.wastedbankspace.model.StorageLocation;
 import net.runelite.api.ItemID;
 
-@Getter
-public enum MasterScrollBook implements StorableItem {
-    NARDAH_TELEPORT(ItemID.NARDAH_TELEPORT),
-    DIGSITE_TELEPORT(ItemID.DIGSITE_TELEPORT),
-    FELDIP_HILLS_TELEPORT(ItemID.FELDIP_HILLS_TELEPORT),
-    LUNAR_ISLE_TELEPORT(ItemID.LUNAR_ISLE_TELEPORT),
-    MORTTON_TELEPORT(ItemID.MORTTON_TELEPORT),
-    PEST_CONTROL_TELEPORT(ItemID.PEST_CONTROL_TELEPORT),
-    PISCATORIS_TELEPORT(ItemID.PISCATORIS_TELEPORT),
-    TAI_BWO_WANNAI_TELEPORT(ItemID.TAI_BWO_WANNAI_TELEPORT),
-    IORWERTH_CAMP_TELEPORT(ItemID.IORWERTH_CAMP_TELEPORT),
-    MOS_LEHARMLESS_TELEPORT(ItemID.MOS_LEHARMLESS_TELEPORT),
-    LUMBERYARD_TELEPORT(ItemID.LUMBERYARD_TELEPORT),
-    ZULANDRA_TELEPORT(ItemID.ZULANDRA_TELEPORT),
-    KEY_MASTER_TELEPORT(ItemID.KEY_MASTER_TELEPORT),
-    REVENANT_CAVE_TELEPORT(ItemID.REVENANT_CAVE_TELEPORT),
-    WATSON_TELEPORT(ItemID.WATSON_TELEPORT),
-    GUTHIXIAN_TEMPLE_TELEPORT(ItemID.GUTHIXIAN_TEMPLE_TELEPORT),
-    SPIDER_CAVE_TELEPORT(ItemID.SPIDER_CAVE_TELEPORT),
-    COLOSSAL_WYRM_TELEPORT_SCROLL(ItemID.COLOSSAL_WYRM_TELEPORT_SCROLL);
+import java.util.Set;
 
-    private final int itemID;
-    @Getter
-    private final String location = "Master Scroll Book";
-    @Getter
-    private final boolean isBis;
+public class MasterScrollBook implements StorageLocation {
 
-    MasterScrollBook(int itemID) {
-        this.itemID = itemID;
-        this.isBis = false;
+    private static final Set<Integer> ITEMS = Set.of(
+            ItemID.NARDAH_TELEPORT,
+            ItemID.DIGSITE_TELEPORT,
+            ItemID.FELDIP_HILLS_TELEPORT,
+            ItemID.LUNAR_ISLE_TELEPORT,
+            ItemID.MORTTON_TELEPORT,
+            ItemID.PEST_CONTROL_TELEPORT,
+            ItemID.PISCATORIS_TELEPORT,
+            ItemID.TAI_BWO_WANNAI_TELEPORT,
+            ItemID.IORWERTH_CAMP_TELEPORT,
+            ItemID.MOS_LEHARMLESS_TELEPORT,
+            ItemID.LUMBERYARD_TELEPORT,
+            ItemID.ZULANDRA_TELEPORT,
+            ItemID.KEY_MASTER_TELEPORT,
+            ItemID.REVENANT_CAVE_TELEPORT,
+            ItemID.WATSON_TELEPORT,
+            ItemID.GUTHIXIAN_TEMPLE_TELEPORT,
+            ItemID.SPIDER_CAVE_TELEPORT,
+            ItemID.COLOSSAL_WYRM_TELEPORT_SCROLL
+    );
+
+    @Override
+    public String getName() {
+        return "Master Scroll Book";
+    }
+
+    @Override
+    public Set<Integer> getStorableItems() {
+        return ITEMS;
     }
 }
