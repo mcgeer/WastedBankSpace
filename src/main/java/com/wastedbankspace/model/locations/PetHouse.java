@@ -28,84 +28,86 @@
 
 package com.wastedbankspace.model.locations;
 
-import com.wastedbankspace.model.StorableItem;
-import lombok.Getter;
-import net.runelite.api.Item;
+import com.wastedbankspace.model.StorageLocation;
 import net.runelite.api.ItemID;
 
-@Getter
-public enum PetHouse implements StorableItem {
-    PET_CHAOS_ELEMENTAL(ItemID.PET_CHAOS_ELEMENTAL),
-    PET_DAGANNOTH_SUPREME(ItemID.PET_DAGANNOTH_SUPREME),
-    PET_DAGANNOTH_PRIME(ItemID.PET_DAGANNOTH_PRIME),
-    PET_DAGANNOTH_REX(ItemID.PET_DAGANNOTH_REX),
-    PET_PENANCE_QUEEN(ItemID.PET_PENANCE_QUEEN),
-    PET_KREEARRA(ItemID.PET_KREEARRA),
-    PET_GENERAL_GRAARDOR(ItemID.PET_GENERAL_GRAARDOR),
-    PET_ZILYANA(ItemID.PET_ZILYANA),
-    PET_KRIL_TSUTAROTH(ItemID.PET_KRIL_TSUTSAROTH),
-    PET_BABY_MOLE(ItemID.BABY_MOLE),
-    PET_PRINCE_BLACK_DRAGON(ItemID.PRINCE_BLACK_DRAGON),
-    PET_KALPHITE_PRINCESS(ItemID.KALPHITE_PRINCESS),
-    PET_SMOKE_DEVIL(ItemID.PET_SMOKE_DEVIL),
-    PET_KRAKEN(ItemID.PET_KRAKEN),
-    PET_DARK_CORE(ItemID.PET_DARK_CORE),
-    PET_SNAKELING(ItemID.PET_SNAKELING),
-    CHOMPY_CHICK(ItemID.CHOMPY_CHICK),
-    VENENATIS_SPIDERLING(ItemID.VENENATIS_SPIDERLING),
-    CALLISTO_CUB(ItemID.CALLISTO_CUB),
-    CALLISTO_CUB_(ItemID.CALLISTO_CUB_27649),
-    VETION_JR(ItemID.VETION_JR),
-    SCORPIAS_OFFSPRING(ItemID.SCORPIAS_OFFSPRING),
-    TZREKJAD(ItemID.TZREKJAD),
-    HELLPUPPY(ItemID.HELLPUPPY),
-    ABYSSAL_ORPHAN(ItemID.ABYSSAL_ORPHAN),
-    HERON(ItemID.HERON),
-    ROCK_GOLEM(ItemID.ROCK_GOLEM),
-    BEAVER(ItemID.BEAVER),
-    BABY_CHINCHOMPA(ItemID.BABY_CHINCHOMPA),
-    BLOODHOUND(ItemID.BLOODHOUND),
-    GIANT_SQUIRREL(ItemID.GIANT_SQUIRREL),
-    TANGLEROOT(ItemID.TANGLEROOT),
-    RIFT_GUARDIAN(ItemID.RIFT_GUARDIAN),
-    ROCKY(ItemID.ROCKY),
-    PHOENIX(ItemID.PHOENIX),
-    OLMLET(ItemID.OLMLET),
-    SKOTOS(ItemID.SKOTOS),
-    JALNIBREK(ItemID.JALNIBREK),
-    HERBI(ItemID.HERBI),
-    NOON(ItemID.NOON),
-    VORKI(ItemID.VORKI),
-    LIL_ZIK(ItemID.LIL_ZIK),
-    IKKLE_HYDRA(ItemID.IKKLE_HYDRA),
-    SRARACHA(ItemID.SRARACHA),
-    YOUNGLLEF(ItemID.YOUNGLLEF),
-    SMOLCANO(ItemID.SMOLCANO),
-    LITTLE_NIGHTMARE(ItemID.LITTLE_NIGHTMARE),
-    LIL_CREATOR(ItemID.LIL_CREATOR),
-    TINY_TEMPOR(ItemID.TINY_TEMPOR),
-    NEXLING(ItemID.NEXLING),
-    ABYSSAL_PROTECTOR(ItemID.ABYSSAL_PROTECTOR),
-    TUMEKENS_GUARDIAN(ItemID.TUMEKENS_GUARDIAN),
-    MUPHIN(ItemID.MUPHIN),
-    WISP(ItemID.WISP),
-    BUTCH(ItemID.BUTCH),
-    LILVIATHAN(ItemID.LILVIATHAN),
-    BARON(ItemID.BARON),
-    SCURRY(ItemID.SCURRY),
-    SMOL_HEREDIT(ItemID.SMOL_HEREDIT),
-    QUETZIN(ItemID.QUETZIN),
-    NID(ItemID.NID),
-    HUBERTE(ItemID.HUBERTE),
-    MOXI(ItemID.MOXI);
+import java.util.Set;
 
-    private final int itemID;
-    @Getter
-    private final String location = "Pet House";
-    @Getter
-    private final boolean isBis;
-    PetHouse(int itemID) {
-        this.itemID = itemID;
-        this.isBis = false;
+public class PetHouse implements StorageLocation {
+
+    private static final Set<Integer> ITEMS = Set.of(
+            ItemID.PET_CHAOS_ELEMENTAL,
+            ItemID.PET_DAGANNOTH_SUPREME,
+            ItemID.PET_DAGANNOTH_PRIME,
+            ItemID.PET_DAGANNOTH_REX,
+            ItemID.PET_PENANCE_QUEEN,
+            ItemID.PET_KREEARRA,
+            ItemID.PET_GENERAL_GRAARDOR,
+            ItemID.PET_ZILYANA,
+            ItemID.PET_KRIL_TSUTSAROTH,
+            ItemID.BABY_MOLE,
+            ItemID.PRINCE_BLACK_DRAGON,
+            ItemID.KALPHITE_PRINCESS,
+            ItemID.PET_SMOKE_DEVIL,
+            ItemID.PET_KRAKEN,
+            ItemID.PET_DARK_CORE,
+            ItemID.PET_SNAKELING,
+            ItemID.CHOMPY_CHICK,
+            ItemID.VENENATIS_SPIDERLING,
+            ItemID.CALLISTO_CUB,
+            ItemID.CALLISTO_CUB_27649,
+            ItemID.VETION_JR,
+            ItemID.SCORPIAS_OFFSPRING,
+            ItemID.TZREKJAD,
+            ItemID.HELLPUPPY,
+            ItemID.ABYSSAL_ORPHAN,
+            ItemID.HERON,
+            ItemID.ROCK_GOLEM,
+            ItemID.BEAVER,
+            ItemID.BABY_CHINCHOMPA,
+            ItemID.BLOODHOUND,
+            ItemID.GIANT_SQUIRREL,
+            ItemID.TANGLEROOT,
+            ItemID.RIFT_GUARDIAN,
+            ItemID.ROCKY,
+            ItemID.PHOENIX,
+            ItemID.OLMLET,
+            ItemID.SKOTOS,
+            ItemID.JALNIBREK,
+            ItemID.HERBI,
+            ItemID.NOON,
+            ItemID.VORKI,
+            ItemID.LIL_ZIK,
+            ItemID.IKKLE_HYDRA,
+            ItemID.SRARACHA,
+            ItemID.YOUNGLLEF,
+            ItemID.SMOLCANO,
+            ItemID.LITTLE_NIGHTMARE,
+            ItemID.LIL_CREATOR,
+            ItemID.TINY_TEMPOR,
+            ItemID.NEXLING,
+            ItemID.ABYSSAL_PROTECTOR,
+            ItemID.TUMEKENS_GUARDIAN,
+            ItemID.MUPHIN,
+            ItemID.WISP,
+            ItemID.BUTCH,
+            ItemID.LILVIATHAN,
+            ItemID.BARON,
+            ItemID.SCURRY,
+            ItemID.SMOL_HEREDIT,
+            ItemID.QUETZIN,
+            ItemID.NID,
+            ItemID.HUBERTE,
+            ItemID.MOXI
+    );
+
+    @Override
+    public String getName() {
+        return "Pet House";
+    }
+
+    @Override
+    public Set<Integer> getStorableItems() {
+        return ITEMS;
     }
 }

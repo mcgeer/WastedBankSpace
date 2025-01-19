@@ -28,43 +28,46 @@
 
 package com.wastedbankspace.model.locations;
 
-import com.wastedbankspace.model.StorableItem;
-import lombok.Getter;
+import com.wastedbankspace.model.StorageLocation;
 import net.runelite.api.ItemID;
 
-@Getter
-public enum ToolLeprechaun implements StorableItem {
-    RAKE(ItemID.RAKE),
-    SPADE(ItemID.SPADE),
-    SEED_DIBBER(ItemID.SEED_DIBBER),
-    SECATEURS(ItemID.SECATEURS),
-    MAGIC_SECATEURS(ItemID.MAGIC_SECATEURS),
-    GARDENING_TROWEL(ItemID.GARDENING_TROWEL),
-    BOTOMLESS_COMPOST(ItemID.BOTTOMLESS_COMPOST_BUCKET),
-    BOTTOMLESS_COMPOST_BUCKET_22997(ItemID.BOTTOMLESS_COMPOST_BUCKET_22997),
-    PLANT_CURE(ItemID.PLANT_CURE),
-    PLANT_CURE_6468(ItemID.PLANT_CURE_6468),
-    COMPOST(ItemID.COMPOST),
-    SUPERCOMPOST(ItemID.SUPERCOMPOST),
-    ULTRACOMPOST(ItemID.ULTRACOMPOST),
-    WATERING_CAN(ItemID.WATERING_CAN),
-    WATERING_CAN1(ItemID.WATERING_CAN1),
-    WATERING_CAN2(ItemID.WATERING_CAN2),
-    WATERING_CAN3(ItemID.WATERING_CAN3),
-    WATERING_CAN4(ItemID.WATERING_CAN4),
-    WATERING_CAN5(ItemID.WATERING_CAN5),
-    WATERING_CAN6(ItemID.WATERING_CAN6),
-    WATERING_CAN7(ItemID.WATERING_CAN7),
-    WATERING_CAN8(ItemID.WATERING_CAN8),
-    GRICOLLERS_CAN(ItemID.GRICOLLERS_CAN);
+import java.util.Set;
 
-    private final int itemID;
-    @Getter
-    private final String location = "Tool Leprechaun";
-    @Getter
-    private final boolean isBis;
-    ToolLeprechaun(int itemID) {
-        this.itemID = itemID;
-        this.isBis = false;
+public class ToolLeprechaun implements StorageLocation {
+
+    private static final Set<Integer> ITEMS = Set.of(
+            ItemID.RAKE,
+            ItemID.SPADE,
+            ItemID.SEED_DIBBER,
+            ItemID.SECATEURS,
+            ItemID.MAGIC_SECATEURS,
+            ItemID.GARDENING_TROWEL,
+            ItemID.BOTTOMLESS_COMPOST_BUCKET,
+            ItemID.BOTTOMLESS_COMPOST_BUCKET_22997,
+            ItemID.PLANT_CURE,
+            ItemID.PLANT_CURE_6468,
+            ItemID.COMPOST,
+            ItemID.SUPERCOMPOST,
+            ItemID.ULTRACOMPOST,
+            ItemID.WATERING_CAN,
+            ItemID.WATERING_CAN1,
+            ItemID.WATERING_CAN2,
+            ItemID.WATERING_CAN3,
+            ItemID.WATERING_CAN4,
+            ItemID.WATERING_CAN5,
+            ItemID.WATERING_CAN6,
+            ItemID.WATERING_CAN7,
+            ItemID.WATERING_CAN8,
+            ItemID.GRICOLLERS_CAN
+    );
+
+    @Override
+    public String getName() {
+        return "Tool Leprechaun";
+    }
+
+    @Override
+    public Set<Integer> getStorableItems() {
+        return ITEMS;
     }
 }

@@ -28,24 +28,26 @@
 
 package com.wastedbankspace.model.locations;
 
-import com.wastedbankspace.model.StorableItem;
-import lombok.Getter;
+import com.wastedbankspace.model.StorageLocation;
 import net.runelite.api.ItemID;
 
-@Getter
-public enum FlamtaerBag implements StorableItem {
-    TIMBER_BEAMS(ItemID.TIMBER_BEAM),
-    LIMESTONE_BRICK(ItemID.LIMESTONE_BRICK),
-    SWAMP_PASTE(ItemID.SWAMP_PASTE);
+import java.util.Set;
 
-    private final int itemID;
-    @Getter
-    private final String location = "Flamtaer Bag";
-    @Getter
-    private final boolean isBis;
+public class FlamtaerBag implements StorageLocation {
 
-    FlamtaerBag(int itemID) {
-        this.itemID = itemID;
-        this.isBis = false;
+    private static final Set<Integer> ITEMS = Set.of(
+            ItemID.TIMBER_BEAM,
+            ItemID.LIMESTONE_BRICK,
+            ItemID.SWAMP_PASTE
+    );
+
+    @Override
+    public String getName() {
+        return "Flamtaer Bag";
+    }
+
+    @Override
+    public Set<Integer> getStorableItems() {
+        return ITEMS;
     }
 }

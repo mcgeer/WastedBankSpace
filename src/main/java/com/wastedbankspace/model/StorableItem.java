@@ -28,8 +28,14 @@
 
 package com.wastedbankspace.model;
 
-public interface StorableItem {
-    int getItemID();
-    String getLocation();
-    boolean isBis();
+import lombok.Data;
+
+@Data
+public class StorableItem {
+
+    private final int itemId;
+
+    private final String location;
+
+    private final boolean isBis;
 }
