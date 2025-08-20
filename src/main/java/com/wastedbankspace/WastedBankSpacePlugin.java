@@ -443,6 +443,7 @@ public class WastedBankSpacePlugin extends Plugin
 		// perform non-destructive set intersection of items in bank and enabledItems, which is all the items
 		// in the bank that are enabled
 		tempItemsInBank.retainAll(enabledItems);
+		tempItemsInBank.removeAll(ignoredItemIds);
 		storableItemsInBank.addAll(tempItemsInBank);
 
 		SwingUtilities.invokeLater(
