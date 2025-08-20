@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.game.ItemManager;
 
 import java.util.HashMap;
@@ -40,16 +41,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Getter
 public class StorageLocations
 {
-	@Getter
 	private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
+	private static final Map<Integer, String> itemNameMap = new HashMap<>();
 	@Getter
 	private static final Map<Integer, StorableItem> itemIdMap = new HashMap<>();
-	// Use TreeMap instead of hashmap so that we can use string insensitive comparison in order to access values
+	// Use TreeMap instead of hashmap so that we can use string case-insensitive comparison in order to access values
 	@Getter
-	private static final Map<String, Integer> itemNameMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	private static final Map<String, Integer> modifiedItemNameMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
 	static
 	{
@@ -84,14 +86,28 @@ public class StorageLocations
 		{
 			itemIdMap.put(item.getItemID(), item);
 		}
+		log.debug("Registered items from {}", enumClass.getSimpleName());
 	}
 
 	public static void prepareStorableItemNames(ItemManager itemManager)
 	{
-		storableItemNameMap.clear();
+		log.debug("Starting prepareStorableItemNames()");
+		log.debug("itemIdMap contents before preparing: {}", itemIdMap.values());
+		// storableItemNameMap.clear();
 		for (StorableItem item : itemIdMap.values())
 		{
-			storableItemNameMap.put(item, itemManager.getItemComposition(item.getItemID()).getName());
+			String item_name = itemManager.getItemComposition(item.getItemID()).getName();
+			storableItemNameMap.put(item, item_name);
+			itemNameMap.put(item.getItemID(), item_name);
+			// need to lowercase and remove spaces of item_name for case-insensitive comparison
+			String cleaned_item_name = item_name.toLowerCase().replaceAll("\\s+", "");
+			modifiedItemNameMap.put(cleaned_item_name, item.getItemID());
+		}
+		if (itemIdMap.size() == storableItemNameMap.size()) {
+			log.debug("Successfully prepared storableItemNameMap");
+		}
+		else {
+			log.warn("prepareStorableItemNames() did not successfully prepare storableItemNameMap");
 		}
 	}
 
@@ -100,14 +116,17 @@ public class StorageLocations
 		return itemIdMap.containsKey(id);
 	}
 
-	public static Set<String> storableListToString(Set<Integer> itemIds)
+	/**
+	 * Converts a set of item IDs into a set of their corresponding item names.
+	 *
+	 * @param itemIds A set of item IDs to be converted.
+	 * @return A set of item names corresponding to the provided item IDs.
+	 */
+	public static List<String> itemIdsToString(Set<Integer> itemIds)
 	{
-		// TODO: may be able to collapse the for loop into a stream call
-		Set<String> itemNames = new HashSet<>();
-		for (int i : itemIds) {
-			itemNames.add(getStorableItemName(i));
-		}
-		return itemNames;
+		return itemIds.stream()
+			    .map(itemNameMap::get)
+			    .collect(Collectors.toList());
 	}
 
 	public static StorableItem getStorableItem(Integer id)
@@ -126,6 +145,6 @@ public class StorageLocations
 
 	public static Integer getStorableItemId(String name)
 	{
-		return itemNameMap.get(name);
+		return modifiedItemNameMap.get(name);
 	}
 }

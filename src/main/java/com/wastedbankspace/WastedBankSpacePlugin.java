@@ -36,7 +36,6 @@ import com.wastedbankspace.model.locations.*;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
 import com.wastedbankspace.ui.overlay.OverlayImage;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -174,40 +173,44 @@ public class WastedBankSpacePlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager, this::processBlackListChanged, scheduledExecutorService);
+		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager, this::processIgnoreListChanged, scheduledExecutorService);
 		navButton = NavigationButton.builder()
-									.tooltip("Wasted Bank Space")
-									.priority(8)
-									.icon(ICON)
-									.panel(panel)
-									.build();
+			.tooltip("Wasted Bank Space")
+			.priority(8)
+			.icon(ICON)
+			.panel(panel)
+			.build();
 		clientToolbar.addNavigation(navButton);
 
 		overlayManager.add(storageItemOverlay);
 
+		log.debug("Attempting to prepare WastedBankSpace upon startup.");
 		if (!prepared)
 		{
+			log.debug("Not prepared, invoking clientThread");
 			clientThread.invoke(() ->
-								{
-									switch (client.getGameState())
-									{
-										case LOGIN_SCREEN:
-										case LOGIN_SCREEN_AUTHENTICATOR:
-										case LOGGING_IN:
-										case LOADING:
-										case LOGGED_IN:
-										case CONNECTION_LOST:
-										case HOPPING:
-											StorageLocations.prepareStorableItemNames(itemManager);
-											initializeItemSets();
-											bisFilterEnabled = config.bisFilterEnabledCheck();
-											panel.updatePluginFilter();
-											prepared = true;
-											return true;
-										default:
-											return false;
-									}
-								});
+			{
+				switch (client.getGameState())
+				{
+					case LOGIN_SCREEN:
+					case LOGIN_SCREEN_AUTHENTICATOR:
+					case LOGGING_IN:
+					case LOADING:
+					case LOGGED_IN:
+					case CONNECTION_LOST:
+					case HOPPING:
+						log.debug("Inside switch case for initializing");
+						StorageLocations.prepareStorableItemNames(itemManager);
+						initializeItemSets();
+						bisFilterEnabled = config.bisFilterEnabledCheck();
+						panel.updatePluginFilter();
+						prepared = true;
+						return true;
+					default:
+						log.debug("In default case, returning false");
+						return false;
+				}
+			});
 		}
 	}
 
@@ -293,6 +296,7 @@ public class WastedBankSpacePlugin extends Plugin
 		}
 		else
 		{
+			// TODO: this will still set to false when bank is still open
 			isBankOpen = false;
 			log.debug("isBankOpen set to false");
 		}
@@ -312,10 +316,26 @@ public class WastedBankSpacePlugin extends Plugin
 		log.debug("onConfigChanged key: {}", eventKey);
 
 		// only attempt to run updating of enabledItems hashset if event key is one of the keys that affect enabledItems
-		if (WastedBankSpaceConfig.getStorageLocationKeys().contains(eventKey)) {
-			updateEnabledItems(event);
+		if (WastedBankSpaceConfig.getStorageLocationKeys().get(eventKey).equals(eventKey))
+		{
+			boolean result;
+			if (event.getNewValue() == null)
+			{
+				// then config group was disabled, so remove them from the enabledItems set
+				result = enabledItems.removeAll(allStorableItemsByCategory.getOrDefault((event.getKey()), new HashSet<>()));
+			}
+			else
+			{
+				result = enabledItems.addAll(allStorableItemsByCategory.getOrDefault((event.getKey()), new HashSet<>()));
+			}
+
+			if (!result)
+			{
+				// enabledItems failed to update from the call above, indicating an issue with
+				log.debug("onConfigChanged(): Attempted update of enabledItems hashset failed.\nEvent: {}\n", event);
+			}
 		}
-		updateWastedBankSpace();
+		updateStorableItemsInBank();
 	}
 
 	@Subscribe
@@ -327,6 +347,7 @@ public class WastedBankSpacePlugin extends Plugin
 	@Subscribe
 	public void onMenuOpened(final MenuOpened event)
 	{
+		// TODO: refactor this
 		if (!client.isKeyPressed(KeyCode.KC_SHIFT) || !isBankOpen)
 		{
 			return;
@@ -346,10 +367,10 @@ public class WastedBankSpacePlugin extends Plugin
 				if (isItemStorable(itemId))
 				{
 					final MenuEntry parent = client.createMenuEntry(i)
-												   .setOption(flagged ? "Unflag Item" : "Flag Item")
-												   .setTarget(entry.getTarget())
-												   .setType(MenuAction.RUNELITE)
-												   .onClick(x -> toggleItemInIgnoreList(itemId));
+						.setOption(flagged ? "Unflag Item" : "Flag Item")
+						.setTarget(entry.getTarget())
+						.setType(MenuAction.RUNELITE)
+						.onClick(x -> toggleItemInIgnoreList(itemId));
 				}
 				return;
 			}
@@ -404,7 +425,7 @@ public class WastedBankSpacePlugin extends Plugin
 			itemsInBank.add(itemId);
 		}
 
-		updateWastedBankSpace();
+		updateStorableItemsInBank();
 	}
 
 
@@ -412,33 +433,36 @@ public class WastedBankSpacePlugin extends Plugin
 	 * Gets list of all currently enabled items, loops and checks if each item exists in the map of items in bank, and
 	 * if so, adds that itemId to a list of all storableItemsInBank, which is the running tally of "wasted space".
 	 */
-	private void updateWastedBankSpace()
+	private void updateStorableItemsInBank()
 	{
 		log.debug("running updateWastedBankSpace, getting every item after regenerating the enabled item list");
-		// TODO: Refactor this to be a hashset
-		// List<StorableItem> storableItemsInBank = new ArrayList<>();
+
 		storableItemsInBank.clear();
-		for (int id : enabledItems)
-		{
-			if (itemsInBank.contains(id))
-			{
-				storableItemsInBank.add(id);
-			}
-		}
+
+		Set<Integer> tempItemsInBank = itemsInBank;
+		// perform non-destructive set intersection of items in bank and enabledItems, which is all the items
+		// in the bank that are enabled
+		tempItemsInBank.retainAll(enabledItems);
+		storableItemsInBank.addAll(tempItemsInBank);
 
 		SwingUtilities.invokeLater(
 			() -> panel.setWastedBankSpaceItems(storableItemsInBank)
 		);
 	}
 
-	public void processBlackListChanged(String filter)
+	public void processIgnoreListChanged(String filter)
 	{
+		log.debug("Starting processIgnoreListChanged() with filter: {}", filter);
+		log.debug("Contents of StorageLocations.getItemNameMap(): {}", StorageLocations.getModifiedItemNameMap());
+
 		List<String> ignoredItemList = Text.fromCSV(filter);
+		log.debug("processIgnoreListChanged() - ignoredItemList: {}", ignoredItemList);
 
 		ignoredItemIds.clear();
 		for (String value : ignoredItemList)
 		{
-			// check if value, with all whitespace removed, is only digits, i.e. an itemId
+			log.debug("processIgnoreListChanged - value: {}", value);
+			// check if "value", with all whitespace removed, is only digits, i.e. an itemId
 			if (value.replaceAll("\\s+", "").matches("^\\d+$"))
 			{
 				ignoredItemIds.add(Integer.parseInt(value));
@@ -446,63 +470,21 @@ public class WastedBankSpacePlugin extends Plugin
 			else
 			{
 				String modValue = value.replaceAll("\\s+", "");
+				log.debug("Original value: {}, ModValue: {}", value, modValue);
 
-				if (StorageLocations.getItemNameMap().getOrDefault(modValue, null) != null)
+				if (StorageLocations.getModifiedItemNameMap().getOrDefault(modValue, null) != null)
 				{
-					ignoredItemIds.add(StorageLocations.getStorableItemId(modValue));
+					Integer item_id = StorageLocations.getStorableItemId(modValue);
+					ignoredItemIds.add(item_id);
+					log.debug("Found {}, id: {} in itemNameMap", modValue, item_id);
 				}
 				else
 				{
-					log.debug("Could not find {} in {}", modValue, StorageLocations.getItemNameMap());
+					log.debug("Could not find {} in {}", modValue, StorageLocations.getModifiedItemNameMap());
 				}
 			}
 		}
 
-		updateWastedBankSpace();
-	}
-
-	// TODO: Refactor this to remove check in unflaggedItemIds and bis check
-	// TODO: refactor to be called in onBankChange()
-	// public List<StorableItem> getEnabledItemLists()
-	// {
-	// 	// ON change and subscribe for the above
-	// 	// End this needs to Change
-	// 	log.debug("running getEnabledItemLists, rebuilding list of storable items.");
-	// 	List<StorableItem> ret = new ArrayList<>();
-	// 	for (StorageLocationEnabler sle : storageLocationEnablers)
-	// 	{
-	// 		for (StorableItem item : sle.GetStorableItemsIfEnabled())
-	// 		{
-	// 			if (ignoredItemIds.contains(item.getItemID())
-	// 				|| (item.isBis() && config.bisFilterEnabledCheck())
-	// 			)
-	// 			{
-	// 				continue;
-	// 			}
-	// 			ret.add(item);
-	// 		}
-	// 	}
-	// 	return ret;
-	// }
-
-	public void updateEnabledItems(ConfigChanged event)
-	{
-		event.getNewValue();  // may be null if value was unset
-		event.getOldValue();  // may be null if value was unset
-		// if event.getKey()
-		boolean result;
-		if (event.getNewValue() == null) {
-			// then config group was disabled, so remove them from the enabledItems set
-			result = enabledItems.removeAll(allStorableItemsByCategory.getOrDefault((event.getKey()), new HashSet<>()));
-		}
-		else
-		{
-			result = enabledItems.addAll(allStorableItemsByCategory.getOrDefault((event.getKey()), new HashSet<>()));
-		}
-
-		if (!result) {
-			// enabledItems failed to update from the call above
-			log.debug("updateEnabledItems(): Attempted update of enabledItems hashset failed.\nEvent: {}\n", event);
-		}
+		updateStorableItemsInBank();
 	}
 }

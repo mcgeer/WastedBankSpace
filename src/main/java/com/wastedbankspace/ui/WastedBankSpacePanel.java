@@ -28,11 +28,9 @@
 
 package com.wastedbankspace.ui;
 
-import com.google.common.collect.Sets;
 import com.wastedbankspace.WastedBankSpaceConfig;
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
-import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -66,8 +64,8 @@ public class WastedBankSpacePanel extends PluginPanel
     private final JTextArea filtersEditor;
     private final JLabel numberOfItemsText;
     private final JList<String> data;
-    private List<StorableItem> items;
-    private Document filterDoc;
+    private List<StorableItem> items; 
+	private Document filterDoc;
     private Consumer<String> filterUiCallback;
 
     public WastedBankSpacePanel(Client client, TooltipManager tooltipManager, WastedBankSpaceConfig config,
@@ -167,17 +165,19 @@ public class WastedBankSpacePanel extends PluginPanel
 
     }
 
-	// TODO: update data structure
-    public void setWastedBankSpaceItems(Set<Integer> items)
+    public void setWastedBankSpaceItems(Set<Integer> item_ids)
     {
-		// use StorageLocations.getitemIdMap() to get an Int/StorableItem list and use items set for all keys to get
-		// values
-		this.items = items.stream()
+		log.debug("setWastedBankSpaceItems() called with items: {}", item_ids);
+		// use StorageLocations.getItemIdMap() to get an Int/StorableItem list and use items set for all keys to get values
+		log.debug("in setWastedBankSpaceItems, provided item_ids: {}", item_ids);
+
+		// assign to a previously-null this.items.
+		this.items = item_ids.stream()
 						  .map(StorageLocations.getItemIdMap()::get)
 						  .collect(Collectors.toList());
         //Update number of items that can be moved
-        numberOfItemsText.setText("Number of Items Wasting Space: " + items.size());
-        data.setListData(new Vector<>(StorageLocations.storableListToString(items)));
+        numberOfItemsText.setText("Number of Items Wasting Space: " + this.items.size());
+        data.setListData(new Vector<>(StorageLocations.itemIdsToString(item_ids)));
         this.updateUI();
     }
 
