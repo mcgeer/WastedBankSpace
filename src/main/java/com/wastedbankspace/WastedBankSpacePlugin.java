@@ -335,7 +335,7 @@ public class WastedBankSpacePlugin extends Plugin
 				log.debug("onConfigChanged(): Attempted update of enabledItems hashset failed.\nEvent: {}\n", event);
 			}
 		}
-		updateStorableItemsInBank();
+		updateWastedBankSpace();
 	}
 
 	@Subscribe
@@ -425,7 +425,7 @@ public class WastedBankSpacePlugin extends Plugin
 			itemsInBank.add(itemId);
 		}
 
-		updateStorableItemsInBank();
+		updateWastedBankSpace();
 	}
 
 
@@ -433,22 +433,20 @@ public class WastedBankSpacePlugin extends Plugin
 	 * Gets list of all currently enabled items, loops and checks if each item exists in the map of items in bank, and
 	 * if so, adds that itemId to a list of all storableItemsInBank, which is the running tally of "wasted space".
 	 */
-	private void updateStorableItemsInBank()
+	private void updateWastedBankSpace()
 	{
 		log.debug("running updateWastedBankSpace, getting every item after regenerating the enabled item list");
 
 		storableItemsInBank.clear();
 
-		Set<Integer> tempItemsInBank = itemsInBank;
-		// perform non-destructive set intersection of items in bank and enabledItems, which is all the items
-		// in the bank that are enabled
+		// Recalculate storable items in the bank
+		Set<Integer> tempItemsInBank = new HashSet<>(itemsInBank);
 		tempItemsInBank.retainAll(enabledItems);
 		tempItemsInBank.removeAll(ignoredItemIds);
 		storableItemsInBank.addAll(tempItemsInBank);
 
-		SwingUtilities.invokeLater(
-			() -> panel.setWastedBankSpaceItems(storableItemsInBank)
-		);
+		// Update the panel UI
+		SwingUtilities.invokeLater(() -> panel.setWastedBankSpaceItems(storableItemsInBank));
 	}
 
 	public void processIgnoreListChanged(String filter)
@@ -460,32 +458,41 @@ public class WastedBankSpacePlugin extends Plugin
 		log.debug("processIgnoreListChanged() - ignoredItemList: {}", ignoredItemList);
 
 		ignoredItemIds.clear();
-		for (String value : ignoredItemList)
+		for (String ignoredItem : ignoredItemList)
 		{
-			log.debug("processIgnoreListChanged - value: {}", value);
-			// check if "value", with all whitespace removed, is only digits, i.e. an itemId
-			if (value.replaceAll("\\s+", "").matches("^\\d+$"))
+			log.debug("processIgnoreListChanged - ignoredItem: {}", ignoredItem);
+			String cleanedIgnoredItem = ignoredItem.replaceAll("\\s+", "");
+			log.debug("Original value: {}, ModValue: {}", ignoredItem, cleanedIgnoredItem);
+
+			// check if is only digits, i.e. an itemId
+			if (cleanedIgnoredItem.matches("^\\d+$"))
 			{
-				ignoredItemIds.add(Integer.parseInt(value));
+				ignoredItemIds.add(Integer.parseInt(ignoredItem));
 			}
+			// check if cleanedIgnoredItem has a corresponding itemId in the modifiedItemNameMap
 			else
 			{
-				String modValue = value.replaceAll("\\s+", "");
-				log.debug("Original value: {}, ModValue: {}", value, modValue);
-
-				if (StorageLocations.getModifiedItemNameMap().getOrDefault(modValue, null) != null)
+				Integer itemId = StorageLocations.getStorableItemId(cleanedIgnoredItem);
+				if (itemId != null)
 				{
-					Integer item_id = StorageLocations.getStorableItemId(modValue);
-					ignoredItemIds.add(item_id);
-					log.debug("Found {}, id: {} in itemNameMap", modValue, item_id);
-				}
-				else
-				{
-					log.debug("Could not find {} in {}", modValue, StorageLocations.getModifiedItemNameMap());
+					ignoredItemIds.add(itemId);
 				}
 			}
 		}
 
-		updateStorableItemsInBank();
+		// Recalculate enabled items
+		enabledItems.clear();
+		for (StorageLocationEnabler sle : storageLocationEnablers)
+		{
+			for (StorableItem item : sle.GetStorableItemsIfEnabled())
+			{
+				if (!ignoredItemIds.contains(item.getItemID()) &&
+					(!item.isBis() || !config.bisFilterEnabledCheck()))
+				{
+					enabledItems.add(item.getItemID());
+				}
+			}
+		}
+		updateWastedBankSpace();
 	}
 }

@@ -135,7 +135,7 @@ public class StorageLocations
 	}
 	public static String getStorableItemName(Integer id)
 	{
-		return getStorableItemName(itemIdMap.get(id));
+		return itemNameMap.get(id);
 	}
 
 	public static String getStorableItemName(StorableItem item)

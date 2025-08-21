@@ -36,6 +36,7 @@ import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
 import java.util.Set;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.WidgetItem;
@@ -52,61 +53,62 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class StorageItemOverlay extends WidgetItemOverlay
 {
-    private final Point point;
+	private final Point point;
 
-    private final Client client;
-    private final WastedBankSpacePlugin plugin;
-    private final ItemManager itemManager;
-    private final TooltipManager tooltipManager;
+	private final Client client;
+	private final WastedBankSpacePlugin plugin;
+	private final ItemManager itemManager;
+	private final TooltipManager tooltipManager;
 
-    @Getter
-    private final Cache<Integer, BufferedImage> wastedSpaceImages = CacheBuilder.newBuilder()
-            .maximumSize(160)
-            .expireAfterWrite(2, TimeUnit.MINUTES)
-            .build();
+	@Getter
+	private final Cache<Integer, BufferedImage> wastedSpaceImages = CacheBuilder.newBuilder()
+		.maximumSize(160)
+		.expireAfterWrite(2, TimeUnit.MINUTES)
+		.build();
 
-    @Inject
-    StorageItemOverlay(Client client, WastedBankSpacePlugin plugin, ItemManager itemManager, TooltipManager tooltipManager)
-    {
-        this.client = client;
-        this.plugin = plugin;
-        this.itemManager = itemManager;
-        this.tooltipManager = tooltipManager;
-        this.point = new Point();
-        showOnBank();
-    }
+	@Inject
+	StorageItemOverlay(Client client, WastedBankSpacePlugin plugin, ItemManager itemManager, TooltipManager tooltipManager)
+	{
+		this.client = client;
+		this.plugin = plugin;
+		this.itemManager = itemManager;
+		this.tooltipManager = tooltipManager;
+		this.point = new Point();
+		showOnBank();
+	}
 
-    @Override
-    public void renderItemOverlay(Graphics2D graphics, int itemId, WidgetItem itemWidget)
-    {
-        Set<Integer> items =  plugin.getEnabledItems();
+	@Override
+	public void renderItemOverlay(Graphics2D graphics, int itemId, WidgetItem itemWidget)
+	{
+		Set<Integer> items = plugin.getEnabledItems();
 
-        if (items.isEmpty()
-                || itemWidget.getWidget().getParentId() != ComponentID.BANK_ITEM_CONTAINER
-                || !items.contains(itemId)
-        )
-        {
-            return;
-        }
+		if (items.isEmpty()
+			|| itemWidget.getWidget().getParentId() != ComponentID.BANK_ITEM_CONTAINER
+			|| !items.contains(itemId)
+		)
+		{
+			return;
+		}
 
-        StorableItem item = StorageLocations.getStorableItem(itemId);
-        Rectangle bounds = itemWidget.getCanvasBounds();
+		StorableItem item = StorageLocations.getStorableItem(itemId);
+		Rectangle bounds = itemWidget.getCanvasBounds();
 
-        if (bounds.contains(client.getMouseCanvasPosition().getX(), client.getMouseCanvasPosition().getY()))
-        {
-            Tooltip t = new Tooltip(ColorUtil.prependColorTag("Store @ " + item.getLocation(), new Color(238, 238, 238)));
-            tooltipManager.add(t);
-        }
+		if (bounds.contains(client.getMouseCanvasPosition().getX(), client.getMouseCanvasPosition().getY()))
+		{
+			Tooltip t = new Tooltip(ColorUtil.prependColorTag("Store @ " + item.getLocation(), new Color(238, 238, 238)));
+			tooltipManager.add(t);
+		}
 
-        renderRibbon(graphics, plugin.getOverlayImage().getImage(), bounds.x + bounds.width - 12,bounds.y + bounds.height - 12);
-    }
+		renderRibbon(graphics, plugin.getOverlayImage().getImage(), bounds.x + bounds.width - 12, bounds.y + bounds.height - 12);
+	}
 
-    private void renderRibbon(Graphics2D graphics, ImageComponent ribbon, int x, int y)
-    {
-        this.point.setLocation(x, y);
-        ribbon.setPreferredLocation(this.point);
-        ribbon.render(graphics);
-    }
+	private void renderRibbon(Graphics2D graphics, ImageComponent ribbon, int x, int y)
+	{
+		this.point.setLocation(x, y);
+		ribbon.setPreferredLocation(this.point);
+		ribbon.render(graphics);
+	}
 }
