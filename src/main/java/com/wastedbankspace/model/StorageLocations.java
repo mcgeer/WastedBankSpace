@@ -103,10 +103,12 @@ public class StorageLocations
 			String cleaned_item_name = item_name.toLowerCase().replaceAll("\\s+", "");
 			modifiedItemNameMap.put(cleaned_item_name, item.getItemID());
 		}
-		if (itemIdMap.size() == storableItemNameMap.size()) {
+		if (itemIdMap.size() == storableItemNameMap.size())
+		{
 			log.debug("Successfully prepared storableItemNameMap");
 		}
-		else {
+		else
+		{
 			log.warn("prepareStorableItemNames() did not successfully prepare storableItemNameMap");
 		}
 	}
@@ -125,14 +127,15 @@ public class StorageLocations
 	public static List<String> itemIdsToString(Set<Integer> itemIds)
 	{
 		return itemIds.stream()
-			    .map(itemNameMap::get)
-			    .collect(Collectors.toList());
+			.map(itemNameMap::get)
+			.collect(Collectors.toList());
 	}
 
 	public static StorableItem getStorableItem(Integer id)
 	{
 		return itemIdMap.get(id);
 	}
+
 	public static String getStorableItemName(Integer id)
 	{
 		return itemNameMap.get(id);

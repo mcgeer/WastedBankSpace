@@ -378,7 +378,6 @@ public class WastedBankSpacePlugin extends Plugin
 	}
 
 	/**
-	 * TODO: rename to something like ignoreItemToggle, remove flagged arg, useless, already determined by .contains()
 	 * Toggles whether an item is ignored or not from list of items considered wasting space.
 	 *
 	 * @param id
