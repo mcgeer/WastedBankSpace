@@ -141,8 +141,8 @@ public class WastedBankSpacePlugin extends Plugin
 		new StorageLocationEnabler(() -> config.huntsmansKitStorageCheck(), HuntsmansKit.values())
 	);
 
-	// TODO: convert to a hashmap and refactor child calls
-	private Set<Integer> ignoredItemIds = new HashSet<>();
+	private final Set<Integer> ignoredItemIds = new HashSet<>();
+	private long bankContentsHash = 0;
 
 	private NavigationButton navButton;
 	private WastedBankSpacePanel panel;
@@ -290,9 +290,9 @@ public class WastedBankSpacePlugin extends Plugin
 	{
 		if (event.getContainerId() == InventoryID.BANK.getId())
 		{
-			updateItemsFromBankContainer(event.getItemContainer());
 			isBankOpen = true;
 			log.debug("isBankOpen set to true");
+			updateItemsFromBankContainer(event.getItemContainer());
 		}
 		else
 		{
@@ -436,13 +436,11 @@ public class WastedBankSpacePlugin extends Plugin
 	{
 		log.debug("running updateWastedBankSpace, getting every item after regenerating the enabled item list");
 
-		storableItemsInBank.clear();
-
 		// Recalculate storable items in the bank
-		Set<Integer> tempItemsInBank = new HashSet<>(itemsInBank);
-		tempItemsInBank.retainAll(enabledItems);
-		tempItemsInBank.removeAll(ignoredItemIds);
-		storableItemsInBank.addAll(tempItemsInBank);
+		storableItemsInBank.clear();
+		storableItemsInBank.addAll(itemsInBank);
+		storableItemsInBank.retainAll(enabledItems);
+		storableItemsInBank.removeAll(ignoredItemIds);
 
 		// Update the panel UI
 		SwingUtilities.invokeLater(() -> panel.setWastedBankSpaceItems(storableItemsInBank));
