@@ -66,7 +66,7 @@ public class WastedBankSpacePanel extends PluginPanel
 	private final JList<String> data;
 	private List<StorableItem> items;
 	private Document filterDoc;
-	private Consumer<String> filterUiCallback;
+	private final Consumer<String> filterUiCallback;
 
 	public WastedBankSpacePanel(Client client, TooltipManager tooltipManager, WastedBankSpaceConfig config,
 								ItemManager itemManager, Consumer<String> filterUi,

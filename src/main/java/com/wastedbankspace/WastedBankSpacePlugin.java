@@ -412,7 +412,6 @@ public class WastedBankSpacePlugin extends Plugin
 		}
 
 		itemsInBank.clear();
-		Items[] items = c.getItems();
 		for (Item item : c.getItems())
 		{
 			if (item.getId() == -1)
