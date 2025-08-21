@@ -115,7 +115,6 @@ public class WastedBankSpacePlugin extends Plugin
 	// public static final String CONFIG_GROUP = "Wasted Bank Space";
 	private static boolean prepared = false;
 
-	// TODO: this should create a list or hashset of enabled items
 	// Contains a list of tuples like (Boolean, List<Int>) of an "enabled" bool and a list of itemIds within category
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
 		new StorageLocationEnabler(() -> config.tackleBoxStorageCheck(), TackleBox.values()),
@@ -142,7 +141,7 @@ public class WastedBankSpacePlugin extends Plugin
 	);
 
 	private final Set<Integer> ignoredItemIds = new HashSet<>();
-	private long bankContentsHash = 0;
+	private int bankContentsHash = 0;
 
 	private NavigationButton navButton;
 	private WastedBankSpacePanel panel;
@@ -292,11 +291,21 @@ public class WastedBankSpacePlugin extends Plugin
 		{
 			isBankOpen = true;
 			log.debug("isBankOpen set to true");
+
+			// check if bank contents have changed by utilizing hashcode of items array
+			Item[] items = event.getItemContainer().getItems();
+			int hash = Arrays.hashCode(items);
+			if (hash == bankContentsHash)
+			{
+				log.debug("Bank contents hash matched ({}), not running updateItemsFromBankContainer()",
+					bankContentsHash);
+				return;
+			}
+			bankContentsHash = hash;
 			updateItemsFromBankContainer(event.getItemContainer());
 		}
 		else
 		{
-			// TODO: this will still set to false when bank is still open
 			isBankOpen = false;
 			log.debug("isBankOpen set to false");
 		}
@@ -309,9 +318,7 @@ public class WastedBankSpacePlugin extends Plugin
 		{
 			return;
 		}
-		// TODO: check if any item containers were enabled/disabled, repopulate the enabledItems hashset
-		// TODO: find clever way of checking
-		// check if event.getKey() is one of the wastedbankspaceconfig keys
+
 		String eventKey = event.getKey();
 		log.debug("onConfigChanged key: {}", eventKey);
 
@@ -405,6 +412,7 @@ public class WastedBankSpacePlugin extends Plugin
 		}
 
 		itemsInBank.clear();
+		Items[] items = c.getItems();
 		for (Item item : c.getItems())
 		{
 			if (item.getId() == -1)
@@ -437,12 +445,20 @@ public class WastedBankSpacePlugin extends Plugin
 		log.debug("running updateWastedBankSpace, getting every item after regenerating the enabled item list");
 
 		// Recalculate storable items in the bank
+		Set<Integer> prevStorableItemsInBank = new HashSet<>(storableItemsInBank);
+		log.debug("prevStorableItemsInBank: {}", prevStorableItemsInBank);
 		storableItemsInBank.clear();
 		storableItemsInBank.addAll(itemsInBank);
 		storableItemsInBank.retainAll(enabledItems);
 		storableItemsInBank.removeAll(ignoredItemIds);
+		log.debug("new storableItemsInBank: {}", storableItemsInBank);
 
-		// Update the panel UI
+		// Update the panel UI only if there are changes to storable items in bank, except when empty, as that's on startup
+		if (!storableItemsInBank.isEmpty() && prevStorableItemsInBank.equals(storableItemsInBank))
+		{
+			log.debug("storableItemsInBank matched previous, not updating panel");
+			return;
+		}
 		SwingUtilities.invokeLater(() -> panel.setWastedBankSpaceItems(storableItemsInBank));
 	}
 
