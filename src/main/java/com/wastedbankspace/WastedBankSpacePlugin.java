@@ -112,10 +112,21 @@ public class WastedBankSpacePlugin extends Plugin
 	}
 
 	private static final BufferedImage ICON = ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/overlaySmoll.png");
-	// public static final String CONFIG_GROUP = "Wasted Bank Space";
+
+	private int bankContentsHash = 0;
+
+	private NavigationButton navButton;
+	private WastedBankSpacePanel panel;
+
+	private boolean isBankOpen = false;
+	private boolean bisFilterEnabled = false;
+
 	private static boolean prepared = false;
 
-	// Contains a list of tuples like (Boolean, List<Int>) of an "enabled" bool and a list of itemIds within category
+	/**
+	 * List of storage location enablers (sle) in Plugin Configuration. These map a boolean function to the list of
+	 * 	storable items which they enable.
+	 */
 	private final List<StorageLocationEnabler> storageLocationEnablers = Arrays.asList(
 		new StorageLocationEnabler(() -> config.tackleBoxStorageCheck(), TackleBox.values()),
 		new StorageLocationEnabler(() -> config.steelKeyRingStorageCheck(), SteelKeyRing.values()),
@@ -140,34 +151,51 @@ public class WastedBankSpacePlugin extends Plugin
 		new StorageLocationEnabler(() -> config.huntsmansKitStorageCheck(), HuntsmansKit.values())
 	);
 
-	private final Set<Integer> ignoredItemIds = new HashSet<>();
-	private int bankContentsHash = 0;
 
-	private NavigationButton navButton;
-	private WastedBankSpacePanel panel;
-	// private Map<Integer, Integer> inventoryMap = new HashMap<>();  // replaced by storableItemsInBank
-
-	/* Static values, will never change once initialized */
-
-	// All items possible for all storage locations
+	/* Note: Static values, will never change once initialized */
+	/**
+	 * All items possible for all storage locations
+	 * Note: Only set once during Initialize
+	 */
 	private static final Set<Integer> allStorableItems = new HashSet<>();
-	// Hashmap containing all itemIds per category. Used for enabling/disabling specific categories on config change.
+
+	/**
+	 * Hashmap containing all itemIds per category. Used for enabling/disabling specific categories on config change.
+	 * Note: Only set once during Initialize
+	 */
 	private static final Map<String, Set<Integer>> allStorableItemsByCategory = new HashMap<>();
+
+	/**
+	 * bis (Best in Slot) item ID's as tagged in each respective Storage Location.
+	 * Note: Only set once during Initialize
+	 */
 	private static final Set<Integer> bisItems = new HashSet<>();
 
-	/* Mutable item sets, will update based on config change, items present in bank, filtered, etc. */
+	/* The Below Sets are dynamic depending on config change (Panel for Ignore items),
+	 items present in bank, filtered, etc. */
 
+	/**
+	 All Items ID's found in the players bank
+	 */
 	private final Set<Integer> itemsInBank = new HashSet<>();
-	// Items populated from enabled storage types
+
+	/**
+	 *  Items populated from enabled storage types
+	 */
 	@Getter
 	private final Set<Integer> enabledItems = new HashSet<>();
-	// Items matching enabled items that are also present in bank
+
+	/**
+	 * Set of Item IDs which are Ignored regardless of being storable
+	 * 	This is Managed in the plugin's panel
+	 */
+	private final Set<Integer> ignoredItemIds = new HashSet<>();
+
+	/**
+	 * Items matching enabled items that are also present in bank. AKA the Items Wasting Space.
+	 * ID in itemsInBank AND enabledItems AND NOT ignoredItemIds
+	 */
 	private final Set<Integer> storableItemsInBank = new HashSet<>();
-	private final Set<Integer> ignoredItems = new HashSet<>();
-
-	private boolean isBankOpen = false;
-	private boolean bisFilterEnabled = false;
-
 
 	@Override
 	protected void startUp() throws Exception
@@ -223,7 +251,15 @@ public class WastedBankSpacePlugin extends Plugin
 		panel = null;
 	}
 
-	private static <E extends Enum<E> & StorableItem> void populateStorageItemIds(Class<E> enumClass, String configKey, boolean bisCheck)
+	/**
+	 * Populate data sets/maps at initialization with items ID's for what is storable/bis for fast lookups
+	 * @param enumClass StorableItem child see model.locations
+	 * @param configKey	Key for Storage Location from Plugin Configuration
+	 * @param bisCheck Flag if bis items exist for storage location
+	 * @param <E> enumClass
+	 */
+	private static <E extends Enum<E> & StorableItem> void populateStorageItemIds(
+			Class<E> enumClass, String configKey, boolean bisCheck)
 	{
 		for (E item : enumClass.getEnumConstants())
 		{
@@ -237,7 +273,12 @@ public class WastedBankSpacePlugin extends Plugin
 		}
 	}
 
-	private <E extends Enum<E> & StorableItem> void initializeItemSets()
+	/**
+	 *	1. populateStorageItemIds for all items at each storage location
+	 * 	2. Update the initial enabledItems
+	 * 	Note: this function is called only once for setup purposes
+	 */
+	private void initializeItemSets()
 	{
 		// Get all item ids from each storage category. Those with 'true' contain BIS items and need to identify them.
 		populateStorageItemIds(ArmourCase.class, WastedBankSpaceConfig.ARMOUR_CASE_CHECK_KEY, true);
@@ -346,12 +387,6 @@ public class WastedBankSpacePlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onGameTick(GameTick gameTick)
-	{
-
-	}
-
-	@Subscribe
 	public void onMenuOpened(final MenuOpened event)
 	{
 		// TODO: refactor this
@@ -387,7 +422,7 @@ public class WastedBankSpacePlugin extends Plugin
 	/**
 	 * Toggles whether an item is ignored or not from list of items considered wasting space.
 	 *
-	 * @param id
+	 * @param id Item Id for the item being toggled for ignore.
 	 */
 	private void toggleItemInIgnoreList(int id)
 	{
@@ -426,7 +461,6 @@ public class WastedBankSpacePlugin extends Plugin
 			{
 				continue;
 			}
-			// removed check if noted to getLinkedNoteId() since you can never have noted items in the bank
 
 			itemsInBank.add(itemId);
 		}
@@ -436,8 +470,9 @@ public class WastedBankSpacePlugin extends Plugin
 
 
 	/**
-	 * Gets list of all currently enabled items, loops and checks if each item exists in the map of items in bank, and
-	 * if so, adds that itemId to a list of all storableItemsInBank, which is the running tally of "wasted space".
+	 * Calculate and update the wasted space Panel via the following algorithm:
+	 * Wasted Space = Bank Items Where Item is Storable in an enabled Storable Location AND Item is not Ignored by user
+	 * 	Wasted Space = (itemsInBank interset enabledItems) - ignoredItemIds
 	 */
 	private void updateWastedBankSpace()
 	{
@@ -452,7 +487,8 @@ public class WastedBankSpacePlugin extends Plugin
 		storableItemsInBank.removeAll(ignoredItemIds);
 		log.debug("new storableItemsInBank: {}", storableItemsInBank);
 
-		// Update the panel UI only if there are changes to storable items in bank, except when empty, as that's on startup
+		/* Update the panel UI only if there are changes to storable items in bank,
+			except when empty. (empty will occur on startup, and in edge conditions where everything is disabled) */
 		if (!storableItemsInBank.isEmpty() && prevStorableItemsInBank.equals(storableItemsInBank))
 		{
 			log.debug("storableItemsInBank matched previous, not updating panel");
@@ -461,7 +497,11 @@ public class WastedBankSpacePlugin extends Plugin
 		SwingUtilities.invokeLater(() -> panel.setWastedBankSpaceItems(storableItemsInBank));
 	}
 
-	public void processIgnoreListChanged(String filter)
+	/**
+	 * Function to be invoked when the Ignore list is modified by the player in the plugin's panel.
+	 * @param filter
+	 */
+	private void processIgnoreListChanged(String filter)
 	{
 		log.debug("Starting processIgnoreListChanged() with filter: {}", filter);
 		log.debug("Contents of StorageLocations.getItemNameMap(): {}", StorageLocations.getModifiedItemNameMap());

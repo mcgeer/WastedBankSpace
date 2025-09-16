@@ -34,7 +34,6 @@ import com.google.inject.Inject;
 import com.wastedbankspace.WastedBankSpacePlugin;
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
-import java.util.Set;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -46,11 +45,10 @@ import net.runelite.client.ui.overlay.components.ImageComponent;
 import net.runelite.client.ui.overlay.tooltip.Tooltip;
 import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 import net.runelite.client.util.ColorUtil;
-import net.runelite.client.util.ImageUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j

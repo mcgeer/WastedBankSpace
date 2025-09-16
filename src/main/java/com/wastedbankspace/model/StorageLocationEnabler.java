@@ -48,9 +48,4 @@ public class StorageLocationEnabler
 	{
 		return storageLocationEnabled.get() ? storableItems : new StorableItem[0];
 	}
-
-	public StorableItem[] GetStorableItems()
-	{
-		return storableItems;
-	}
 }

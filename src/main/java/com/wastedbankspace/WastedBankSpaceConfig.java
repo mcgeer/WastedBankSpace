@@ -28,20 +28,15 @@
 
 package com.wastedbankspace;
 
-import com.google.common.collect.Sets;
 import com.wastedbankspace.ui.overlay.OverlayImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import static java.util.Map.entry;
-import java.util.Set;
-import lombok.Getter;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
+
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 @ConfigGroup(WastedBankSpaceConfig.GROUP)
 public interface WastedBankSpaceConfig extends Config
@@ -102,7 +97,7 @@ public interface WastedBankSpaceConfig extends Config
 
 	@ConfigSection(
 		name = "General Config",
-		description = "Genera plugin config flags",
+		description = "General plugin config flags",
 		position = 0
 	)
 	String generalConfig = "generalConfig";

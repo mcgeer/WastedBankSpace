@@ -2,7 +2,6 @@ package com.wastedbankspace.ui.overlay;
 
 import com.wastedbankspace.WastedBankSpacePlugin;
 import lombok.Getter;
-
 import net.runelite.client.ui.overlay.components.ImageComponent;
 import net.runelite.client.util.ImageUtil;
 

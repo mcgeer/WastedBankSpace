@@ -29,27 +29,33 @@
 package com.wastedbankspace.model;
 
 import com.wastedbankspace.model.locations.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.game.ItemManager;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
 public class StorageLocations
 {
-	private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
+	/**
+	 * itemNameMap: Maps a storable item ID to the corresponding item name
+	 */
 	private static final Map<Integer, String> itemNameMap = new HashMap<>();
+
+	/**
+	 *	itemIdMap: Maps item ID to items that are storable (see registerItems)
+	 */
 	@Getter
 	private static final Map<Integer, StorableItem> itemIdMap = new HashMap<>();
-	// Use TreeMap instead of hashmap so that we can use string case-insensitive comparison in order to access values
+
+	/**
+	 *	modifiedItemNameMap: Maps item name to item ID after cleaning name string.
+	 *	Note: Use TreeMap instead of hashmap so that we can use string case-insensitive comparison
+	 *		in order to access values
+	 */
 	@Getter
 	private static final Map<String, Integer> modifiedItemNameMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
@@ -93,17 +99,16 @@ public class StorageLocations
 	{
 		log.debug("Starting prepareStorableItemNames()");
 		log.debug("itemIdMap contents before preparing: {}", itemIdMap.values());
-		// storableItemNameMap.clear();
+
 		for (StorableItem item : itemIdMap.values())
 		{
 			String item_name = itemManager.getItemComposition(item.getItemID()).getName();
-			storableItemNameMap.put(item, item_name);
 			itemNameMap.put(item.getItemID(), item_name);
-			// need to lowercase and remove spaces of item_name for case-insensitive comparison
+			// Standardize name's to lowercase and remove spaces for case-insensitive comparison
 			String cleaned_item_name = item_name.toLowerCase().replaceAll("\\s+", "");
 			modifiedItemNameMap.put(cleaned_item_name, item.getItemID());
 		}
-		if (itemIdMap.size() == storableItemNameMap.size())
+		if (itemIdMap.size() == itemNameMap.size())
 		{
 			log.debug("Successfully prepared storableItemNameMap");
 		}
@@ -139,11 +144,6 @@ public class StorageLocations
 	public static String getStorableItemName(Integer id)
 	{
 		return itemNameMap.get(id);
-	}
-
-	public static String getStorableItemName(StorableItem item)
-	{
-		return storableItemNameMap.getOrDefault(item, null);
 	}
 
 	public static Integer getStorableItemId(String name)
