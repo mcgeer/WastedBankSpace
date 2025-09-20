@@ -35,6 +35,7 @@ import net.runelite.api.ItemID;
 @Getter
 public enum MagicWardrobe implements StorableItem {
     AMYS_SAW(ItemID.AMYS_SAW, true),
+    AMYS_SAW_OFFHAND(ItemID.AMYS_SAW_OFFHAND, true),
     ANCESTRAL_HAT(ItemID.ANCESTRAL_HAT, true),
     ANCESTRAL_ROBE_BOTTOM(ItemID.ANCESTRAL_ROBE_BOTTOM, true),
     ANCESTRAL_ROBE_TOP(ItemID.ANCESTRAL_ROBE_TOP, true),
@@ -81,6 +82,7 @@ public enum MagicWardrobe implements StorableItem {
     GHOSTLY_ROBE_6108(ItemID.GHOSTLY_ROBE_6108),
     //GRACEFUL
     IMCANDO_HAMMER(ItemID.IMCANDO_HAMMER, true),
+    IMCANDO_HAMMER_OFFHAND(ItemID.IMCANDO_HAMMER_OFFHAND, true),
     INFINITY_BOOTS(ItemID.INFINITY_BOOTS),
     INFINITY_BOTTOMS(ItemID.INFINITY_BOTTOMS),
     INFINITY_HAT(ItemID.INFINITY_HAT),
