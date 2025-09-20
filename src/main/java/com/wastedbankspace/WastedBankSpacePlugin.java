@@ -364,17 +364,17 @@ public class WastedBankSpacePlugin extends Plugin
 		log.debug("onConfigChanged key: {}", eventKey);
 
 		// only attempt to run updating of enabledItems hashset if event key is one of the keys that affect enabledItems
-		if (WastedBankSpaceConfig.getStorageLocationKeys().get(eventKey).equals(eventKey))
+		if (WastedBankSpaceConfig.getStorageLocationKeys().contains(eventKey))
 		{
 			boolean result;
-			if (event.getNewValue() == null)
+			if ((event.getNewValue() == null) || event.getNewValue().equalsIgnoreCase("false"))
 			{
 				// then config group was disabled, so remove them from the enabledItems set
-				result = enabledItems.removeAll(allStorableItemsByCategory.getOrDefault((event.getKey()), new HashSet<>()));
+				result = enabledItems.removeAll(allStorableItemsByCategory.getOrDefault(eventKey, new HashSet<>()));
 			}
 			else
 			{
-				result = enabledItems.addAll(allStorableItemsByCategory.getOrDefault((event.getKey()), new HashSet<>()));
+				result = enabledItems.addAll(allStorableItemsByCategory.getOrDefault(eventKey, new HashSet<>()));
 			}
 
 			if (!result)
@@ -382,8 +382,14 @@ public class WastedBankSpacePlugin extends Plugin
 				// enabledItems failed to update from the call above, indicating an issue with
 				log.debug("onConfigChanged(): Attempted update of enabledItems hashset failed.\nEvent: {}\n", event);
 			}
+			updateWastedBankSpace();
+		} else if(eventKey.equals(WastedBankSpaceConfig.FILTER_ENABLED_CHECK_KEY) || eventKey.equals(WastedBankSpaceConfig.BIS_FILTER_ENABLED_CHECK_KEY)){
+			//Moderate jank to reforce filter and BIS check. TODO These should be separated into two functions
+			processIgnoreListChanged(panel.getFilterdItemsText());
+		} else {
+			//Note this currently is hit when Overlay Image is changed but seems to have no effect on the software
+			log.debug("onConfigChanged(): Event not handled! \nEvent: {}\n", event);
 		}
-		updateWastedBankSpace();
 	}
 
 	@Subscribe
@@ -510,24 +516,22 @@ public class WastedBankSpacePlugin extends Plugin
 		log.debug("processIgnoreListChanged() - ignoredItemList: {}", ignoredItemList);
 
 		ignoredItemIds.clear();
-		for (String ignoredItem : ignoredItemList)
-		{
-			log.debug("processIgnoreListChanged - ignoredItem: {}", ignoredItem);
-			String cleanedIgnoredItem = ignoredItem.replaceAll("\\s+", "");
-			log.debug("Original value: {}, ModValue: {}", ignoredItem, cleanedIgnoredItem);
+		if(config.filterEnabledCheck()) {
+			for (String ignoredItem : ignoredItemList) {
+				log.debug("processIgnoreListChanged - ignoredItem: {}", ignoredItem);
+				String cleanedIgnoredItem = ignoredItem.replaceAll("\\s+", "");
+				log.debug("Original value: {}, ModValue: {}", ignoredItem, cleanedIgnoredItem);
 
-			// check if is only digits, i.e. an itemId
-			if (cleanedIgnoredItem.matches("^\\d+$"))
-			{
-				ignoredItemIds.add(Integer.parseInt(ignoredItem));
-			}
-			// check if cleanedIgnoredItem has a corresponding itemId in the modifiedItemNameMap
-			else
-			{
-				Integer itemId = StorageLocations.getStorableItemId(cleanedIgnoredItem);
-				if (itemId != null)
-				{
-					ignoredItemIds.add(itemId);
+				// check if is only digits, i.e. an itemId
+				if (cleanedIgnoredItem.matches("^\\d+$")) {
+					ignoredItemIds.add(Integer.parseInt(ignoredItem));
+				}
+				// check if cleanedIgnoredItem has a corresponding itemId in the modifiedItemNameMap
+				else {
+					Integer itemId = StorageLocations.getStorableItemId(cleanedIgnoredItem);
+					if (itemId != null) {
+						ignoredItemIds.add(itemId);
+					}
 				}
 			}
 		}

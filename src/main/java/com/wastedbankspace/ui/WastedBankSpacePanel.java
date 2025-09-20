@@ -252,4 +252,8 @@ public class WastedBankSpacePanel extends PluginPanel
 			// Should not get here
 		}
 	}
+
+	public String getFilterdItemsText(){
+		return filtersEditor.getText();
+	}
 }
