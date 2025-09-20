@@ -2,7 +2,6 @@ package com.wastedbankspace.ui.overlay;
 
 import com.wastedbankspace.WastedBankSpacePlugin;
 import lombok.Getter;
-
 import net.runelite.client.ui.overlay.components.ImageComponent;
 import net.runelite.client.util.ImageUtil;
 
@@ -27,7 +26,7 @@ public enum OverlayImage {
     private final String name;
     private final ImageComponent image;
 
-    private OverlayImage(String name, ImageComponent image)
+    OverlayImage(String name, ImageComponent image)
     {
         this.name = name;
         this.image = image;

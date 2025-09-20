@@ -30,10 +30,12 @@ package com.wastedbankspace.model.locations;
 
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
+import net.runelite.api.ItemComposition;
 import net.runelite.api.ItemID;
 
 @Getter
-public enum ArmourCase implements StorableItem {
+public enum ArmourCase implements StorableItem
+{
     ADVENTURERS_HOOD_T1(ItemID.ADVENTURERS_HOOD_T1),
     ADVENTURERS_TOP_T1(ItemID.ADVENTURERS_TOP_T1),
     ADVENTURERS_TROUSERS_T1(ItemID.ADVENTURERS_TROUSERS_T1),

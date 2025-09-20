@@ -30,72 +30,124 @@ package com.wastedbankspace.model;
 
 import com.wastedbankspace.model.locations.*;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.game.ItemManager;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Getter
-public class StorageLocations {
-    private static final Map<StorableItem, String> storableItemNameMap = new HashMap<>();
-    private static final Map<Integer, StorableItem> ITEM_ID_MAP = new HashMap<>();
+public class StorageLocations
+{
+	/**
+	 * itemNameMap: Maps a storable item ID to the corresponding item name
+	 */
+	private static final Map<Integer, String> itemNameMap = new HashMap<>();
 
-    static {
-        //Currently just run ([A-Za-z]+)\.java replaced with registerItems($1.class);
-        // on the ls of the model.locations folder
-        registerItems(ArmourCase.class);
-        registerItems(Bookcase.class);
-        registerItems(CapeRack.class);
-        registerItems(ElnockInquisitor.class);
-        registerItems(FancyDressBox.class);
-        registerItems(FlamtaerBag.class);
-        registerItems(ForestryKit.class);
-        registerItems(FossilStorage.class);
-        registerItems(HuntsmansKit.class);
-        registerItems(MagicWardrobe.class);
-        registerItems(MasterScrollBook.class);
-        registerItems(MysteriousStranger.class);
-        registerItems(NightmareZone.class);
-        registerItems(PetHouse.class);
-        registerItems(SeedVault.class);
-        registerItems(SpiceRack.class);
-        registerItems(SteelKeyRing.class);
-        registerItems(TackleBox.class);
-        registerItems(ToolLeprechaun.class);
-        registerItems(ToyBox.class);
-        registerItems(TreasureChest.class);
-    }
+	/**
+	 *	itemIdMap: Maps item ID to items that are storable (see registerItems)
+	 */
+	@Getter
+	private static final Map<Integer, StorableItem> itemIdMap = new HashMap<>();
 
-    private static <E extends Enum<E> & StorableItem> void registerItems(Class<E> enumClass) {
-        for (E item : enumClass.getEnumConstants()) {
-            ITEM_ID_MAP.put(item.getItemID(), item);
-        }
-    }
+	/**
+	 *	modifiedItemNameMap: Maps item name to item ID after cleaning name string.
+	 *	Note: Use TreeMap instead of hashmap so that we can use string case-insensitive comparison
+	 *		in order to access values
+	 */
+	@Getter
+	private static final Map<String, Integer> modifiedItemNameMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-    public static void prepareStorableItemNames(ItemManager itemManager) {
-        storableItemNameMap.clear();
-        for (StorableItem item : ITEM_ID_MAP.values()) {
-            storableItemNameMap.put(item, itemManager.getItemComposition(item.getItemID()).getName());
-        }
-    }
+	static
+	{
+		// Currently just run ([A-Za-z]+)\.java replaced with registerItems($1.class);
+		// on the ls of the model.locations folder
+		registerItems(ArmourCase.class);
+		registerItems(Bookcase.class);
+		registerItems(CapeRack.class);
+		registerItems(ElnockInquisitor.class);
+		registerItems(FancyDressBox.class);
+		registerItems(FlamtaerBag.class);
+		registerItems(ForestryKit.class);
+		registerItems(FossilStorage.class);
+		registerItems(HuntsmansKit.class);
+		registerItems(MagicWardrobe.class);
+		registerItems(MasterScrollBook.class);
+		registerItems(MysteriousStranger.class);
+		registerItems(NightmareZone.class);
+		registerItems(PetHouse.class);
+		registerItems(SeedVault.class);
+		registerItems(SpiceRack.class);
+		registerItems(SteelKeyRing.class);
+		registerItems(TackleBox.class);
+		registerItems(ToolLeprechaun.class);
+		registerItems(ToyBox.class);
+		registerItems(TreasureChest.class);
+	}
 
-    public static boolean isItemStorable(int id)
-    {
-        return ITEM_ID_MAP.containsKey(id);
-    }
+	private static <E extends Enum<E> & StorableItem> void registerItems(Class<E> enumClass)
+	{
+		for (E item : enumClass.getEnumConstants())
+		{
+			itemIdMap.put(item.getItemID(), item);
+		}
+		log.debug("Registered items from {}", enumClass.getSimpleName());
+	}
 
-    public static List<String> storableListToString(List<? extends StorableItem> items) {
-        return items.stream()
-                .filter(storableItemNameMap::containsKey)
-                .map(i -> String.format("%s", storableItemNameMap.get(i)))
-                .collect(Collectors.toList());
-    }
+	public static void prepareStorableItemNames(ItemManager itemManager)
+	{
+		log.debug("Starting prepareStorableItemNames()");
+		log.debug("itemIdMap contents before preparing: {}", itemIdMap.values());
 
-    public static String getStorableItemName(Integer id) { return getStorableItemName(ITEM_ID_MAP.get(id)); }
-    public static String getStorableItemName(StorableItem item)
-    {
-        return storableItemNameMap.getOrDefault(item, null);
-    }
+		for (StorableItem item : itemIdMap.values())
+		{
+			String item_name = itemManager.getItemComposition(item.getItemID()).getName();
+			itemNameMap.put(item.getItemID(), item_name);
+			// Standardize name's to lowercase and remove spaces for case-insensitive comparison
+			String cleaned_item_name = item_name.toLowerCase().replaceAll("\\s+", "");
+			modifiedItemNameMap.put(cleaned_item_name, item.getItemID());
+		}
+		if (itemIdMap.size() == itemNameMap.size())
+		{
+			log.debug("Successfully prepared storableItemNameMap");
+		}
+		else
+		{
+			log.warn("prepareStorableItemNames() did not successfully prepare storableItemNameMap");
+		}
+	}
+
+	public static boolean isItemStorable(int id)
+	{
+		return itemIdMap.containsKey(id);
+	}
+
+	/**
+	 * Converts a set of item IDs into a set of their corresponding item names.
+	 *
+	 * @param itemIds A set of item IDs to be converted.
+	 * @return A set of item names corresponding to the provided item IDs.
+	 */
+	public static List<String> itemIdsToString(Set<Integer> itemIds)
+	{
+		return itemIds.stream()
+			.map(itemNameMap::get)
+			.collect(Collectors.toList());
+	}
+
+	public static StorableItem getStorableItem(Integer id)
+	{
+		return itemIdMap.get(id);
+	}
+
+	public static String getStorableItemName(Integer id)
+	{
+		return itemNameMap.get(id);
+	}
+
+	public static Integer getStorableItemId(String name)
+	{
+		return modifiedItemNameMap.get(name);
+	}
 }
