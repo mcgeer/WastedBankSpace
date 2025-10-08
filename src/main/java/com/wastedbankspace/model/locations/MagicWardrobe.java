@@ -65,6 +65,7 @@ public enum MagicWardrobe implements StorableItem {
     BOUNTY_HUNTER_HAT_TIER_5(ItemID.BOUNTY_HUNTER_HAT_TIER_5),
     BOUNTY_HUNTER_HAT_TIER_6(ItemID.BOUNTY_HUNTER_HAT_TIER_6),
     BRUMA_TORCH(ItemID.BRUMA_TORCH),
+    BRUMA_TORCH_OFFHAND(ItemID.BRUMA_TORCH_OFFHAND),
     // Carpenter outfit
     CARPENTERS_BOOTS(ItemID.CARPENTERS_BOOTS),
     CARPENTERS_HELMET(ItemID.CARPENTERS_HELMET),
@@ -95,6 +96,8 @@ public enum MagicWardrobe implements StorableItem {
     EVIL_CHICKEN_WINGS(ItemID.EVIL_CHICKEN_WINGS),
     // Fish sack
     FISH_SACK(ItemID.FISH_SACK),
+    FISH_SACK_BARREL(ItemID.FISH_SACK_BARREL, true),
+    OPEN_FISH_SACK_BARREL(ItemID.OPEN_FISH_SACK_BARREL, true),
     // Trouble Brewing flags, ordered by item id
     CUTTHROAT_FLAG(ItemID.CUTTHROAT_FLAG),
     GILDED_SMILE_FLAG(ItemID.GILDED_SMILE_FLAG),
@@ -107,6 +110,7 @@ public enum MagicWardrobe implements StorableItem {
     // Forestry Kit, Forestry Basket
     FORESTRY_KIT(ItemID.FORESTRY_KIT, true),
     FORESTRY_BASKET(ItemID.FORESTRY_BASKET, true),
+    OPEN_FORESTRY_BASKET(ItemID.OPEN_FORESTRY_BASKET, true),
     // Ghostly robes
     GHOSTLY_BOOTS(ItemID.GHOSTLY_BOOTS),
     GHOSTLY_CLOAK(ItemID.GHOSTLY_CLOAK),
@@ -139,8 +143,8 @@ public enum MagicWardrobe implements StorableItem {
     LIGHT_INFINITY_HAT(ItemID.LIGHT_INFINITY_HAT),
     LIGHT_INFINITY_TOP(ItemID.LIGHT_INFINITY_TOP),
     // Log basket
-    // FORESTRY_BASKET(ItemID.FORESTRY_BASKET, true), // already included above
     LOG_BASKET(ItemID.LOG_BASKET, true),
+    OPEN_LOG_BASKET(ItemID.OPEN_LOG_BASKET, true),
     // Lunar equipment
     LUNAR_HELM(ItemID.LUNAR_HELM),
     LUNAR_CAPE(ItemID.LUNAR_CAPE),
