@@ -33,22 +33,19 @@ import lombok.Getter;
 import java.util.function.Supplier;
 
 @Getter
-public class StorageLocationEnabler {
-    private final Supplier<Boolean> storageLocationEnabled;
-    private final StorableItem[] storableItems;
+public class StorageLocationEnabler
+{
+	private final Supplier<Boolean> storageLocationEnabled;
+	private final StorableItem[] storableItems;
 
-    public StorageLocationEnabler(Supplier<Boolean> storageLocationEnabled, StorableItem[] storableItems)
-    {
-        this.storageLocationEnabled = storageLocationEnabled;
-        this.storableItems = storableItems;
-    }
+	public StorageLocationEnabler(Supplier<Boolean> storageLocationEnabled, StorableItem[] storableItems)
+	{
+		this.storageLocationEnabled = storageLocationEnabled;
+		this.storableItems = storableItems;
+	}
 
-    public StorableItem[] GetStorableItemsIfEnabled()
-    {
-        return storageLocationEnabled.get() ? storableItems : new StorableItem[0];
-    }
-
-    public StorableItem[] GetStorableItems(){
-        return storableItems;
-    }
+	public StorableItem[] GetStorableItemsIfEnabled()
+	{
+		return storageLocationEnabled.get() ? storableItems : new StorableItem[0];
+	}
 }
