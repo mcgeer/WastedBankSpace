@@ -1,4 +1,8 @@
 # Wasted Bank Space
+
+![image](https://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/rank/plugin/wasted-bank-space)
+![image](https://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/installs/plugin/wasted-bank-space)
+
 Plugin to show what items in your bank can be stored elsewhere in Gielinor, to save you bank space.
 
 # How it works
