@@ -383,6 +383,7 @@ public class WastedBankSpacePlugin extends Plugin
 				log.debug("onConfigChanged(): Attempted update of enabledItems hashset failed.\nEvent: {}\n", event);
 			}
 			updateWastedBankSpace();
+			processIgnoreListChanged(panel.getFilterdItemsText());
 		} else if(eventKey.equals(WastedBankSpaceConfig.FILTER_ENABLED_CHECK_KEY) || eventKey.equals(WastedBankSpaceConfig.BIS_FILTER_ENABLED_CHECK_KEY)){
 			//Moderate jank to reforce filter and BIS check. TODO These should be separated into two functions
 			processIgnoreListChanged(panel.getFilterdItemsText());
