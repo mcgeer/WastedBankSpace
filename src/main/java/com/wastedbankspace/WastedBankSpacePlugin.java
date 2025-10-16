@@ -64,6 +64,8 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static com.wastedbankspace.model.StorageLocations.isItemStorable;
 
@@ -505,7 +507,13 @@ public class WastedBankSpacePlugin extends Plugin
 
 	/**
 	 * Function to be invoked when the Ignore list is modified by the player in the plugin's panel.
-	 * @param filter
+	 * @param filter Is the Comma Separated String of Item's to ignore.
+	 *               Acceptable format ItemName Ignore CASE and Spaces, Item ID Number, Item Name with '*' wild cards
+	 *
+	 *               Example 1: Mystic robe top, Mysticrobetop,Mysticrobetop,Mystic robe     top, mySTicrObETop
+	 *               are all the same
+	 *               Example 2: 12345 will try and add Item ID 12345 to the set of ignorable items if it exists
+	 *               Example 3: *Mystic robe top* can be used to match ALL Mystic robe top variants
 	 */
 	private void processIgnoreListChanged(String filter)
 	{
@@ -517,20 +525,48 @@ public class WastedBankSpacePlugin extends Plugin
 
 		ignoredItemIds.clear();
 		if(config.filterEnabledCheck()) {
+			/* 1. Loop each comma separated ignore Item
+			 * 2. If a number, add the item ID directly
+			 * 3.1. If a wild card exists
+			 * 3.1.1. loop all items and try to match the wildcard pattern to the name, on hit add the
+			 * 		ID to the ignore list
+			 * 3.2. Otherwise, try and find the name of the item ignore case and space in the map of items
+			 * 3.2.1. Add the ID if found
+			 * */
 			for (String ignoredItem : ignoredItemList) {
 				log.debug("processIgnoreListChanged - ignoredItem: {}", ignoredItem);
 				String cleanedIgnoredItem = ignoredItem.replaceAll("\\s+", "");
 				log.debug("Original value: {}, ModValue: {}", ignoredItem, cleanedIgnoredItem);
 
-				// check if is only digits, i.e. an itemId
+				// Check if is only digits, i.e. an itemId
 				if (cleanedIgnoredItem.matches("^\\d+$")) {
 					ignoredItemIds.add(Integer.parseInt(ignoredItem));
 				}
-				// check if cleanedIgnoredItem has a corresponding itemId in the modifiedItemNameMap
+				// Check if cleanedIgnoredItem has a corresponding itemId in the modifiedItemNameMap
 				else {
-					Integer itemId = StorageLocations.getStorableItemId(cleanedIgnoredItem);
-					if (itemId != null) {
-						ignoredItemIds.add(itemId);
+					if(cleanedIgnoredItem.contains("*")) {
+						/* Process Wild Card Ignores */
+						cleanedIgnoredItem = cleanedIgnoredItem.replaceAll("\\(", "\\\\(")
+								.replaceAll("\\)", "\\\\)")
+								.replaceAll("\\*","(.*)");
+						try {
+							/* Test with Item with brackets in name (*) like watering can(7) */
+							Pattern p = Pattern.compile(cleanedIgnoredItem, Pattern.CASE_INSENSITIVE);
+							/* Check all items against the wildcard regex. */
+							StorageLocations.getModifiedItemNameMap().entrySet().stream()
+									.filter(e -> p.matcher(e.getKey()).matches())
+									.forEach(e -> ignoredItemIds.add(e.getValue()));
+						}
+						catch(PatternSyntaxException e) {
+							log.debug("Invalid Pattern {}", ignoredItem);
+						}
+					}
+					else {
+						/* Do we have a matching name? */
+						Integer itemId = StorageLocations.getStorableItemId(cleanedIgnoredItem);
+						if (itemId != null) {
+							ignoredItemIds.add(itemId);
+						}
 					}
 				}
 			}
