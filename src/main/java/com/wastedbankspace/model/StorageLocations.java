@@ -28,6 +28,8 @@
 
 package com.wastedbankspace.model;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
 import com.wastedbankspace.model.locations.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +59,7 @@ public class StorageLocations
 	 *		in order to access values
 	 */
 	@Getter
-	private static final Map<String, Integer> modifiedItemNameMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	private static final Multimap<String, Integer> modifiedItemNameMap = TreeMultimap.create(String.CASE_INSENSITIVE_ORDER, Comparator.naturalOrder());
 
 	static
 	{
@@ -146,7 +148,7 @@ public class StorageLocations
 		return itemNameMap.get(id);
 	}
 
-	public static Integer getStorableItemId(String name)
+	public static Collection<Integer> getStorableItemId(String name)
 	{
 		return modifiedItemNameMap.get(name);
 	}

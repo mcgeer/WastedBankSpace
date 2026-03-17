@@ -554,9 +554,9 @@ public class WastedBankSpacePlugin extends Plugin
 							/* Test with Item with brackets in name (*) like watering can(7) */
 							Pattern p = Pattern.compile(cleanedIgnoredItem, Pattern.CASE_INSENSITIVE);
 							/* Check all items against the wildcard regex. */
-							StorageLocations.getModifiedItemNameMap().entrySet().stream()
-									.filter(e -> p.matcher(e.getKey()).matches())
-									.forEach(e -> ignoredItemIds.add(e.getValue()));
+							StorageLocations.getModifiedItemNameMap().entries().stream()
+								.filter(e -> p.matcher(e.getKey()).matches())
+								.forEach(e -> ignoredItemIds.add(e.getValue()));
 						}
 						catch(PatternSyntaxException e) {
 							log.debug("Invalid Pattern {}", ignoredItem);
@@ -564,9 +564,12 @@ public class WastedBankSpacePlugin extends Plugin
 					}
 					else {
 						/* Do we have a matching name? */
-						Integer itemId = StorageLocations.getStorableItemId(cleanedIgnoredItem);
-						if (itemId != null) {
-							ignoredItemIds.add(itemId);
+						for (Integer itemId : StorageLocations.getStorableItemId(cleanedIgnoredItem))
+						{
+							if (itemId != null)
+							{
+								ignoredItemIds.add(itemId);
+							}
 						}
 					}
 				}
