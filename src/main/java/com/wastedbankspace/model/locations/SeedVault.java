@@ -79,7 +79,7 @@ public enum SeedVault implements StorableItem {
     WILDBLOOD_SEED(ItemID.WILDBLOOD_SEED),
     FLAX_SEED(ItemID.FLAX_SEED),
     HEMP_SEED(ItemID.HEMP_SEED),
-    COTTON_SEED(ItemID.COTTON_SEED)
+    COTTON_SEED(ItemID.COTTON_SEED),
 
     // Bush Seeds
     REDBERRY_SEED(ItemID.REDBERRY_SEED),
@@ -153,7 +153,12 @@ public enum SeedVault implements StorableItem {
     CRYSTAL_SAPLING(ItemID.CRYSTAL_SAPLING),
     CAMPHOR_SAPLING(ItemID.CAMPHOR_SAPLING),
     IRONWOOD_SAPLING(ItemID.IRONWOOD_SAPLING),
-    ROSEWOOD_SAPLING(ItemID.ROSEWOOD_SAPLING);
+    ROSEWOOD_SAPLING(ItemID.ROSEWOOD_SAPLING),
+
+    // Coral Frags
+    ELKHORN_FRAG(ItemID.ELKHORN_FRAG),
+    PILLAR_FRAG(ItemID.PILLAR_FRAG),
+    UMBRAL_FRAG(ItemID.UMBRAL_FRAG);
 
     private final int itemID;
     @Getter
