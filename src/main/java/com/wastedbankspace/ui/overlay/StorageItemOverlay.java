@@ -31,14 +31,18 @@ package com.wastedbankspace.ui.overlay;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
+import com.wastedbankspace.WastedBankSpaceConfig;
 import com.wastedbankspace.WastedBankSpacePlugin;
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetItem;
+import net.runelite.api.widgets.WidgetUtil;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.overlay.WidgetItemOverlay;
 import net.runelite.client.ui.overlay.components.ImageComponent;
@@ -58,6 +62,7 @@ public class StorageItemOverlay extends WidgetItemOverlay
 
 	private final Client client;
 	private final WastedBankSpacePlugin plugin;
+	private final WastedBankSpaceConfig config;
 	private final ItemManager itemManager;
 	private final TooltipManager tooltipManager;
 
@@ -68,14 +73,17 @@ public class StorageItemOverlay extends WidgetItemOverlay
 		.build();
 
 	@Inject
-	StorageItemOverlay(Client client, WastedBankSpacePlugin plugin, ItemManager itemManager, TooltipManager tooltipManager)
+	StorageItemOverlay(Client client, WastedBankSpacePlugin plugin, WastedBankSpaceConfig config, ItemManager itemManager, TooltipManager tooltipManager)
 	{
 		this.client = client;
 		this.plugin = plugin;
+		this.config = config;
 		this.itemManager = itemManager;
 		this.tooltipManager = tooltipManager;
 		this.point = new Point();
 		showOnBank();
+		showOnInventory();
+		showOnEquipment();
 	}
 
 	@Override
@@ -84,7 +92,7 @@ public class StorageItemOverlay extends WidgetItemOverlay
 		Set<Integer> items = plugin.getEnabledItems();
 
 		if (items.isEmpty()
-			|| itemWidget.getWidget().getParentId() != ComponentID.BANK_ITEM_CONTAINER
+			|| !shouldMark(itemWidget.getWidget())
 			|| !items.contains(itemId)
 		)
 		{
@@ -101,6 +109,23 @@ public class StorageItemOverlay extends WidgetItemOverlay
 		}
 
 		renderRibbon(graphics, plugin.getOverlayImage().getImage(), bounds.x + bounds.width - 12, bounds.y + bounds.height - 12);
+	}
+
+	/**
+	 * Bank items are always marked; inventory and worn equipment items only when enabled in the config.
+	 */
+	private boolean shouldMark(Widget widget)
+	{
+		switch (WidgetUtil.componentToInterface(widget.getId()))
+		{
+			case InterfaceID.BANKMAIN:
+			case InterfaceID.SHARED_BANK:
+				return widget.getParentId() == ComponentID.BANK_ITEM_CONTAINER;
+			case InterfaceID.WORNITEMS:
+				return config.markEquippedItems();
+			default:
+				return config.markInventoryItems();
+		}
 	}
 
 	private void renderRibbon(Graphics2D graphics, ImageComponent ribbon, int x, int y)
