@@ -30,23 +30,23 @@ package com.wastedbankspace.model.locations;
 
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
-import net.runelite.api.ItemID;
+import net.runelite.api.gameval.ItemID;
 
 @Getter
 public enum SteelKeyRing implements StorableItem {
-    ANCESTREAL_KEY(ItemID.ANCESTRAL_KEY),
-    BATTERED_KEY(ItemID.BATTERED_KEY),
-    BONE_KEY(ItemID.BONE_KEY),
-    BRASS_KEY(ItemID.BRASS_KEY),
-    CRYSTALMINE_KEY(ItemID.CRYSTALMINE_KEY),
+    ANCESTREAL_KEY(ItemID.ELID_KEY),
+    BATTERED_KEY(ItemID.ELEMENTAL_WORKSHOP_KEY),
+    BONE_KEY(ItemID.ZQBONEKEY),
+    BRASS_KEY(ItemID.EDGEVILLEDUNGEONKEY),
+    CRYSTALMINE_KEY(ItemID.HAUNTEDMINE_REWARD_KEY),
     DUSTY_KEY(ItemID.DUSTY_KEY),
-    ENCHANTED_KEY(ItemID.ENCHANTED_KEY),
-    WEAPON_STORE_KEY(ItemID.WEAPON_STORE_KEY),
-    MAZE_KEY(ItemID.MAZE_KEY),
+    ENCHANTED_KEY(ItemID.MAKINGHISTORY_KEY),
+    WEAPON_STORE_KEY(ItemID.PHOENIXKEY2),
+    MAZE_KEY(ItemID.MELZARKEY),
     METAL_KEY(ItemID.METAL_KEY),
-    NEW_KEY(ItemID.NEW_KEY),
-    SHINY_KEY(ItemID.SHINY_KEY),
-    WROUGHT_IRON_KEY(ItemID.WROUGHT_IRON_KEY);
+    NEW_KEY(ItemID.MOURNING_EXCAVATION_KEY),
+    SHINY_KEY(ItemID.IKOV_SHINYKEY),
+    WROUGHT_IRON_KEY(ItemID.THGOODMINEKEY);
 
     private final int itemID;
     @Getter

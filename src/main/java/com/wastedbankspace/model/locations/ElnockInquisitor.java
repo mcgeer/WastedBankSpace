@@ -30,14 +30,14 @@ package com.wastedbankspace.model.locations;
 
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
-import net.runelite.api.ItemID;
+import net.runelite.api.gameval.ItemID;
 
 @Getter
 public enum ElnockInquisitor implements StorableItem {
-    BUTTERFLY_NET(ItemID.BUTTERFLY_NET),
-    MAGIC_BUTTERFLY_NET(ItemID.MAGIC_BUTTERFLY_NET),
-    IMPLING_JAR(ItemID.IMPLING_JAR),
-    IMP_REPELLENT(ItemID.IMP_REPELLENT);
+    BUTTERFLY_NET(ItemID.HUNTING_BUTTERFLY_NET),
+    MAGIC_BUTTERFLY_NET(ItemID.II_MAGIC_BUTTERFLY_NET),
+    IMPLING_JAR(ItemID.II_IMPLING_JAR),
+    IMP_REPELLENT(ItemID.II_IMP_REPELLENT);
     private final int itemID;
     @Getter
     private final String location = "Elnock Inquisitor";

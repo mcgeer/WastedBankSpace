@@ -30,13 +30,13 @@ package com.wastedbankspace.model.locations;
 
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
-import net.runelite.api.ItemID;
+import net.runelite.api.gameval.ItemID;
 
 @Getter
 public enum FlamtaerBag implements StorableItem {
-    TIMBER_BEAMS(ItemID.TIMBER_BEAM),
-    LIMESTONE_BRICK(ItemID.LIMESTONE_BRICK),
-    SWAMP_PASTE(ItemID.SWAMP_PASTE);
+    TIMBER_BEAMS(ItemID.TIMBERBEAM),
+    LIMESTONE_BRICK(ItemID.LIMESTONEBRICK),
+    SWAMP_PASTE(ItemID.SWAMPPASTE);
 
     private final int itemID;
     @Getter
