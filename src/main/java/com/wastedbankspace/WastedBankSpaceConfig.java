@@ -28,6 +28,7 @@
 
 package com.wastedbankspace;
 
+import com.wastedbankspace.banktag.WastedBankTag;
 import com.wastedbankspace.ui.overlay.OverlayImage;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
@@ -66,6 +67,9 @@ public interface WastedBankSpaceConfig extends Config
 	/* Filtering and Blacklist Flags */
 	String FILTER_ENABLED_CHECK_KEY = "filterEnabledCheck";
 	String BIS_FILTER_ENABLED_CHECK_KEY = "bisFilterEnabledCheck";
+
+	/* Bank Interface Keys */
+	String BANK_TAG_TAB_KEY = "bankTagTab";
 
 	static Set<String> getStorageLocationKeys()
 	{
@@ -396,6 +400,19 @@ public interface WastedBankSpaceConfig extends Config
 	default OverlayImage overlayImage()
 	{
 		return OverlayImage.DEFAULT;
+	}
+
+	@ConfigItem(
+		keyName = BANK_TAG_TAB_KEY,
+		name = "Wasted Bank Tag Tab",
+		description = "Adds a '" + WastedBankTag.TAG_NAME + "' bank tag tab showing every flagged item, using the overlay image as its icon."
+			+ " Also searchable with tag:" + WastedBankTag.TAG_NAME + ". Requires the Bank Tags plugin.",
+		position = 1,
+		section = bankInterfaceConfig
+	)
+	default boolean bankTagTab()
+	{
+		return true;
 	}
 }
 

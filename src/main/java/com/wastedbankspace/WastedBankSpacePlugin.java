@@ -29,16 +29,19 @@
 package com.wastedbankspace;
 
 import com.google.inject.Provides;
+import com.wastedbankspace.banktag.WastedBankTag;
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocationEnabler;
 import com.wastedbankspace.model.StorageLocations;
 import com.wastedbankspace.model.locations.*;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
+import com.wastedbankspace.ui.overlay.BankTagTabOverlay;
 import com.wastedbankspace.ui.overlay.OverlayImage;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.events.BeforeRender;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.MenuOpened;
@@ -51,7 +54,9 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.banktags.BankTagsPlugin;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -74,6 +79,7 @@ import static com.wastedbankspace.model.StorageLocations.isItemStorable;
 @PluginDescriptor(
 	name = "Wasted Bank Space"
 )
+@PluginDependency(BankTagsPlugin.class)
 public class WastedBankSpacePlugin extends Plugin
 {
 	@Inject
@@ -93,6 +99,12 @@ public class WastedBankSpacePlugin extends Plugin
 
 	@Inject
 	private StorageItemOverlay storageItemOverlay;
+
+	@Inject
+	private BankTagTabOverlay bankTagTabOverlay;
+
+	@Inject
+	private WastedBankTag bankTag;
 
 	@Inject
 	private TooltipManager tooltipManager;
@@ -212,6 +224,8 @@ public class WastedBankSpacePlugin extends Plugin
 		clientToolbar.addNavigation(navButton);
 
 		overlayManager.add(storageItemOverlay);
+		overlayManager.add(bankTagTabOverlay);
+		bankTag.startUp();
 
 		log.debug("Attempting to prepare WastedBankSpace upon startup.");
 		if (!prepared)
@@ -248,6 +262,8 @@ public class WastedBankSpacePlugin extends Plugin
 	{
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(storageItemOverlay);
+		overlayManager.remove(bankTagTabOverlay);
+		bankTag.shutDown();
 
 		navButton = null;
 		panel = null;
@@ -319,6 +335,7 @@ public class WastedBankSpacePlugin extends Plugin
 				enabledItems.add(item.getItemID());
 			}
 		}
+		bankTag.setItems(enabledItems);
 	}
 
 
@@ -386,6 +403,8 @@ public class WastedBankSpacePlugin extends Plugin
 			}
 			updateWastedBankSpace();
 			processIgnoreListChanged(panel.getFilterdItemsText());
+		} else if (eventKey.equals(WastedBankSpaceConfig.BANK_TAG_TAB_KEY)) {
+			clientThread.invokeLater(bankTag::sync);
 		} else if(eventKey.equals(WastedBankSpaceConfig.FILTER_ENABLED_CHECK_KEY) || eventKey.equals(WastedBankSpaceConfig.BIS_FILTER_ENABLED_CHECK_KEY)){
 			//Moderate jank to reforce filter and BIS check. TODO These should be separated into two functions
 			processIgnoreListChanged(panel.getFilterdItemsText());
@@ -393,6 +412,12 @@ public class WastedBankSpacePlugin extends Plugin
 			//Note this currently is hit when Overlay Image is changed but seems to have no effect on the software
 			log.debug("onConfigChanged(): Event not handled! \nEvent: {}\n", event);
 		}
+	}
+
+	@Subscribe
+	public void onBeforeRender(BeforeRender event)
+	{
+		bankTag.onBeforeRender();
 	}
 
 	@Subscribe
@@ -486,6 +511,7 @@ public class WastedBankSpacePlugin extends Plugin
 	private void updateWastedBankSpace()
 	{
 		log.debug("running updateWastedBankSpace, getting every item after regenerating the enabled item list");
+		bankTag.setItems(enabledItems);
 
 		// Recalculate storable items in the bank
 		Set<Integer> prevStorableItemsInBank = new HashSet<>(storableItemsInBank);
