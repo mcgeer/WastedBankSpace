@@ -29,6 +29,7 @@
 package com.wastedbankspace.model;
 
 import com.wastedbankspace.model.locations.*;
+import com.wastedbankspace.model.stash.StashItem;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.game.ItemManager;
@@ -50,6 +51,18 @@ public class StorageLocations
 	 */
 	@Getter
 	private static final Map<Integer, StorableItem> itemIdMap = new HashMap<>();
+
+	/**
+	 *	itemLocationsMap: Every location entry for an item ID, in registration order, since some items can be
+	 *	stored in more than one location
+	 */
+	private static final Map<Integer, List<StorableItem>> itemLocationsMap = new HashMap<>();
+
+	/**
+	 * The POH costume room storages, whose contents the game reports together in the POH_COSTUMES container
+	 */
+	private static final Set<Class<?>> COSTUME_ROOM_LOCATIONS = Set.of(
+		ArmourCase.class, CapeRack.class, FancyDressBox.class, MagicWardrobe.class, ToyBox.class, TreasureChest.class);
 
 	/**
 	 *	modifiedItemNameMap: Maps item name to item ID after cleaning name string.
@@ -91,8 +104,20 @@ public class StorageLocations
 		for (E item : enumClass.getEnumConstants())
 		{
 			itemIdMap.put(item.getItemID(), item);
+			itemLocationsMap.computeIfAbsent(item.getItemID(), id -> new ArrayList<>()).add(item);
 		}
 		log.debug("Registered items from {}", enumClass.getSimpleName());
+	}
+
+	/**
+	 * @return every item a storage location or STASH unit takes. STASH items aren't in itemIdMap, as which of
+	 * them count changes while playing, but their names are still needed for the non-flagged items list.
+	 */
+	private static Set<Integer> allItemIds()
+	{
+		Set<Integer> ids = new HashSet<>(itemIdMap.keySet());
+		StashItem.ALL.forEach(item -> ids.add(item.getItemID()));
+		return ids;
 	}
 
 	public static void prepareStorableItemNames(ItemManager itemManager)
@@ -100,15 +125,16 @@ public class StorageLocations
 		log.debug("Starting prepareStorableItemNames()");
 		log.debug("itemIdMap contents before preparing: {}", itemIdMap.values());
 
-		for (StorableItem item : itemIdMap.values())
+		Set<Integer> ids = allItemIds();
+		for (int id : ids)
 		{
-			String item_name = itemManager.getItemComposition(item.getItemID()).getName();
-			itemNameMap.put(item.getItemID(), item_name);
+			String item_name = itemManager.getItemComposition(id).getName();
+			itemNameMap.put(id, item_name);
 			// Standardize name's to lowercase and remove spaces for case-insensitive comparison
-			String cleaned_item_name = item_name.toLowerCase().replaceAll("\\s+", "");
-			modifiedItemNameMap.put(cleaned_item_name, item.getItemID());
+			String cleaned_item_name = item_name.toLowerCase(Locale.ROOT).replaceAll("\\s+", "");
+			modifiedItemNameMap.put(cleaned_item_name, id);
 		}
-		if (itemIdMap.size() == itemNameMap.size())
+		if (ids.size() == itemNameMap.size())
 		{
 			log.debug("Successfully prepared storableItemNameMap");
 		}
@@ -120,7 +146,7 @@ public class StorageLocations
 
 	public static boolean isItemStorable(int id)
 	{
-		return itemIdMap.containsKey(id);
+		return itemIdMap.containsKey(id) || !StashItem.getUnits(id).isEmpty();
 	}
 
 	/**
@@ -139,6 +165,39 @@ public class StorageLocations
 	public static StorableItem getStorableItem(Integer id)
 	{
 		return itemIdMap.get(id);
+	}
+
+	/**
+	 * @return every location entry for an item, in registration order; empty if the item isn't storable
+	 */
+	public static List<StorableItem> getStorableItems(int id)
+	{
+		return Collections.unmodifiableList(itemLocationsMap.getOrDefault(id, Collections.emptyList()));
+	}
+
+	/**
+	 * @return whether any location marks the item as best in slot
+	 */
+	public static boolean isBestInSlot(int id)
+	{
+		return getStorableItems(id).stream().anyMatch(StorableItem::isBis);
+	}
+
+	/**
+	 * @return whether the item's location is one of the POH costume room storages
+	 */
+	public static boolean isCostumeRoomItem(StorableItem item)
+	{
+		Class<?> location = item instanceof Enum ? ((Enum<?>) item).getDeclaringClass() : item.getClass();
+		return COSTUME_ROOM_LOCATIONS.contains(location);
+	}
+
+	/**
+	 * @return whether any POH costume room storage takes the item
+	 */
+	public static boolean canGoInCostumeRoom(int id)
+	{
+		return getStorableItems(id).stream().anyMatch(StorageLocations::isCostumeRoomItem);
 	}
 
 	public static String getStorableItemName(Integer id)

@@ -28,7 +28,12 @@
 
 package com.wastedbankspace;
 
+import com.wastedbankspace.banktag.WastedBankTag;
+import com.wastedbankspace.model.stash.StashIconMode;
+import com.wastedbankspace.model.stash.StashUnitFilter;
+import com.wastedbankspace.ui.overlay.HouseIcon;
 import com.wastedbankspace.ui.overlay.OverlayImage;
+import com.wastedbankspace.ui.overlay.StashIcon;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -66,6 +71,14 @@ public interface WastedBankSpaceConfig extends Config
 	/* Filtering and Blacklist Flags */
 	String FILTER_ENABLED_CHECK_KEY = "filterEnabledCheck";
 	String BIS_FILTER_ENABLED_CHECK_KEY = "bisFilterEnabledCheck";
+
+	/* Bank Interface Keys */
+	String BANK_TAG_TAB_KEY = "bankTagTab";
+	String BANK_TAG_PLACEHOLDERS_KEY = "bankTagPlaceholders";
+
+	/* STASH Unit Keys */
+	String STASH_UNITS_KEY = "stashUnits";
+	String STASH_UNIT_FILTER_KEY = "stashUnitFilter";
 
 	static Set<String> getStorageLocationKeys()
 	{
@@ -113,6 +126,183 @@ public interface WastedBankSpaceConfig extends Config
 		position = 2
 	)
 	String bankInterfaceConfig = "bankInterfaceConfig";
+
+	@ConfigSection(
+		name = "Inventory & Equipment",
+		description = "Mark storable items outside the bank",
+		position = 3
+	)
+	String inventoryEquipmentConfig = "inventoryEquipmentConfig";
+
+	@ConfigItem(
+		keyName = "markInventoryItems",
+		name = "Mark Inventory Items",
+		description = "Show the overlay image and storage location tooltip on storable items in your inventory."
+			+ " While off, inventory items get no house or STASH icons either.",
+		position = 0,
+		section = inventoryEquipmentConfig
+	)
+	default boolean markInventoryItems()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "markEquippedItems",
+		name = "Mark Equipped Items",
+		description = "Show the overlay image and storage location tooltip on storable items in the worn equipment tab."
+			+ " While off, worn items get no house or STASH icons either.",
+		position = 1,
+		section = inventoryEquipmentConfig
+	)
+	default boolean markEquippedItems()
+	{
+		return false;
+	}
+
+	@ConfigSection(
+		name = "Already In House",
+		description = "Mark flagged items you already have stored in your POH costume room."
+			+ " Open any costume room storage in your house to update what's stored.",
+		position = 4
+	)
+	String alreadyInHouseConfig = "alreadyInHouseConfig";
+
+	@ConfigItem(
+		keyName = "houseIconInBank",
+		name = "House Icon in Bank",
+		description = "Show a house icon on flagged bank items you already have stored in your POH costume room"
+			+ " (treasure chest, armour case, magic wardrobe, cape rack, toy box, fancy dress box)",
+		position = 0,
+		section = alreadyInHouseConfig
+	)
+	default boolean houseIconInBank()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "houseIconInInventory",
+		name = "House Icon in Inventory",
+		description = "Show a house icon on flagged inventory and worn equipment items you already have stored in your"
+			+ " POH costume room. Needs Mark Inventory Items or Mark Equipped Items on.",
+		position = 1,
+		section = alreadyInHouseConfig
+	)
+	default boolean houseIconInInventory()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "houseIcon",
+		name = "House Icon",
+		description = "Icon shown on items already stored in your POH",
+		position = 2,
+		section = alreadyInHouseConfig
+	)
+	default HouseIcon houseIcon()
+	{
+		return HouseIcon.TELEPORT_SPELL;
+	}
+
+	@ConfigItem(
+		keyName = "houseIconReplacesMarker",
+		name = "Replace Marker With House Icon",
+		description = "For items already stored in your POH, show only the house icon, in the bottom-right where the"
+			+ " overlay image normally goes, instead of both icons",
+		position = 3,
+		section = alreadyInHouseConfig
+	)
+	default boolean houseIconReplacesMarker()
+	{
+		return false;
+	}
+
+	@ConfigSection(
+		name = "STASH Units",
+		description = "Mark items that can be stored in a STASH unit, the storage for emote clue items."
+			+ " Each unit takes the full set of items its clue asks for.",
+		position = 5
+	)
+	String stashUnitsConfig = "stashUnitsConfig";
+
+	@ConfigItem(
+		keyName = STASH_UNITS_KEY,
+		name = "Mark STASH Unit Items",
+		description = "Flag items that can be stored in a STASH unit, and show a STASH icon on them",
+		position = 0,
+		section = stashUnitsConfig
+	)
+	default boolean stashUnits()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = STASH_UNIT_FILTER_KEY,
+		name = "STASH Units",
+		description = "Only built units: only flag items for STASH units you've built."
+			+ " All units: flag items for every STASH unit.",
+		position = 1,
+		section = stashUnitsConfig
+	)
+	default StashUnitFilter stashUnitFilter()
+	{
+		return StashUnitFilter.BUILT;
+	}
+
+	@ConfigItem(
+		keyName = "stashIconInBank",
+		name = "STASH Icon in Bank",
+		description = "Show a STASH icon on flagged bank items that are already stashed",
+		position = 2,
+		section = stashUnitsConfig
+	)
+	default boolean stashIconInBank()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "stashIconInInventory",
+		name = "STASH Icon in Inventory",
+		description = "Show a STASH icon on flagged inventory and worn equipment items that are already stashed."
+			+ " Needs Mark Inventory Items or Mark Equipped Items on.",
+		position = 3,
+		section = stashUnitsConfig
+	)
+	default boolean stashIconInInventory()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "stashIcon",
+		name = "STASH Icon",
+		description = "Icon shown on items that are already stashed."
+			+ " Open the STASH chart in your POH to update which units are filled.",
+		position = 4,
+		section = stashUnitsConfig
+	)
+	default StashIcon stashIcon()
+	{
+		return StashIcon.CLUE_SCROLL;
+	}
+
+	@ConfigItem(
+		keyName = "stashIconMode",
+		name = "Show STASH Icon When",
+		description = "In at least one unit: the item is in any of the STASH units that take it."
+			+ " In every unit: all of those STASH units are filled."
+			+ " Only the units chosen under STASH Units count.",
+		position = 5,
+		section = stashUnitsConfig
+	)
+	default StashIconMode stashIconMode()
+	{
+		return StashIconMode.ANY_UNIT;
+	}
 
 	@ConfigItem(keyName = FILTER_ENABLED_CHECK_KEY,
 		name = "Enable Filtering",
@@ -396,6 +586,43 @@ public interface WastedBankSpaceConfig extends Config
 	default OverlayImage overlayImage()
 	{
 		return OverlayImage.DEFAULT;
+	}
+
+	@ConfigItem(
+		keyName = BANK_TAG_TAB_KEY,
+		name = "Wasted Bank Tag Tab",
+		description = "Adds a '" + WastedBankTag.TAG_NAME + "' bank tag tab showing every flagged item, using the overlay image as its icon."
+			+ " Also searchable with tag:" + WastedBankTag.TAG_NAME + ". Requires the Bank Tags plugin.",
+		position = 1,
+		section = bankInterfaceConfig
+	)
+	default boolean bankTagTab()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "markPlaceholders",
+		name = "Mark Placeholders",
+		description = "Also show the overlay image and house icon on bank placeholders of storable items",
+		position = 2,
+		section = bankInterfaceConfig
+	)
+	default boolean markPlaceholders()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = BANK_TAG_PLACEHOLDERS_KEY,
+		name = "Show Placeholders in Wasted Tab",
+		description = "Include bank placeholders of storable items in the '" + WastedBankTag.TAG_NAME + "' bank tag tab",
+		position = 3,
+		section = bankInterfaceConfig
+	)
+	default boolean bankTagPlaceholders()
+	{
+		return true;
 	}
 }
 
