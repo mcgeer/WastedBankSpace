@@ -29,7 +29,6 @@
 package com.wastedbankspace.ui;
 
 import com.wastedbankspace.WastedBankSpaceConfig;
-import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +54,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -64,17 +64,20 @@ public class WastedBankSpacePanel extends PluginPanel
 	private final JTextArea filtersEditor;
 	private final JLabel numberOfItemsText;
 	private final JList<String> data;
-	private List<StorableItem> items;
+	private List<Integer> items;
+	private final Function<Integer, String> locationText;
 	private Document filterDoc;
 	private final Consumer<String> filterUiCallback;
 
 	public WastedBankSpacePanel(Client client, TooltipManager tooltipManager, WastedBankSpaceConfig config,
 								ItemManager itemManager, Consumer<String> filterUi,
+								Function<Integer, String> locationText,
 								ScheduledExecutorService scheduledExecutorService)
 	{
 		super();
 		this.config = config;
 		this.filterUiCallback = filterUi;
+		this.locationText = locationText;
 
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setLayout(new GridBagLayout());
@@ -131,7 +134,7 @@ public class WastedBankSpacePanel extends PluginPanel
 				int index = locationToIndex(me.getPoint());
 				if (index > -1 && items != null)
 				{
-					return items.get(index).getLocation();
+					return locationText.apply(items.get(index));
 				}
 				return null;
 			}
@@ -171,16 +174,20 @@ public class WastedBankSpacePanel extends PluginPanel
 	public void setWastedBankSpaceItems(Set<Integer> item_ids)
 	{
 		log.debug("setWastedBankSpaceItems() called with items: {}", item_ids);
-		// use StorageLocations.getItemIdMap() to get an Int/StorableItem list and use items set for all keys to get values
 		log.debug("in setWastedBankSpaceItems, provided item_ids: {}", item_ids);
 
-		// assign to a previously-null this.items.
-		this.items = item_ids.stream()
-			.map(StorageLocations.getItemIdMap()::get)
-			.collect(Collectors.toList());
+		// Build the ids and the names shown in one pass, so a row always maps back to its own item
+		List<Integer> ids = new ArrayList<>(item_ids.size());
+		Vector<String> names = new Vector<>(item_ids.size());
+		for (int itemId : item_ids)
+		{
+			ids.add(itemId);
+			names.add(StorageLocations.getStorableItemName(itemId));
+		}
+		this.items = ids;
 		// Update number of items that can be moved
 		numberOfItemsText.setText("Number of Items Wasting Space: " + this.items.size());
-		data.setListData(new Vector<>(StorageLocations.itemIdsToString(item_ids)));
+		data.setListData(names);
 		this.updateUI();
 	}
 
