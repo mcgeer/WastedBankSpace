@@ -52,6 +52,18 @@ public class StorageLocations
 	private static final Map<Integer, StorableItem> itemIdMap = new HashMap<>();
 
 	/**
+	 *	itemLocationsMap: Every location entry for an item ID, in registration order, since some items can be
+	 *	stored in more than one location
+	 */
+	private static final Map<Integer, List<StorableItem>> itemLocationsMap = new HashMap<>();
+
+	/**
+	 * The POH costume room storages, whose contents the game reports together in the POH_COSTUMES container
+	 */
+	private static final Set<Class<?>> COSTUME_ROOM_LOCATIONS = Set.of(
+		ArmourCase.class, CapeRack.class, FancyDressBox.class, MagicWardrobe.class, ToyBox.class, TreasureChest.class);
+
+	/**
 	 *	modifiedItemNameMap: Maps item name to item ID after cleaning name string.
 	 *	Note: Use TreeMap instead of hashmap so that we can use string case-insensitive comparison
 	 *		in order to access values
@@ -91,6 +103,7 @@ public class StorageLocations
 		for (E item : enumClass.getEnumConstants())
 		{
 			itemIdMap.put(item.getItemID(), item);
+			itemLocationsMap.computeIfAbsent(item.getItemID(), id -> new ArrayList<>()).add(item);
 		}
 		log.debug("Registered items from {}", enumClass.getSimpleName());
 	}
@@ -105,7 +118,7 @@ public class StorageLocations
 			String item_name = itemManager.getItemComposition(item.getItemID()).getName();
 			itemNameMap.put(item.getItemID(), item_name);
 			// Standardize name's to lowercase and remove spaces for case-insensitive comparison
-			String cleaned_item_name = item_name.toLowerCase().replaceAll("\\s+", "");
+			String cleaned_item_name = item_name.toLowerCase(Locale.ROOT).replaceAll("\\s+", "");
 			modifiedItemNameMap.put(cleaned_item_name, item.getItemID());
 		}
 		if (itemIdMap.size() == itemNameMap.size())
@@ -139,6 +152,31 @@ public class StorageLocations
 	public static StorableItem getStorableItem(Integer id)
 	{
 		return itemIdMap.get(id);
+	}
+
+	/**
+	 * @return every location entry for an item, in registration order; empty if the item isn't storable
+	 */
+	public static List<StorableItem> getStorableItems(int id)
+	{
+		return Collections.unmodifiableList(itemLocationsMap.getOrDefault(id, Collections.emptyList()));
+	}
+
+	/**
+	 * @return whether any location marks the item as best in slot
+	 */
+	public static boolean isBestInSlot(int id)
+	{
+		return getStorableItems(id).stream().anyMatch(StorableItem::isBis);
+	}
+
+	/**
+	 * @return whether the item's location is one of the POH costume room storages
+	 */
+	public static boolean isCostumeRoomItem(StorableItem item)
+	{
+		Class<?> location = item instanceof Enum ? ((Enum<?>) item).getDeclaringClass() : item.getClass();
+		return COSTUME_ROOM_LOCATIONS.contains(location);
 	}
 
 	public static String getStorableItemName(Integer id)
