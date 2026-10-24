@@ -65,7 +65,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import static com.wastedbankspace.model.StorageLocations.isItemStorable;
 
@@ -306,17 +306,27 @@ public class WastedBankSpacePlugin extends Plugin
 		populateStorageItemIds(TreasureChest.class, WastedBankSpaceConfig.CLUE_ITEM_CHECK_KEY, false);
 
 		// Initialize the enabled item values
+		recalculateEnabledItems();
+	}
+
+	/**
+	 * Recalculates enabledItems from the enabled storage locations, minus ignored items and, while
+	 * "Never Filter BIS" is on, anything any location marks as best in slot
+	 */
+	private void recalculateEnabledItems()
+	{
+		enabledItems.clear();
+		boolean bisFilter = config.bisFilterEnabledCheck();
 		for (StorageLocationEnabler sle : storageLocationEnablers)
 		{
 			for (StorableItem item : sle.GetStorableItemsIfEnabled())
 			{
-				if (ignoredItemIds.contains(item.getItemID())
-					|| (item.isBis() && config.bisFilterEnabledCheck())
-				)
+				int itemId = item.getItemID();
+				if (ignoredItemIds.contains(itemId) || (bisFilter && StorageLocations.isBestInSlot(itemId)))
 				{
 					continue;
 				}
-				enabledItems.add(item.getItemID());
+				enabledItems.add(itemId);
 			}
 		}
 	}
@@ -541,26 +551,27 @@ public class WastedBankSpacePlugin extends Plugin
 
 				// Check if is only digits, i.e. an itemId
 				if (cleanedIgnoredItem.matches("^\\d+$")) {
-					ignoredItemIds.add(Integer.parseInt(ignoredItem));
+					try {
+						ignoredItemIds.add(Integer.parseInt(cleanedIgnoredItem));
+					}
+					catch (NumberFormatException e) {
+						log.debug("Ignoring item id out of range: {}", cleanedIgnoredItem);
+					}
 				}
 				// Check if cleanedIgnoredItem has a corresponding itemId in the modifiedItemNameMap
 				else {
 					if(cleanedIgnoredItem.contains("*")) {
 						/* Process Wild Card Ignores */
-						cleanedIgnoredItem = cleanedIgnoredItem.replaceAll("\\(", "\\\\(")
-								.replaceAll("\\)", "\\\\)")
-								.replaceAll("\\*","(.*)");
-						try {
-							/* Test with Item with brackets in name (*) like watering can(7) */
-							Pattern p = Pattern.compile(cleanedIgnoredItem, Pattern.CASE_INSENSITIVE);
-							/* Check all items against the wildcard regex. */
-							StorageLocations.getModifiedItemNameMap().entrySet().stream()
-									.filter(e -> p.matcher(e.getKey()).matches())
-									.forEach(e -> ignoredItemIds.add(e.getValue()));
-						}
-						catch(PatternSyntaxException e) {
-							log.debug("Invalid Pattern {}", ignoredItem);
-						}
+						// Quote everything except the wildcards, so names with regex characters still match literally.
+						// Runs of "*" collapse to one: chained ".*" patterns backtrack badly over a long name list.
+						String wildcardPattern = Arrays.stream(cleanedIgnoredItem.replaceAll("[*]+", "*").split("\\*", -1))
+								.map(Pattern::quote)
+								.collect(Collectors.joining(".*"));
+						Pattern p = Pattern.compile(wildcardPattern, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+						/* Check all items against the wildcard regex. */
+						StorageLocations.getModifiedItemNameMap().entrySet().stream()
+								.filter(e -> p.matcher(e.getKey()).matches())
+								.forEach(e -> ignoredItemIds.add(e.getValue()));
 					}
 					else {
 						/* Do we have a matching name? */
@@ -573,19 +584,7 @@ public class WastedBankSpacePlugin extends Plugin
 			}
 		}
 
-		// Recalculate enabled items
-		enabledItems.clear();
-		for (StorageLocationEnabler sle : storageLocationEnablers)
-		{
-			for (StorableItem item : sle.GetStorableItemsIfEnabled())
-			{
-				if (!ignoredItemIds.contains(item.getItemID()) &&
-					(!item.isBis() || !config.bisFilterEnabledCheck()))
-				{
-					enabledItems.add(item.getItemID());
-				}
-			}
-		}
+		recalculateEnabledItems();
 		updateWastedBankSpace();
 	}
 }
