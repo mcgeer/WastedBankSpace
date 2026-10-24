@@ -114,6 +114,37 @@ public interface WastedBankSpaceConfig extends Config
 	)
 	String bankInterfaceConfig = "bankInterfaceConfig";
 
+	@ConfigSection(
+		name = "Inventory & Equipment",
+		description = "Mark storable items outside the bank",
+		position = 3
+	)
+	String inventoryEquipmentConfig = "inventoryEquipmentConfig";
+
+	@ConfigItem(
+		keyName = "markInventoryItems",
+		name = "Mark Inventory Items",
+		description = "Show the overlay image and storage location tooltip on storable items in your inventory",
+		position = 0,
+		section = inventoryEquipmentConfig
+	)
+	default boolean markInventoryItems()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "markEquippedItems",
+		name = "Mark Equipped Items",
+		description = "Show the overlay image and storage location tooltip on storable items in the worn equipment tab",
+		position = 1,
+		section = inventoryEquipmentConfig
+	)
+	default boolean markEquippedItems()
+	{
+		return false;
+	}
+
 	@ConfigItem(keyName = FILTER_ENABLED_CHECK_KEY,
 		name = "Enable Filtering",
 		description = "Enable Item Filters and Blacklist",
