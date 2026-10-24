@@ -30,7 +30,7 @@ package com.wastedbankspace.model.locations;
 
 import com.wastedbankspace.model.StorableItem;
 import lombok.Getter;
-import net.runelite.api.ItemID;
+import net.runelite.api.gameval.ItemID;
 
 @Getter
 public enum MysteriousStranger implements StorableItem {
