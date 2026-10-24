@@ -29,7 +29,6 @@
 package com.wastedbankspace.ui;
 
 import com.wastedbankspace.WastedBankSpaceConfig;
-import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocations;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +54,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -63,18 +63,24 @@ public class WastedBankSpacePanel extends PluginPanel
 	private final WastedBankSpaceConfig config;
 	private final JTextArea filtersEditor;
 	private final JLabel numberOfItemsText;
+	/** Under the show button: why it couldn't show the items, or nothing */
+	private final JLabel showWastedHint;
 	private final JList<String> data;
-	private List<StorableItem> items;
+	private List<Integer> items;
+	private final Function<Integer, String> locationText;
 	private Document filterDoc;
 	private final Consumer<String> filterUiCallback;
 
 	public WastedBankSpacePanel(Client client, TooltipManager tooltipManager, WastedBankSpaceConfig config,
 								ItemManager itemManager, Consumer<String> filterUi,
-								ScheduledExecutorService scheduledExecutorService)
+								Function<Integer, String> locationText,
+								ScheduledExecutorService scheduledExecutorService,
+								Runnable showWastedItems)
 	{
 		super();
 		this.config = config;
 		this.filterUiCallback = filterUi;
+		this.locationText = locationText;
 
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setLayout(new GridBagLayout());
@@ -106,8 +112,9 @@ public class WastedBankSpacePanel extends PluginPanel
 			public void focusLost(FocusEvent e)
 			{
 				this.updateFilterFuture.cancel(false);
+				// The executor only waits; the filter text is read on the Swing thread
 				this.updateFilterFuture = scheduledExecutorService.schedule(
-					WastedBankSpacePanel.this::updatePluginFilter,
+					() -> SwingUtilities.invokeLater(WastedBankSpacePanel.this::updatePluginFilter),
 					250,
 					TimeUnit.MILLISECONDS);
 			}
@@ -131,7 +138,7 @@ public class WastedBankSpacePanel extends PluginPanel
 				int index = locationToIndex(me.getPoint());
 				if (index > -1 && items != null)
 				{
-					return items.get(index).getLocation();
+					return locationText.apply(items.get(index));
 				}
 				return null;
 			}
@@ -147,7 +154,7 @@ public class WastedBankSpacePanel extends PluginPanel
 			"1: Talk to the Wise Old Man",
 			tipTab + "to remove Junk Quest Items",
 			"2: Murky Matt combines ",
-			tipTab + "jewelery charges",
+			tipTab + "jewelry charges",
 			"3: Make item sets at the ge",
 			"3.1: PHat and Mask can be combined",
 			"4: Clue items in PoH (future update)",
@@ -156,6 +163,17 @@ public class WastedBankSpacePanel extends PluginPanel
 		};
 
 
+		/* SHOW WASTED ITEMS IN THE BANK */
+		JButton showWastedButton = new JButton("Show Wasted Items in Bank");
+		showWastedButton.setToolTipText("Shows only the items wasting space in your open bank,"
+			+ " like a tag tab would. Uses the wasted bank tag.");
+		showWastedButton.addActionListener(e -> showWastedItems.run());
+		showWastedHint = new JLabel();
+
+		add(showWastedButton, c);
+		c.gridy++;
+		add(showWastedHint, c);
+		c.gridy++;
 		add(numberOfItemsText, c);
 		c.gridy++;
 		add(data, c);
@@ -171,17 +189,30 @@ public class WastedBankSpacePanel extends PluginPanel
 	public void setWastedBankSpaceItems(Set<Integer> item_ids)
 	{
 		log.debug("setWastedBankSpaceItems() called with items: {}", item_ids);
-		// use StorageLocations.getItemIdMap() to get an Int/StorableItem list and use items set for all keys to get values
 		log.debug("in setWastedBankSpaceItems, provided item_ids: {}", item_ids);
 
-		// assign to a previously-null this.items.
-		this.items = item_ids.stream()
-			.map(StorageLocations.getItemIdMap()::get)
-			.collect(Collectors.toList());
+		// Build the ids and the names shown in one pass, so a row always maps back to its own item
+		List<Integer> ids = new ArrayList<>(item_ids.size());
+		Vector<String> names = new Vector<>(item_ids.size());
+		for (int itemId : item_ids)
+		{
+			ids.add(itemId);
+			names.add(StorageLocations.getStorableItemName(itemId));
+		}
+		this.items = ids;
 		// Update number of items that can be moved
 		numberOfItemsText.setText("Number of Items Wasting Space: " + this.items.size());
-		data.setListData(new Vector<>(StorageLocations.itemIdsToString(item_ids)));
+		data.setListData(names);
 		this.updateUI();
+	}
+
+	/**
+	 * Says why the show button couldn't show the wasted items, e.g. the bank isn't open; empty once it could.
+	 */
+	public void setShowWastedHint(String hint)
+	{
+		// As HTML so a long hint wraps at whole words instead of being cut off
+		showWastedHint.setText(hint.isEmpty() ? "" : "<html>" + hint + "</html>");
 	}
 
 	public void updatePluginFilter()

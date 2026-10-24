@@ -29,29 +29,45 @@
 package com.wastedbankspace;
 
 import com.google.inject.Provides;
+import com.wastedbankspace.banktag.WastedBankTag;
 import com.wastedbankspace.model.StorableItem;
 import com.wastedbankspace.model.StorageLocationEnabler;
 import com.wastedbankspace.model.StorageLocations;
+import com.wastedbankspace.poh.PohStorageTracker;
 import com.wastedbankspace.model.locations.*;
+import com.wastedbankspace.model.stash.StashIconMode;
+import com.wastedbankspace.model.stash.StashItem;
+import com.wastedbankspace.model.stash.StashUnit;
+import com.wastedbankspace.model.stash.StashUnitFilter;
+import com.wastedbankspace.stash.StashTracker;
 import com.wastedbankspace.ui.WastedBankSpacePanel;
 import com.wastedbankspace.ui.overlay.OverlayImage;
 import com.wastedbankspace.ui.overlay.StorageItemOverlay;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.events.ChatMessage;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.MenuOpened;
-import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.events.ScriptPreFired;
+import net.runelite.api.events.VarbitChanged;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetUtil;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.events.RuneScapeProfileChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.banktags.BankTagsPlugin;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -65,7 +81,8 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.wastedbankspace.model.StorageLocations.isItemStorable;
 
@@ -74,6 +91,7 @@ import static com.wastedbankspace.model.StorageLocations.isItemStorable;
 @PluginDescriptor(
 	name = "Wasted Bank Space"
 )
+@PluginDependency(BankTagsPlugin.class)
 public class WastedBankSpacePlugin extends Plugin
 {
 	@Inject
@@ -95,6 +113,15 @@ public class WastedBankSpacePlugin extends Plugin
 	private StorageItemOverlay storageItemOverlay;
 
 	@Inject
+	private WastedBankTag bankTag;
+
+	@Inject
+	private PohStorageTracker pohStorage;
+
+	@Inject
+	private StashTracker stashTracker;
+
+	@Inject
 	private TooltipManager tooltipManager;
 
 	@Inject
@@ -113,6 +140,9 @@ public class WastedBankSpacePlugin extends Plugin
 		return configManager.getConfig(WastedBankSpaceConfig.class);
 	}
 
+	/** Starts the tooltip line naming the filled STASH units an item is already in */
+	public static final String ALREADY_STASHED = "Already stashed @ ";
+
 	private static final BufferedImage ICON = ImageUtil.loadImageResource(WastedBankSpacePlugin.class, "/overlaySmoll.png");
 
 	private int bankContentsHash = 0;
@@ -120,7 +150,6 @@ public class WastedBankSpacePlugin extends Plugin
 	private NavigationButton navButton;
 	private WastedBankSpacePanel panel;
 
-	private boolean isBankOpen = false;
 	private boolean bisFilterEnabled = false;
 
 	private static boolean prepared = false;
@@ -174,35 +203,49 @@ public class WastedBankSpacePlugin extends Plugin
 	private static final Set<Integer> bisItems = new HashSet<>();
 
 	/* The Below Sets are dynamic depending on config change (Panel for Ignore items),
-	 items present in bank, filtered, etc. */
+	 items present in bank, filtered, etc. The overlay reads them every frame on the client thread while the panel
+	 and the config panel change them from their own threads, so each is replaced whole, never modified, and
+	 the methods that rebuild them are synchronized. */
 
 	/**
 	 All Items ID's found in the players bank
 	 */
-	private final Set<Integer> itemsInBank = new HashSet<>();
+	private volatile Set<Integer> itemsInBank = Collections.emptySet();
 
 	/**
 	 *  Items populated from enabled storage types
 	 */
 	@Getter
-	private final Set<Integer> enabledItems = new HashSet<>();
+	private volatile Set<Integer> enabledItems = Collections.emptySet();
+
+	/**
+	 * Names of the enabled storage locations each item in enabledItems can go to, joined with " / ", by
+	 * item ID, for tooltips. The panel reads it from the Swing thread, so it is replaced whole, never modified.
+	 */
+	private volatile Map<Integer, String> enabledLocationText = Collections.emptyMap();
 
 	/**
 	 * Set of Item IDs which are Ignored regardless of being storable
 	 * 	This is Managed in the plugin's panel
 	 */
-	private final Set<Integer> ignoredItemIds = new HashSet<>();
+	private volatile Set<Integer> ignoredItemIds = Collections.emptySet();
 
 	/**
 	 * Items matching enabled items that are also present in bank. AKA the Items Wasting Space.
 	 * ID in itemsInBank AND enabledItems AND NOT ignoredItemIds
 	 */
-	private final Set<Integer> storableItemsInBank = new HashSet<>();
+	private Set<Integer> storableItemsInBank = Collections.emptySet();
 
 	@Override
 	protected void startUp() throws Exception
 	{
-		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager, this::processIgnoreListChanged, scheduledExecutorService);
+		panel = new WastedBankSpacePanel(client, tooltipManager, config, itemManager, this::processIgnoreListChanged,
+			this::getPanelLocationText, scheduledExecutorService, this::showWastedItemsInBank);
+		if (!itemsInBank.isEmpty())
+		{
+			// Turned back on: the bank hasn't changed, so fill the new panel from what was there
+			updateWastedBankSpace();
+		}
 		navButton = NavigationButton.builder()
 			.tooltip("Wasted Bank Space")
 			.priority(8)
@@ -212,6 +255,9 @@ public class WastedBankSpacePlugin extends Plugin
 		clientToolbar.addNavigation(navButton);
 
 		overlayManager.add(storageItemOverlay);
+		bankTag.startUp();
+		pohStorage.load();
+		stashTracker.load();
 
 		log.debug("Attempting to prepare WastedBankSpace upon startup.");
 		if (!prepared)
@@ -248,9 +294,16 @@ public class WastedBankSpacePlugin extends Plugin
 	{
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(storageItemOverlay);
+		bankTag.shutDown();
 
 		navButton = null;
 		panel = null;
+		// So the bank is read again, and the panel filled, when the plugin is turned back on
+		bankContentsHash = 0;
+		synchronized (this)
+		{
+			storableItemsInBank = Collections.emptySet();
+		}
 	}
 
 	/**
@@ -306,21 +359,169 @@ public class WastedBankSpacePlugin extends Plugin
 		populateStorageItemIds(TreasureChest.class, WastedBankSpaceConfig.CLUE_ITEM_CHECK_KEY, false);
 
 		// Initialize the enabled item values
+		recalculateEnabledItems();
+		bankTag.setItems(enabledItems);
+	}
+
+	/**
+	 * Recalculates enabledItems from the enabled storage locations, minus ignored items and, while
+	 * "Never Filter BIS" is on, anything any location marks as best in slot. Also records which enabled
+	 * locations each flagged item can go to, for tooltips.
+	 */
+	private synchronized void recalculateEnabledItems()
+	{
+		Set<Integer> enabledItems = new HashSet<>();
+		Map<Integer, Set<String>> locations = new HashMap<>();
+		boolean bisFilter = config.bisFilterEnabledCheck();
 		for (StorageLocationEnabler sle : storageLocationEnablers)
 		{
 			for (StorableItem item : sle.GetStorableItemsIfEnabled())
 			{
-				if (ignoredItemIds.contains(item.getItemID())
-					|| (item.isBis() && config.bisFilterEnabledCheck())
-				)
+				int itemId = item.getItemID();
+				if (ignoredItemIds.contains(itemId) || (bisFilter && StorageLocations.isBestInSlot(itemId)))
 				{
 					continue;
 				}
-				enabledItems.add(item.getItemID());
+				enabledItems.add(itemId);
+				locations.computeIfAbsent(itemId, id -> new LinkedHashSet<>()).add(item.getLocation());
 			}
 		}
+		// STASH units are named in tooltips from getStashUnits, since which ones are filled changes while playing
+		if (config.stashUnits())
+		{
+			for (StashItem item : StashItem.ALL)
+			{
+				int itemId = item.getItemID();
+				if (isCounted(item.getUnit()) && !ignoredItemIds.contains(itemId)
+					&& !(bisFilter && StorageLocations.isBestInSlot(itemId)))
+				{
+					enabledItems.add(itemId);
+				}
+			}
+		}
+		Map<Integer, String> text = new HashMap<>();
+		locations.forEach((itemId, names) -> text.put(itemId, String.join(" / ", names)));
+		enabledLocationText = Collections.unmodifiableMap(text);
+		this.enabledItems = Collections.unmodifiableSet(enabledItems);
 	}
 
+	/**
+	 * Names where an item can be stored, for tooltips.
+	 *
+	 * @param inHouse whether the item is already in the POH costume room. Then the costume room storages
+	 *                that take it are named, enabled or not, because that's where it is.
+	 * @return e.g. "Cape Rack", or "Cape Rack / Forestry Kit" when more than one enabled location takes it
+	 */
+	public String getStorageLocationText(int itemId, boolean inHouse)
+	{
+		if (inHouse)
+		{
+			String costumeRoom = joinLocations(StorageLocations.getStorableItems(itemId).stream()
+				.filter(StorageLocations::isCostumeRoomItem));
+			if (!costumeRoom.isEmpty())
+			{
+				return costumeRoom;
+			}
+		}
+		List<String> names = new ArrayList<>();
+		String enabled = enabledLocationText.get(itemId);
+		if (enabled != null)
+		{
+			names.add(enabled);
+		}
+		List<StashUnit> stashUnits = getStashUnits(itemId);
+		names.addAll(stashLocations(stashUnits, false));
+		if (!names.isEmpty())
+		{
+			return String.join(" / ", names);
+		}
+		if (!stashUnits.isEmpty())
+		{
+			// Every STASH unit that takes it is filled, which getStashTooltipLines says
+			return "";
+		}
+		return joinLocations(StorageLocations.getStorableItems(itemId).stream());
+	}
+
+	/**
+	 * Tooltip lines about STASH units, after the one from {@link #getStorageLocationText}: the units that are
+	 * already filled, and, for an item in the POH costume room, the units it could still go in.
+	 */
+	public List<String> getStashTooltipLines(int itemId, boolean inHouse)
+	{
+		List<StashUnit> stashUnits = getStashUnits(itemId);
+		List<String> lines = new ArrayList<>();
+		List<String> unfilled = stashLocations(stashUnits, false);
+		if (inHouse && !unfilled.isEmpty())
+		{
+			lines.add("Store @ " + String.join(" / ", unfilled));
+		}
+		List<String> filled = stashLocations(stashUnits, true);
+		if (!filled.isEmpty())
+		{
+			lines.add(ALREADY_STASHED + String.join(" / ", filled));
+		}
+		return lines;
+	}
+
+	/**
+	 * Panel tooltip: every location the item counts for, filled STASH units included
+	 */
+	private String getPanelLocationText(int itemId)
+	{
+		List<String> names = new ArrayList<>();
+		String text = getStorageLocationText(itemId, false);
+		if (!text.isEmpty())
+		{
+			names.add(text);
+		}
+		names.addAll(stashLocations(getStashUnits(itemId), true));
+		return String.join(" / ", names);
+	}
+
+	private List<String> stashLocations(List<StashUnit> units, boolean filled)
+	{
+		return units.stream()
+			.filter(unit -> stashTracker.isFilled(unit) == filled)
+			.map(StashUnit::getLocation)
+			.collect(Collectors.toList());
+	}
+
+	/**
+	 * @return the STASH units that take the item and count under the STASH Units setting, in unit order; empty
+	 * while STASH units are switched off
+	 */
+	public List<StashUnit> getStashUnits(int itemId)
+	{
+		if (!config.stashUnits())
+		{
+			return Collections.emptyList();
+		}
+		return StashItem.getUnits(itemId).stream().filter(this::isCounted).collect(Collectors.toList());
+	}
+
+	/**
+	 * @return whether the item these units take counts as stashed for the STASH icon: at least one of the units is
+	 * filled, or every one of them is, depending on the config
+	 */
+	public boolean isStashed(List<StashUnit> units)
+	{
+		if (config.stashIconMode() == StashIconMode.EVERY_UNIT)
+		{
+			return !units.isEmpty() && units.stream().allMatch(stashTracker::isFilled);
+		}
+		return units.stream().anyMatch(stashTracker::isFilled);
+	}
+
+	private boolean isCounted(StashUnit unit)
+	{
+		return config.stashUnitFilter() == StashUnitFilter.ALL || stashTracker.isBuilt(unit);
+	}
+
+	private static String joinLocations(Stream<StorableItem> items)
+	{
+		return items.map(StorableItem::getLocation).distinct().collect(Collectors.joining(" / "));
+	}
 
 	public OverlayImage getOverlayImage()
 	{
@@ -328,13 +529,62 @@ public class WastedBankSpacePlugin extends Plugin
 	}
 
 	@Subscribe
+	public void onRuneScapeProfileChanged(RuneScapeProfileChanged event)
+	{
+		pohStorage.load();
+		stashTracker.load();
+	}
+
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged event)
+	{
+		stashTracker.onGameStateChanged(event);
+	}
+
+	@Subscribe
+	public void onVarbitChanged(VarbitChanged event)
+	{
+		stashTracker.onVarbitChanged(event);
+	}
+
+	@Subscribe
+	public void onScriptPreFired(ScriptPreFired event)
+	{
+		stashTracker.onScriptPreFired(event);
+	}
+
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		stashTracker.onMenuOptionClicked(event);
+	}
+
+	@Subscribe
+	public void onChatMessage(ChatMessage event)
+	{
+		stashTracker.onChatMessage(event);
+	}
+
+	@Subscribe
+	public void onGameTick(GameTick event)
+	{
+		// Built units decide which STASH items are flagged under "Only built units"
+		if (stashTracker.onGameTick() && prepared && config.stashUnits()
+			&& config.stashUnitFilter() == StashUnitFilter.BUILT)
+		{
+			recalculateEnabledItems();
+			updateWastedBankSpace();
+		}
+	}
+
+	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged event)
 	{
-		if (event.getContainerId() == InventoryID.BANK.getId())
-		{
-			isBankOpen = true;
-			log.debug("isBankOpen set to true");
+		pohStorage.onItemContainerChanged(event);
+		stashTracker.onItemContainerChanged(event);
 
+		if (event.getContainerId() == InventoryID.BANK)
+		{
 			// check if bank contents have changed by utilizing hashcode of items array
 			Item[] items = event.getItemContainer().getItems();
 			int hash = Arrays.hashCode(items);
@@ -346,11 +596,6 @@ public class WastedBankSpacePlugin extends Plugin
 			}
 			bankContentsHash = hash;
 			updateItemsFromBankContainer(event.getItemContainer());
-		}
-		else
-		{
-			isBankOpen = false;
-			log.debug("isBankOpen set to false");
 		}
 	}
 
@@ -368,24 +613,16 @@ public class WastedBankSpacePlugin extends Plugin
 		// only attempt to run updating of enabledItems hashset if event key is one of the keys that affect enabledItems
 		if (WastedBankSpaceConfig.getStorageLocationKeys().contains(eventKey))
 		{
-			boolean result;
-			if ((event.getNewValue() == null) || event.getNewValue().equalsIgnoreCase("false"))
-			{
-				// then config group was disabled, so remove them from the enabledItems set
-				result = enabledItems.removeAll(allStorableItemsByCategory.getOrDefault(eventKey, new HashSet<>()));
-			}
-			else
-			{
-				result = enabledItems.addAll(allStorableItemsByCategory.getOrDefault(eventKey, new HashSet<>()));
-			}
-
-			if (!result)
-			{
-				// enabledItems failed to update from the call above, indicating an issue with
-				log.debug("onConfigChanged(): Attempted update of enabledItems hashset failed.\nEvent: {}\n", event);
-			}
-			updateWastedBankSpace();
+			// Recalculates the enabled items from every enabled location, so an item another enabled location
+			// also takes stays flagged when this one is switched off
 			processIgnoreListChanged(panel.getFilterdItemsText());
+		} else if (eventKey.equals(WastedBankSpaceConfig.STASH_UNITS_KEY)
+			|| eventKey.equals(WastedBankSpaceConfig.STASH_UNIT_FILTER_KEY)) {
+			recalculateEnabledItems();
+			updateWastedBankSpace();
+		} else if (eventKey.equals(WastedBankSpaceConfig.BANK_TAG_TAB_KEY)
+			|| eventKey.equals(WastedBankSpaceConfig.BANK_TAG_PLACEHOLDERS_KEY)) {
+			clientThread.invokeLater(bankTag::sync);
 		} else if(eventKey.equals(WastedBankSpaceConfig.FILTER_ENABLED_CHECK_KEY) || eventKey.equals(WastedBankSpaceConfig.BIS_FILTER_ENABLED_CHECK_KEY)){
 			//Moderate jank to reforce filter and BIS check. TODO These should be separated into two functions
 			processIgnoreListChanged(panel.getFilterdItemsText());
@@ -399,7 +636,7 @@ public class WastedBankSpacePlugin extends Plugin
 	public void onMenuOpened(final MenuOpened event)
 	{
 		// TODO: refactor this
-		if (!client.isKeyPressed(KeyCode.KC_SHIFT) || !isBankOpen)
+		if (!client.isKeyPressed(KeyCode.KC_SHIFT) || !isBankOpen())
 		{
 			return;
 		}
@@ -411,13 +648,13 @@ public class WastedBankSpacePlugin extends Plugin
 			final MenuEntry entry = entries[i];
 			final Widget w = entry.getWidget();
 
-			if (w != null && (WidgetUtil.componentToInterface(w.getId()) == InterfaceID.BANK))
+			if (w != null && (WidgetUtil.componentToInterface(w.getId()) == InterfaceID.BANKMAIN))
 			{
 				final int itemId = w.getItemId();
 				final boolean flagged = !ignoredItemIds.contains(itemId);
 				if (isItemStorable(itemId))
 				{
-					final MenuEntry parent = client.createMenuEntry(i)
+					client.getMenu().createMenuEntry(i)
 						.setOption(flagged ? "Unflag Item" : "Flag Item")
 						.setTarget(entry.getTarget())
 						.setType(MenuAction.RUNELITE)
@@ -429,21 +666,66 @@ public class WastedBankSpacePlugin extends Plugin
 	}
 
 	/**
-	 * Toggles whether an item is ignored or not from list of items considered wasting space.
+	 * The panel's show button: shows the flagged items in the open bank through the wasted bank tag, or says in the
+	 * panel why it can't. Called on the Swing thread.
+	 */
+	private void showWastedItemsInBank()
+	{
+		clientThread.invoke(() ->
+		{
+			String hint;
+			if (!isBankOpen())
+			{
+				hint = "Open your bank first";
+			}
+			else if (!bankTag.open())
+			{
+				hint = "Turn on Wasted Bank Tag in the settings";
+			}
+			else
+			{
+				hint = "";
+			}
+			WastedBankSpacePanel panel = this.panel;
+			if (panel != null)
+			{
+				SwingUtilities.invokeLater(() -> panel.setShowWastedHint(hint));
+			}
+		});
+	}
+
+	/**
+	 * Whether the bank's item list is showing. The bank's item container isn't enough: the game sends it once when
+	 * the bank opens and again on every change, not when it closes.
+	 */
+	private boolean isBankOpen()
+	{
+		Widget bankItems = client.getWidget(InterfaceID.Bankmain.ITEMS);
+		return bankItems != null && !bankItems.isHidden();
+	}
+
+	/**
+	 * Toggles whether an item is ignored or not from list of items considered wasting space. The panel's ignore
+	 * list is edited on the Swing thread, which then applies the whole list again.
 	 *
 	 * @param id Item Id for the item being toggled for ignore.
 	 */
 	private void toggleItemInIgnoreList(int id)
 	{
+		WastedBankSpacePanel panel = this.panel;
+		if (panel == null)
+		{
+			return;
+		}
+
+		String name = StorageLocations.getStorableItemName(id);
 		if (ignoredItemIds.contains(id))
 		{
-			ignoredItemIds.remove(id);
-			panel.removeFilteredItem(StorageLocations.getStorableItemName(id), id);
+			SwingUtilities.invokeLater(() -> panel.removeFilteredItem(name, id));
 		}
 		else
 		{
-			ignoredItemIds.add(id);
-			panel.addFilteredItem(StorageLocations.getStorableItemName(id));
+			SwingUtilities.invokeLater(() -> panel.addFilteredItem(name));
 		}
 	}
 
@@ -455,7 +737,7 @@ public class WastedBankSpacePlugin extends Plugin
 			return;
 		}
 
-		itemsInBank.clear();
+		Set<Integer> itemsInBank = new HashSet<>();
 		for (Item item : c.getItems())
 		{
 			if (item.getId() == -1)
@@ -474,6 +756,7 @@ public class WastedBankSpacePlugin extends Plugin
 			itemsInBank.add(itemId);
 		}
 
+		this.itemsInBank = Collections.unmodifiableSet(itemsInBank);
 		updateWastedBankSpace();
 	}
 
@@ -483,17 +766,18 @@ public class WastedBankSpacePlugin extends Plugin
 	 * Wasted Space = Bank Items Where Item is Storable in an enabled Storable Location AND Item is not Ignored by user
 	 * 	Wasted Space = (itemsInBank interset enabledItems) - ignoredItemIds
 	 */
-	private void updateWastedBankSpace()
+	private synchronized void updateWastedBankSpace()
 	{
 		log.debug("running updateWastedBankSpace, getting every item after regenerating the enabled item list");
+		bankTag.setItems(enabledItems);
 
 		// Recalculate storable items in the bank
-		Set<Integer> prevStorableItemsInBank = new HashSet<>(storableItemsInBank);
+		Set<Integer> prevStorableItemsInBank = storableItemsInBank;
 		log.debug("prevStorableItemsInBank: {}", prevStorableItemsInBank);
-		storableItemsInBank.clear();
-		storableItemsInBank.addAll(itemsInBank);
-		storableItemsInBank.retainAll(enabledItems);
-		storableItemsInBank.removeAll(ignoredItemIds);
+		Set<Integer> storable = new HashSet<>(itemsInBank);
+		storable.retainAll(enabledItems);
+		storable.removeAll(ignoredItemIds);
+		storableItemsInBank = Collections.unmodifiableSet(storable);
 		log.debug("new storableItemsInBank: {}", storableItemsInBank);
 
 		/* Update the panel UI only if there are changes to storable items in bank,
@@ -503,7 +787,12 @@ public class WastedBankSpacePlugin extends Plugin
 			log.debug("storableItemsInBank matched previous, not updating panel");
 			return;
 		}
-		SwingUtilities.invokeLater(() -> panel.setWastedBankSpaceItems(storableItemsInBank));
+		WastedBankSpacePanel panel = this.panel;
+		if (panel != null)
+		{
+			Set<Integer> shown = storableItemsInBank;
+			SwingUtilities.invokeLater(() -> panel.setWastedBankSpaceItems(shown));
+		}
 	}
 
 	/**
@@ -516,7 +805,7 @@ public class WastedBankSpacePlugin extends Plugin
 	 *               Example 2: 12345 will try and add Item ID 12345 to the set of ignorable items if it exists
 	 *               Example 3: *Mystic robe top* can be used to match ALL Mystic robe top variants
 	 */
-	private void processIgnoreListChanged(String filter)
+	private synchronized void processIgnoreListChanged(String filter)
 	{
 		log.debug("Starting processIgnoreListChanged() with filter: {}", filter);
 		log.debug("Contents of StorageLocations.getItemNameMap(): {}", StorageLocations.getModifiedItemNameMap());
@@ -524,7 +813,7 @@ public class WastedBankSpacePlugin extends Plugin
 		List<String> ignoredItemList = Text.fromCSV(filter);
 		log.debug("processIgnoreListChanged() - ignoredItemList: {}", ignoredItemList);
 
-		ignoredItemIds.clear();
+		Set<Integer> ignoredItemIds = new HashSet<>();
 		if(config.filterEnabledCheck()) {
 			/* 1. Loop each comma separated ignore Item
 			 * 2. If a number, add the item ID directly
@@ -541,26 +830,27 @@ public class WastedBankSpacePlugin extends Plugin
 
 				// Check if is only digits, i.e. an itemId
 				if (cleanedIgnoredItem.matches("^\\d+$")) {
-					ignoredItemIds.add(Integer.parseInt(ignoredItem));
+					try {
+						ignoredItemIds.add(Integer.parseInt(cleanedIgnoredItem));
+					}
+					catch (NumberFormatException e) {
+						log.debug("Ignoring item id out of range: {}", cleanedIgnoredItem);
+					}
 				}
 				// Check if cleanedIgnoredItem has a corresponding itemId in the modifiedItemNameMap
 				else {
 					if(cleanedIgnoredItem.contains("*")) {
 						/* Process Wild Card Ignores */
-						cleanedIgnoredItem = cleanedIgnoredItem.replaceAll("\\(", "\\\\(")
-								.replaceAll("\\)", "\\\\)")
-								.replaceAll("\\*","(.*)");
-						try {
-							/* Test with Item with brackets in name (*) like watering can(7) */
-							Pattern p = Pattern.compile(cleanedIgnoredItem, Pattern.CASE_INSENSITIVE);
-							/* Check all items against the wildcard regex. */
-							StorageLocations.getModifiedItemNameMap().entrySet().stream()
-									.filter(e -> p.matcher(e.getKey()).matches())
-									.forEach(e -> ignoredItemIds.add(e.getValue()));
-						}
-						catch(PatternSyntaxException e) {
-							log.debug("Invalid Pattern {}", ignoredItem);
-						}
+						// Quote everything except the wildcards, so names with regex characters still match literally.
+						// Runs of "*" collapse to one: chained ".*" patterns backtrack badly over a long name list.
+						String wildcardPattern = Arrays.stream(cleanedIgnoredItem.replaceAll("[*]+", "*").split("\\*", -1))
+								.map(Pattern::quote)
+								.collect(Collectors.joining(".*"));
+						Pattern p = Pattern.compile(wildcardPattern, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+						/* Check all items against the wildcard regex. */
+						StorageLocations.getModifiedItemNameMap().entrySet().stream()
+								.filter(e -> p.matcher(e.getKey()).matches())
+								.forEach(e -> ignoredItemIds.add(e.getValue()));
 					}
 					else {
 						/* Do we have a matching name? */
@@ -573,19 +863,8 @@ public class WastedBankSpacePlugin extends Plugin
 			}
 		}
 
-		// Recalculate enabled items
-		enabledItems.clear();
-		for (StorageLocationEnabler sle : storageLocationEnablers)
-		{
-			for (StorableItem item : sle.GetStorableItemsIfEnabled())
-			{
-				if (!ignoredItemIds.contains(item.getItemID()) &&
-					(!item.isBis() || !config.bisFilterEnabledCheck()))
-				{
-					enabledItems.add(item.getItemID());
-				}
-			}
-		}
+		this.ignoredItemIds = Collections.unmodifiableSet(ignoredItemIds);
+		recalculateEnabledItems();
 		updateWastedBankSpace();
 	}
 }

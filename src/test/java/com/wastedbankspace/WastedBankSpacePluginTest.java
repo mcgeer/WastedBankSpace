@@ -33,6 +33,7 @@ import net.runelite.client.externalplugins.ExternalPluginManager;
 
 public class WastedBankSpacePluginTest
 {
+	@SuppressWarnings("unchecked") // loadBuiltin takes generic varargs
 	public static void main(String[] args) throws Exception
 	{
 		ExternalPluginManager.loadBuiltin(WastedBankSpacePlugin.class);
